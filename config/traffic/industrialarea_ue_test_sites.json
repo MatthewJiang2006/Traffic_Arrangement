@@ -1,0 +1,108 @@
+{
+  "coordinate_frame": "UE absolute world meters; yaw +90 faces +Y, +180 faces -X",
+  "status": "pie_markers_placed_four_single_uturns_passed",
+  "sites": {
+    "A": {
+      "description": "四车道宽路低 Y 端",
+      "start": {
+        "xy_m": [
+          -97.8936,
+          65.0
+        ],
+        "heading_deg": 90,
+        "edge_id": "road_gate_south_0_in_j_0_0_right"
+      },
+      "finish": {
+        "xy_m": [
+          -86.4936,
+          65.0
+        ],
+        "heading_deg": -90,
+        "edge_id": "road_j_0_0_gate_south_0_out_right"
+      },
+      "uturn_junction": "j_0_0"
+    },
+    "B": {
+      "description": "原园区第二条横路远离宽路的末端，j_1_2 前",
+      "start": {
+        "xy_m": [
+          23.0,
+          135.107
+        ],
+        "heading_deg": 180,
+        "edge_id": "road_j_1_2_j_1_1"
+      },
+      "finish": {
+        "xy_m": [
+          23.0,
+          138.907
+        ],
+        "heading_deg": 0,
+        "edge_id": "road_j_1_1_j_1_2"
+      },
+      "uturn_junction": "j_1_2"
+    },
+    "C": {
+      "description": "四车道宽路高 Y 端",
+      "start": {
+        "xy_m": [
+          -86.4937,
+          289.0
+        ],
+        "heading_deg": -90,
+        "edge_id": "road_gate_north_0_in_j_3_0_right"
+      },
+      "finish": {
+        "xy_m": [
+          -97.8937,
+          289.0
+        ],
+        "heading_deg": 90,
+        "edge_id": "road_j_3_0_gate_north_0_out_right"
+      },
+      "uturn_junction": "j_3_0"
+    },
+    "D": {
+      "description": "复制园区第二条横路远离宽路的末端，j_3_2 前",
+      "start": {
+        "xy_m": [
+          23.0,
+          263.131
+        ],
+        "heading_deg": 180,
+        "edge_id": "road_j_3_2_j_3_1"
+      },
+      "finish": {
+        "xy_m": [
+          23.0,
+          266.931
+        ],
+        "heading_deg": 0,
+        "edge_id": "road_j_3_1_j_3_2"
+      },
+      "uturn_junction": "j_3_2"
+    }
+  },
+  "terminal_uturn": {
+    "allowed_junctions": [
+      "j_0_0",
+      "j_1_2",
+      "j_3_0",
+      "j_3_2"
+    ],
+    "exclusive_vehicle_count": 1,
+    "require_junction_and_exit_clear": true,
+    "release_after_entire_vehicle_exits": true,
+    "implementation_status": "validated_fixture_paths_and_representative_two_truck_fcfs_not_production_graph_movements",
+    "wide_road_approach_lane": "LEFT",
+    "wide_road_notes": "A/C terminal-junction fixture paths validated in UE; enter the LEFT lane before the U-turn, leave on the opposite RIGHT lane.",
+    "horizontal_road_rule": "B/D must drive straight into the terminal junction before beginning any U-turn steering."
+  },
+  "placement_notes": [
+    "Place at lane centers; derive Z from actual road surface.",
+    "Clear nearby vehicles before placement; stage departures to avoid overlapping trucks.",
+    "Wide-road starts use RIGHT lane; move to LEFT lane before a left turn.",
+    "Finish is an arrival trigger; continuous service needs separate parking or a validated return route."
+  ],
+  "validation_report": "docs/ue_test_sites_acceptance.json"
+}

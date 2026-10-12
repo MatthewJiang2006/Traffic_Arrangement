@@ -1,0 +1,58 @@
+{
+  "origin": "W2-unloading",
+  "destination": "W6-loading",
+  "route": {
+    "edge_ids": [
+      "access_022",
+      "access_023",
+      "road_j_2_2_j_2_1__service_1",
+      "road_j_2_2_j_2_1__service_2",
+      "turn_j_2_1_E_S_single_single",
+      "road_j_2_1_j_1_1",
+      "turn_j_1_1_N_E_single_single",
+      "road_j_1_1_j_1_2__p0__service_0",
+      "road_j_1_1_j_1_2__p0__service_1",
+      "road_j_1_1_j_1_2__p1",
+      "road_j_1_1_j_1_2__p2",
+      "uturn_B",
+      "road_j_1_2_j_1_1__p0",
+      "road_j_1_2_j_1_1__p1",
+      "road_j_1_2_j_1_1__p2",
+      "road_j_1_2_j_1_1__p3",
+      "turn_j_1_1_E_N_single_single",
+      "road_j_1_1_j_2_1__service_0",
+      "road_j_1_1_j_2_1__service_1__internal_0",
+      "road_j_1_1_j_2_1__service_1__internal_1",
+      "road_j_1_1_j_2_1__service_2",
+      "road_j_1_1_j_2_1__service_3",
+      "road_j_1_1_j_2_1__service_4",
+      "road_j_1_1_j_2_1__service_5",
+      "access_046",
+      "access_047",
+      "access_048"
+    ],
+    "distance_m": 345.93868382018695,
+    "estimated_travel_time_s": 143.06001308296283,
+    "freeflow_travel_time_s": 141.35923540939993,
+    "congestion_delay_s": 1.700777673562944,
+    "attachment_validation_required": false,
+    "access_validation_required": false,
+    "initial_direction": -1,
+    "gear_change_nodes": [
+      "W2-unloading",
+      "access_point_230",
+      "access_point_242"
+    ],
+    "required_resources": [
+      "access:W2",
+      "access:W5_W6_merge",
+      "j_1_1",
+      "j_1_2",
+      "j_2_1",
+      "j_2_2"
+    ],
+    "must_be_empty_nodes": []
+  },
+  "old_hold_s": 310.6411920830056,
+  "checkpoint_s": 800.0
+}

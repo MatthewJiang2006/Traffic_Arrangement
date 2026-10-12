@@ -1,0 +1,34 @@
+{
+  "map": "config/topology/industrialarea_ue_continuous_transport.json",
+  "positions": {
+    "Car_0_0": "W1-loading",
+    "Car_0_1": "W4-loading"
+  },
+  "tasks": [
+    [
+      "W1-loading",
+      "W3-unloading"
+    ],
+    [
+      "W4-loading",
+      "W3-unloading"
+    ],
+    [
+      "W1-loading",
+      "W4-unloading"
+    ]
+  ],
+  "map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "9d3251cd123f3d55580c6b3049f501426651c9584ee2f57156ecec8a9d36e4d4",
+    "IndustrialArea_Copy.umap": "a50fe748ddcead7dd47b1a485c45ea50c153591303ebbf0da56ab88a5274a956"
+  },
+  "scope": "Congestion policy continuous runtime smoke; two trucks, three tasks",
+  "blocked_candidate_edges": [
+    "access_164",
+    "access_165",
+    "access_166",
+    "access_167"
+  ],
+  "traffic_routing": true,
+  "output": "runs/traffic_routing/continuous_smoke"
+}

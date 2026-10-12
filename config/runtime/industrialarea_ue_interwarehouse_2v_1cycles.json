@@ -1,0 +1,260 @@
+{
+  "application": "shared_transport",
+  "interwarehouse": true,
+  "cycles_per_vehicle": 1,
+  "map": "config/topology/industrialarea_ue_interwarehouse_2v_1cycles.json",
+  "scope": "W5 loading -> W6 unloading -> legal road loop -> approved waiting berth",
+  "max_runtime_s": 1060,
+  "body_prefix": "interwarehouse",
+  "minimum_wait_s": 2,
+  "require_parallel_motion": true,
+  "service_s": 3,
+  "adapter": {
+    "vehicle_ids": [
+      "Car_0_0",
+      "Car_0_1"
+    ],
+    "origin_ue_m": [
+      56.81,
+      88.14,
+      8.05
+    ],
+    "throttle_rise_per_s": 0.4,
+    "speed_rise_m_s2": 1.2,
+    "max_throttle": 0.85,
+    "speed_error_gain": 1.0,
+    "allow_reverse": true
+  },
+  "verified_ground_actors": [
+    "TrafficW5RoadToCurb",
+    "TrafficW5CurbToHardstand",
+    "TrafficW6RoadToCurb",
+    "TrafficW6CurbToHardstand",
+    "TrafficW1LaneTaperLowY",
+    "TrafficW1LaneTaperHighY",
+    "TrafficW2LaneTaperLowY",
+    "TrafficW2LaneTaperHighY",
+    "Traffic_SeamBridge_Left",
+    "Traffic_SeamBridge_Middle",
+    "TrafficWaitingQ9Q10RoadToCurb",
+    "TrafficWaitingQ9Q10CurbToHardstand",
+    "TrafficWaitingQ11Q12RoadToCurb",
+    "TrafficWaitingQ11Q12CurbToHardstand"
+  ],
+  "routes": {
+    "Car_0_0": {
+      "edges": [
+        "Car_0_0_0_to_loading",
+        "Car_0_0_0_w5_exit",
+        "Car_0_0_0_w6_approach",
+        "Car_0_0_0_w6_reverse",
+        "Car_0_0_0_w6_exit",
+        "Car_0_0_0_north_road",
+        "Car_0_0_0_loop_0",
+        "Car_0_0_0_loop_1",
+        "Car_0_0_0_loop_2",
+        "Car_0_0_0_loop_3",
+        "Car_0_0_0_loop_4",
+        "Car_0_0_0_loop_5",
+        "Car_0_0_0_loop_6",
+        "Car_0_0_0_loop_7",
+        "Car_0_0_0_loop_8",
+        "Car_0_0_0_loop_9",
+        "Car_0_0_0_loop_10",
+        "Car_0_0_0_loop_11",
+        "Car_0_0_0_loop_12",
+        "Car_0_0_0_loop_13",
+        "Car_0_0_0_loop_14",
+        "Car_0_0_0_loop_15",
+        "Car_0_0_0_loop_16",
+        "Car_0_0_0_loop_17",
+        "Car_0_0_0_loop_18",
+        "Car_0_0_0_loop_19",
+        "Car_0_0_0_loop_20",
+        "Car_0_0_0_loop_21",
+        "Car_0_0_0_loop_22",
+        "Car_0_0_0_return_approach",
+        "Car_0_0_0_return_waiting"
+      ],
+      "origin": "Q2",
+      "stops": [
+        "W5-loading",
+        "W6-unloading",
+        "Q1"
+      ],
+      "checkpoints": [
+        {
+          "leg": 0,
+          "event": "ARRIVAL",
+          "site": "W5-loading",
+          "node": "Car_0_0_node_1",
+          "after_edge_count": 1,
+          "cycle": 0,
+          "operation": "LOADING",
+          "channel_id": "W5_W6_access"
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 3,
+          "direction": -1
+        },
+        {
+          "leg": 1,
+          "event": "ARRIVAL",
+          "site": "W6-unloading",
+          "node": "Car_0_0_node_4",
+          "after_edge_count": 4,
+          "cycle": 0,
+          "operation": "UNLOADING",
+          "channel_id": "W5_W6_access"
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 4,
+          "direction": 1
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 30,
+          "direction": -1
+        },
+        {
+          "leg": 2,
+          "event": "ARRIVAL",
+          "site": "Q1",
+          "node": "Car_0_0_node_31",
+          "after_edge_count": 31,
+          "cycle": 0
+        }
+      ]
+    },
+    "Car_0_1": {
+      "edges": [
+        "Car_0_1_0_to_loading",
+        "Car_0_1_0_w5_exit",
+        "Car_0_1_0_w6_approach",
+        "Car_0_1_0_w6_reverse",
+        "Car_0_1_0_w6_exit",
+        "Car_0_1_0_north_road",
+        "Car_0_1_0_loop_0",
+        "Car_0_1_0_loop_1",
+        "Car_0_1_0_loop_2",
+        "Car_0_1_0_loop_3",
+        "Car_0_1_0_loop_4",
+        "Car_0_1_0_loop_5",
+        "Car_0_1_0_loop_6",
+        "Car_0_1_0_loop_7",
+        "Car_0_1_0_loop_8",
+        "Car_0_1_0_loop_9",
+        "Car_0_1_0_loop_10",
+        "Car_0_1_0_loop_11",
+        "Car_0_1_0_loop_12",
+        "Car_0_1_0_loop_13",
+        "Car_0_1_0_loop_14",
+        "Car_0_1_0_loop_15",
+        "Car_0_1_0_loop_16",
+        "Car_0_1_0_loop_17",
+        "Car_0_1_0_loop_18",
+        "Car_0_1_0_loop_19",
+        "Car_0_1_0_loop_20",
+        "Car_0_1_0_loop_21",
+        "Car_0_1_0_loop_22",
+        "Car_0_1_0_return_approach",
+        "Car_0_1_0_return_waiting"
+      ],
+      "origin": "Q1",
+      "stops": [
+        "W5-loading",
+        "W6-unloading",
+        "Q2"
+      ],
+      "checkpoints": [
+        {
+          "leg": 0,
+          "event": "ARRIVAL",
+          "site": "W5-loading",
+          "node": "Car_0_1_node_1",
+          "after_edge_count": 1,
+          "cycle": 0,
+          "operation": "LOADING",
+          "channel_id": "W5_W6_access"
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 3,
+          "direction": -1
+        },
+        {
+          "leg": 1,
+          "event": "ARRIVAL",
+          "site": "W6-unloading",
+          "node": "Car_0_1_node_4",
+          "after_edge_count": 4,
+          "cycle": 0,
+          "operation": "UNLOADING",
+          "channel_id": "W5_W6_access"
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 4,
+          "direction": 1
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 30,
+          "direction": -1
+        },
+        {
+          "leg": 2,
+          "event": "ARRIVAL",
+          "site": "Q2",
+          "node": "Car_0_1_node_31",
+          "after_edge_count": 31,
+          "cycle": 0
+        }
+      ]
+    }
+  },
+  "station_plan_sha256": "6eea00da578b211f288a44b4955f7cda3c05d991c58f9180274e01db2e599c60",
+  "source_routes_sha256": "80de73b716cc8cb4abc0c532d9204bfce45da238aa390924799361abc42b12f0",
+  "source_map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "ffd5edcccf61022200440dc7561e3223ed845fb063e4b9df03e00442f1dae905",
+    "IndustrialArea_Copy.umap": "678f87b2636e3e9b3189944bb5014fc817856d9fa0716d35d61d7d1f2f5d0171"
+  },
+  "legal_road_loop_edges": [
+    "turn_j_2_1_S_E_single_single",
+    "road_j_2_1_j_2_2",
+    "turn_j_2_2_W_N_single_single",
+    "road_j_2_2_j_3_2",
+    "turn_j_3_2_S_W_single_single",
+    "road_j_3_2_j_3_1__p0",
+    "road_j_3_2_j_3_1__p1",
+    "road_j_3_2_j_3_1__p2",
+    "road_j_3_2_j_3_1__p3",
+    "turn_j_3_1_E_S_single_single",
+    "road_j_3_1_j_2_1",
+    "turn_j_2_1_N_S_single_single",
+    "road_j_2_1_j_1_1",
+    "turn_j_1_1_N_E_single_single",
+    "road_j_1_1_j_1_2__p0",
+    "road_j_1_1_j_1_2__p1",
+    "road_j_1_1_j_1_2__p2",
+    "uturn_B",
+    "road_j_1_2_j_1_1__p0",
+    "road_j_1_2_j_1_1__p1",
+    "road_j_1_2_j_1_1__p2",
+    "road_j_1_2_j_1_1__p3",
+    "turn_j_1_1_E_N_single_single"
+  ],
+  "cargo_visuals": {
+    "unloading_pads": {
+      "W6-unloading": {
+        "xy_m": [
+          -36,
+          190
+        ],
+        "yaw_deg": 180
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "origin": "Q2",
+  "destination": "W6-unloading",
+  "route": {
+    "edge_ids": [
+      "access_070",
+      "access_031",
+      "access_032",
+      "access_033",
+      "road_j_1_1_j_2_1__service_3",
+      "road_j_1_1_j_2_1__service_4",
+      "road_j_1_1_j_2_1__service_5",
+      "access_046",
+      "access_047"
+    ]
+  },
+  "observed_failure_s": 984.4906545099984,
+  "incoming_progress_m": 69.76592585322267,
+  "incoming_hold_s": 69.99395510060155
+}

@@ -1,0 +1,6 @@
+{
+  "straight_m_s": 4.0,
+  "turn_m_s": 1.5,
+  "uturn_m_s": 1.0,
+  "approach_deceleration_m_s2": 0.6
+}

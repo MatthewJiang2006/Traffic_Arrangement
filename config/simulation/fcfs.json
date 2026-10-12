@@ -1,0 +1,60 @@
+{
+  "simulation": {
+    "dt": 0.02,
+    "duration": 120,
+    "control_hz": 20,
+    "task_hz": 5,
+    "logging_hz": 20,
+    "max_lateral_error": 0.06,
+    "arrival_tolerance": 0.012,
+    "stopped_speed": 0.005,
+    "safety_margin": 0.015,
+    "algorithm": "dijkstra",
+    "vehicle": {
+      "v_max": 0.5,
+      "omega_max": 3,
+      "a_max": 0.5,
+      "deceleration": 0.7,
+      "length": 0.12,
+      "width": 0.08,
+      "wheel_track": 0.07
+    },
+    "tracking": {
+      "cruise_speed": 0.25,
+      "lookahead_base": 0.08,
+      "lookahead_gain": 0.3,
+      "lateral_gain": 0.5,
+      "heading_gain": 0.3,
+      "lateral_acceleration": 0.3
+    }
+  },
+  "rules": {
+    "request_distance": 0.35,
+    "stop_offset": 0.12,
+    "entry_gap": 0.2,
+    "standstill_gap": 0.05,
+    "time_headway": 0.4
+  },
+  "cases": [
+    {
+      "name": "four_way",
+      "map": "../topology/fcfs_four_way.json",
+      "scenario": "../traffic/four_way.json"
+    },
+    {
+      "name": "turns",
+      "map": "../topology/fcfs_turns.json",
+      "scenario": "../traffic/turns.json"
+    },
+    {
+      "name": "same_lane_fifo",
+      "map": "../topology/fcfs_same_lane_fifo.json",
+      "scenario": "../traffic/same_lane_fifo.json"
+    },
+    {
+      "name": "downstream_full",
+      "map": "../topology/fcfs_downstream_full.json",
+      "scenario": "../traffic/downstream_full.json"
+    }
+  ]
+}

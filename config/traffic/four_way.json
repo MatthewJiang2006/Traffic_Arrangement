@@ -1,0 +1,141 @@
+{
+  "description": "Algorithm verification only; final environment supplied later by user",
+  "intersections": [
+    {
+      "intersection_id": "cross",
+      "bounds": [
+        0.65,
+        0.65,
+        1.35,
+        1.35
+      ],
+      "connector_exits": {
+        "cross_W_N": "exit_N",
+        "cross_W_E": "exit_E",
+        "cross_W_S": "exit_S",
+        "cross_N_W": "exit_W",
+        "cross_N_E": "exit_E",
+        "cross_N_S": "exit_S",
+        "cross_E_W": "exit_W",
+        "cross_E_N": "exit_N",
+        "cross_E_S": "exit_S",
+        "cross_S_W": "exit_W",
+        "cross_S_N": "exit_N",
+        "cross_S_E": "exit_E"
+      }
+    },
+    {
+      "intersection_id": "fork",
+      "bounds": [
+        2.15,
+        0.45,
+        2.55,
+        1.35
+      ],
+      "connector_exits": {
+        "fork_0": "parking_E_0",
+        "fork_1": "parking_E_1",
+        "fork_2": "parking_E_2"
+      }
+    }
+  ],
+  "stations": [
+    {
+      "station_id": "dest_W",
+      "berth_nodes": [
+        "dest_W"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 1
+    },
+    {
+      "station_id": "dest_N",
+      "berth_nodes": [
+        "dest_N"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 1
+    },
+    {
+      "station_id": "dest_S",
+      "berth_nodes": [
+        "dest_S"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 1
+    },
+    {
+      "station_id": "bay_E_0",
+      "berth_nodes": [
+        "bay_E_0"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 1
+    },
+    {
+      "station_id": "bay_E_1",
+      "berth_nodes": [
+        "bay_E_1"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 1
+    },
+    {
+      "station_id": "bay_E_2",
+      "berth_nodes": [
+        "bay_E_2"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 1
+    }
+  ],
+  "vehicle_nodes": {
+    "car_00": "src_W",
+    "car_01": "src_N",
+    "car_02": "src_E",
+    "car_03": "src_S"
+  },
+  "tasks": [
+    {
+      "task_id": "four_way_car_00",
+      "vehicle_id": "car_00",
+      "origin": "src_W",
+      "destination": "bay_E_0",
+      "release_time": 0
+    },
+    {
+      "task_id": "four_way_car_01",
+      "vehicle_id": "car_01",
+      "origin": "src_N",
+      "destination": "dest_S",
+      "release_time": 0
+    },
+    {
+      "task_id": "four_way_car_02",
+      "vehicle_id": "car_02",
+      "origin": "src_E",
+      "destination": "dest_W",
+      "release_time": 0
+    },
+    {
+      "task_id": "four_way_car_03",
+      "vehicle_id": "car_03",
+      "origin": "src_S",
+      "destination": "dest_N",
+      "release_time": 0
+    }
+  ],
+  "initial_edges": {},
+  "checks": {
+    "parallel_motion": true,
+    "same_lane_fifo": false,
+    "downstream_full": false,
+    "independent_junctions": false
+  }
+}

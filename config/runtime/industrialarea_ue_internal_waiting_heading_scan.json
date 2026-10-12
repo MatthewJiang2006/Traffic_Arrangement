@@ -1,0 +1,109 @@
+{
+  "map": "config/topology/industrialarea_ue_internal_waiting_heading_scan.json",
+  "jobs": [
+    {
+      "pair_id": "Q26__local_access",
+      "origin": "Q26-road-start",
+      "destination": "Q26-road",
+      "waiting_node": "Q26",
+      "stops": [
+        "Q26",
+        "Q26-road"
+      ],
+      "edges": [
+        "Q26__0_0",
+        "Q26__0_1",
+        "Q26__0_2",
+        "Q26__0_3",
+        "Q26__0_4",
+        "Q26__1_0",
+        "Q26__1_1",
+        "Q26__1_2",
+        "Q26__1_3",
+        "Q26__1_4"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 5,
+          "leg": 0,
+          "site": "Q26",
+          "node": "Q26"
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 5,
+          "direction": -1
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 10,
+          "leg": 1,
+          "site": "Q26-road",
+          "node": "Q26__point10"
+        }
+      ],
+      "distance_m": 49.07159719880179
+    },
+    {
+      "pair_id": "Q28__local_access",
+      "origin": "Q28-road-start",
+      "destination": "Q28-road",
+      "waiting_node": "Q28",
+      "stops": [
+        "Q28",
+        "Q28-road"
+      ],
+      "edges": [
+        "Q28__0_0",
+        "Q28__0_1",
+        "Q28__0_2",
+        "Q28__0_3",
+        "Q28__0_4",
+        "Q28__1_0",
+        "Q28__1_1",
+        "Q28__1_2",
+        "Q28__1_3",
+        "Q28__1_4"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 5,
+          "leg": 0,
+          "site": "Q28",
+          "node": "Q28"
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 5,
+          "direction": -1
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 10,
+          "leg": 1,
+          "site": "Q28-road",
+          "node": "Q28__point10"
+        }
+      ],
+      "distance_m": 49.06380093538382
+    }
+  ],
+  "service_s": 3,
+  "expected_waiting_nodes": [
+    "Q26",
+    "Q28"
+  ],
+  "service_network": "config/topology/industrialarea_ue_internal_waiting_network.json",
+  "service_network_sha256": "3bb7a56ac76214523026c2faa27730ffbb1eed74d2bb54797f44a3181db36f8d",
+  "map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "d9d9e9594579cb4e4f769266adfdc60d9f5f729b2735f88b0a652275f71398fc",
+    "IndustrialArea_Copy.umap": "db5f86ed1f2f5682873362c1452696024b38f10427d6fe8e134a508e6c1123e9"
+  },
+  "original_access_map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "d9d9e9594579cb4e4f769266adfdc60d9f5f729b2735f88b0a652275f71398fc",
+    "IndustrialArea_Copy.umap": "db5f86ed1f2f5682873362c1452696024b38f10427d6fe8e134a508e6c1123e9"
+  },
+  "scope": "Local waiting ingress/stop/egress loops; no all-pairs sweep"
+}

@@ -1,0 +1,76 @@
+{
+  "map": "config/topology/industrialarea_ue_internal_waiting_Q36_connected_scan.json",
+  "jobs": [
+    {
+      "pair_id": "Q36__local_access",
+      "origin": "Q36-road-start",
+      "destination": "Q36-road",
+      "waiting_node": "Q36",
+      "stops": [
+        "Q36",
+        "Q36-road"
+      ],
+      "edges": [
+        "Q36__0_0",
+        "Q36__0_1",
+        "Q36__0_2",
+        "Q36__0_3",
+        "Q36__0_4",
+        "Q36__0_5",
+        "Q36__0_6",
+        "Q36__0_7",
+        "Q36__0_8",
+        "Q36__0_9",
+        "Q36__0_10",
+        "Q36__1_0",
+        "Q36__1_1",
+        "Q36__1_2",
+        "Q36__1_3",
+        "Q36__1_4",
+        "Q36__1_5",
+        "Q36__1_6",
+        "Q36__1_7",
+        "Q36__1_8",
+        "Q36__1_9",
+        "Q36__1_10"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 11,
+          "leg": 0,
+          "site": "Q36",
+          "node": "Q36"
+        },
+        {
+          "event": "GEAR_CHANGE",
+          "after_edge_count": 11,
+          "direction": 1
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 22,
+          "leg": 1,
+          "site": "Q36-road",
+          "node": "Q36__point22"
+        }
+      ],
+      "distance_m": 109.46115479856907
+    }
+  ],
+  "service_s": 3,
+  "expected_waiting_nodes": [
+    "Q36"
+  ],
+  "service_network": "config/topology/industrialarea_ue_internal_waiting_network.json",
+  "service_network_sha256": "d553a52f85eddf63e8ae31089adf61f511d0d9a9aa7ad86c898aa0f42b84a87d",
+  "map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "1ec14ed6f76f61b88724a656fdac54c4e2997108e80c4e26acf64b372fbc2351",
+    "IndustrialArea_Copy.umap": "db5f86ed1f2f5682873362c1452696024b38f10427d6fe8e134a508e6c1123e9"
+  },
+  "original_access_map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "1ec14ed6f76f61b88724a656fdac54c4e2997108e80c4e26acf64b372fbc2351",
+    "IndustrialArea_Copy.umap": "db5f86ed1f2f5682873362c1452696024b38f10427d6fe8e134a508e6c1123e9"
+  },
+  "scope": "Local waiting ingress/stop/egress loops; no all-pairs sweep"
+}

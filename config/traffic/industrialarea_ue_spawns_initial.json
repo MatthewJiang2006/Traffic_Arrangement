@@ -1,0 +1,441 @@
+{
+  "coordinate_frame": "UE absolute world XY, metres; adapter must subtract runtime origin and invert UE Z for AirSim NED",
+  "spawns": [
+    {
+      "vehicle_id": "Car_0_0",
+      "ue_position_m": [
+        -73.1921,
+        214.0416,
+        2.0569
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 0.034,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_0_1",
+      "ue_position_m": [
+        -65.1921,
+        214.0416,
+        2.0569
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 0.034,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_0_2",
+      "ue_position_m": [
+        -57.1921,
+        214.0416,
+        2.0569
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 0.034,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_1_0",
+      "ue_position_m": [
+        -49.1894,
+        214.0415,
+        2.0559
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 0.033,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_1_1",
+      "ue_position_m": [
+        -41.1894,
+        214.0415,
+        2.0559
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 0.033,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_1_2",
+      "ue_position_m": [
+        -33.1894,
+        214.0415,
+        2.0559
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 0.032,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_2_0",
+      "ue_position_m": [
+        -25.1896,
+        214.0415,
+        2.0558
+      ],
+      "ue_yaw_deg": 0.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 0.032,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_2_1",
+      "ue_position_m": [
+        -17.2218,
+        214.0414,
+        2.0608
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_0_j_2_1",
+      "distance_to_aligned_lane_m": 1.002,
+      "inside_junction_by_center": [
+        "j_2_1"
+      ],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_2_2",
+      "ue_position_m": [
+        -9.2218,
+        214.0414,
+        2.0608
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_1_j_2_2",
+      "distance_to_aligned_lane_m": 7.032,
+      "inside_junction_by_center": [
+        "j_2_1"
+      ],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_3_0",
+      "ue_position_m": [
+        -1.1893,
+        214.0415,
+        2.0578
+      ],
+      "ue_yaw_deg": 0.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_1_j_2_2",
+      "distance_to_aligned_lane_m": 0.032,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_3_1",
+      "ue_position_m": [
+        6.7782,
+        214.0414,
+        2.0608
+      ],
+      "ue_yaw_deg": -0.001,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_1_j_2_2",
+      "distance_to_aligned_lane_m": 0.033,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_3_2",
+      "ue_position_m": [
+        14.8106,
+        214.0415,
+        2.0558
+      ],
+      "ue_yaw_deg": -0.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_2_1_j_2_2",
+      "distance_to_aligned_lane_m": 0.035,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": true
+    },
+    {
+      "vehicle_id": "Car_4_0",
+      "ue_position_m": [
+        14.8152,
+        255.714,
+        2.0483
+      ],
+      "ue_yaw_deg": -179.424,
+      "pawn_half_extent_m": [
+        4.196,
+        1.973,
+        1.297
+      ],
+      "nearest_aligned_road_edge": "road_j_3_2_j_3_1",
+      "distance_to_aligned_lane_m": 12.467,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_4_1",
+      "ue_position_m": [
+        6.8171,
+        255.7129,
+        2.0479
+      ],
+      "ue_yaw_deg": -179.452,
+      "pawn_half_extent_m": [
+        4.193,
+        1.97,
+        1.292
+      ],
+      "nearest_aligned_road_edge": "road_j_3_2_j_3_1",
+      "distance_to_aligned_lane_m": 12.468,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_4_2",
+      "ue_position_m": [
+        0.4876,
+        255.5315,
+        2.147
+      ],
+      "ue_yaw_deg": 170.803,
+      "pawn_half_extent_m": [
+        4.502,
+        2.539,
+        3.142
+      ],
+      "nearest_aligned_road_edge": "road_j_3_2_j_3_1",
+      "distance_to_aligned_lane_m": 12.649,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_5_0",
+      "ue_position_m": [
+        -9.1894,
+        255.7415,
+        2.0576
+      ],
+      "ue_yaw_deg": 180.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_3_2_j_3_1",
+      "distance_to_aligned_lane_m": 14.276,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_5_1",
+      "ue_position_m": [
+        -17.1894,
+        255.7415,
+        2.0576
+      ],
+      "ue_yaw_deg": 180.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.482,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_5_2",
+      "ue_position_m": [
+        -25.1894,
+        255.7415,
+        2.0559
+      ],
+      "ue_yaw_deg": 180.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.439,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_6_0",
+      "ue_position_m": [
+        -33.197,
+        255.6977,
+        2.0796
+      ],
+      "ue_yaw_deg": -179.339,
+      "pawn_half_extent_m": [
+        4.271,
+        2.088,
+        1.816
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.482,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_6_1",
+      "ue_position_m": [
+        -41.1894,
+        255.7415,
+        2.0558
+      ],
+      "ue_yaw_deg": 180.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.438,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_6_2",
+      "ue_position_m": [
+        -49.6107,
+        255.6749,
+        2.3436
+      ],
+      "ue_yaw_deg": -173.02,
+      "pawn_half_extent_m": [
+        4.393,
+        2.734,
+        2.013
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.504,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_7_0",
+      "ue_position_m": [
+        -57.1998,
+        255.753,
+        2.0931
+      ],
+      "ue_yaw_deg": 179.943,
+      "pawn_half_extent_m": [
+        4.208,
+        1.949,
+        1.427
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.425,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_7_1",
+      "ue_position_m": [
+        -65.1894,
+        255.7415,
+        2.0558
+      ],
+      "ue_yaw_deg": 180.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.436,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    },
+    {
+      "vehicle_id": "Car_7_2",
+      "ue_position_m": [
+        -73.1894,
+        255.7415,
+        2.0558
+      ],
+      "ue_yaw_deg": 180.0,
+      "pawn_half_extent_m": [
+        4.172,
+        1.918,
+        1.264
+      ],
+      "nearest_aligned_road_edge": "road_j_3_1_j_3_0",
+      "distance_to_aligned_lane_m": 12.435,
+      "inside_junction_by_center": [],
+      "ready_for_roadgraph_spawn": false
+    }
+  ]
+}

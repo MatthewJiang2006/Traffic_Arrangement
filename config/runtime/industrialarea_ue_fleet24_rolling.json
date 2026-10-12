@@ -1,0 +1,603 @@
+{
+  "map": "config/topology/industrialarea_ue_fleet24_transport.json",
+  "positions": {
+    "Car_0_0": "fleet24-start-00",
+    "Car_0_1": "fleet24-start-01",
+    "Car_0_2": "fleet24-start-02",
+    "Car_1_0": "fleet24-start-03",
+    "Car_1_1": "fleet24-start-04",
+    "Car_1_2": "fleet24-start-05",
+    "Car_2_0": "fleet24-start-06",
+    "Car_2_1": "fleet24-start-07",
+    "Car_2_2": "fleet24-start-08",
+    "Car_3_0": "fleet24-start-09",
+    "Car_3_1": "fleet24-start-10",
+    "Car_3_2": "fleet24-start-11",
+    "Car_4_0": "fleet24-start-12",
+    "Car_4_1": "fleet24-start-13",
+    "Car_4_2": "fleet24-start-14",
+    "Car_5_0": "fleet24-start-15",
+    "Car_5_1": "fleet24-start-16",
+    "Car_5_2": "fleet24-start-17",
+    "Car_6_0": "fleet24-start-18",
+    "Car_6_1": "fleet24-start-19",
+    "Car_6_2": "fleet24-start-20",
+    "Car_7_0": "fleet24-start-21",
+    "Car_7_1": "fleet24-start-22",
+    "Car_7_2": "fleet24-start-23"
+  },
+  "tasks": [
+    [
+      "W1-loading",
+      "W3-unloading"
+    ],
+    [
+      "W2-loading",
+      "W4-unloading"
+    ],
+    [
+      "W3-loading",
+      "W5-unloading"
+    ],
+    [
+      "W4-loading",
+      "W6-unloading"
+    ],
+    [
+      "W5-loading",
+      "W1-unloading"
+    ],
+    [
+      "W6-loading",
+      "W2-unloading"
+    ],
+    [
+      "W1-loading",
+      "W4-unloading"
+    ],
+    [
+      "W2-loading",
+      "W5-unloading"
+    ],
+    [
+      "W3-loading",
+      "W6-unloading"
+    ],
+    [
+      "W4-loading",
+      "W1-unloading"
+    ],
+    [
+      "W5-loading",
+      "W2-unloading"
+    ],
+    [
+      "W6-loading",
+      "W3-unloading"
+    ],
+    [
+      "W1-loading",
+      "W5-unloading"
+    ],
+    [
+      "W2-loading",
+      "W6-unloading"
+    ],
+    [
+      "W3-loading",
+      "W1-unloading"
+    ],
+    [
+      "W4-loading",
+      "W2-unloading"
+    ],
+    [
+      "W5-loading",
+      "W3-unloading"
+    ],
+    [
+      "W6-loading",
+      "W4-unloading"
+    ],
+    [
+      "W1-loading",
+      "W2-unloading"
+    ],
+    [
+      "W2-loading",
+      "W3-unloading"
+    ],
+    [
+      "W3-loading",
+      "W4-unloading"
+    ],
+    [
+      "W4-loading",
+      "W5-unloading"
+    ],
+    [
+      "W5-loading",
+      "W6-unloading"
+    ],
+    [
+      "W6-loading",
+      "W1-unloading"
+    ],
+    [
+      "W1-loading",
+      "W6-unloading"
+    ],
+    [
+      "W2-loading",
+      "W1-unloading"
+    ],
+    [
+      "W3-loading",
+      "W2-unloading"
+    ],
+    [
+      "W4-loading",
+      "W3-unloading"
+    ],
+    [
+      "W5-loading",
+      "W4-unloading"
+    ],
+    [
+      "W6-loading",
+      "W5-unloading"
+    ],
+    [
+      "W1-loading",
+      "W3-unloading"
+    ],
+    [
+      "W2-loading",
+      "W4-unloading"
+    ],
+    [
+      "W3-loading",
+      "W5-unloading"
+    ],
+    [
+      "W4-loading",
+      "W6-unloading"
+    ],
+    [
+      "W5-loading",
+      "W1-unloading"
+    ],
+    [
+      "W6-loading",
+      "W2-unloading"
+    ],
+    [
+      "W1-loading",
+      "W4-unloading"
+    ],
+    [
+      "W2-loading",
+      "W5-unloading"
+    ],
+    [
+      "W3-loading",
+      "W6-unloading"
+    ],
+    [
+      "W4-loading",
+      "W1-unloading"
+    ],
+    [
+      "W5-loading",
+      "W2-unloading"
+    ],
+    [
+      "W6-loading",
+      "W3-unloading"
+    ],
+    [
+      "W1-loading",
+      "W5-unloading"
+    ],
+    [
+      "W2-loading",
+      "W6-unloading"
+    ],
+    [
+      "W3-loading",
+      "W1-unloading"
+    ],
+    [
+      "W4-loading",
+      "W2-unloading"
+    ],
+    [
+      "W5-loading",
+      "W3-unloading"
+    ],
+    [
+      "W6-loading",
+      "W4-unloading"
+    ],
+    [
+      "W1-loading",
+      "W2-unloading"
+    ],
+    [
+      "W2-loading",
+      "W3-unloading"
+    ],
+    [
+      "W3-loading",
+      "W4-unloading"
+    ],
+    [
+      "W4-loading",
+      "W5-unloading"
+    ],
+    [
+      "W5-loading",
+      "W6-unloading"
+    ],
+    [
+      "W6-loading",
+      "W1-unloading"
+    ],
+    [
+      "W1-loading",
+      "W6-unloading"
+    ],
+    [
+      "W2-loading",
+      "W1-unloading"
+    ],
+    [
+      "W3-loading",
+      "W2-unloading"
+    ],
+    [
+      "W4-loading",
+      "W3-unloading"
+    ],
+    [
+      "W5-loading",
+      "W4-unloading"
+    ],
+    [
+      "W6-loading",
+      "W5-unloading"
+    ],
+    [
+      "W1-loading",
+      "W3-unloading"
+    ],
+    [
+      "W2-loading",
+      "W4-unloading"
+    ],
+    [
+      "W3-loading",
+      "W5-unloading"
+    ],
+    [
+      "W4-loading",
+      "W6-unloading"
+    ],
+    [
+      "W5-loading",
+      "W1-unloading"
+    ],
+    [
+      "W6-loading",
+      "W2-unloading"
+    ],
+    [
+      "W1-loading",
+      "W4-unloading"
+    ],
+    [
+      "W2-loading",
+      "W5-unloading"
+    ],
+    [
+      "W3-loading",
+      "W6-unloading"
+    ],
+    [
+      "W4-loading",
+      "W1-unloading"
+    ],
+    [
+      "W5-loading",
+      "W2-unloading"
+    ],
+    [
+      "W6-loading",
+      "W3-unloading"
+    ]
+  ],
+  "map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "9d3251cd123f3d55580c6b3049f501426651c9584ee2f57156ecec8a9d36e4d4",
+    "IndustrialArea_Copy.umap": "a50fe748ddcead7dd47b1a485c45ea50c153591303ebbf0da56ab88a5274a956"
+  },
+  "scope": "24 truck rolling admission trial; joint shared resources, physical exit guard, protected committed routes",
+  "blocked_candidate_edges": [
+    "access_164",
+    "access_165",
+    "access_166",
+    "access_167"
+  ],
+  "network": "config/topology/industrialarea_ue_fleet24_service_network.json",
+  "output": "runs/fleet24_rolling",
+  "light_max_sim_s": 7200,
+  "light_dt_s": 0.1,
+  "physical_limit_s": 600,
+  "stall_limit_s": 120,
+  "staging": [
+    {
+      "vehicle": "Car_0_0",
+      "node": "fleet24-start-00",
+      "source_edge": "road_j_0_0_j_0_1",
+      "source_slice": 0,
+      "rear_xy_m": [
+        -80.1877,
+        91.1024
+      ],
+      "heading_deg": -0.0032363183151937086
+    },
+    {
+      "vehicle": "Car_0_1",
+      "node": "fleet24-start-01",
+      "source_edge": "road_gate_north_1_in_j_3_1",
+      "source_slice": 0,
+      "rear_xy_m": [
+        -8.3011,
+        304.8267
+      ],
+      "heading_deg": -90.0
+    },
+    {
+      "vehicle": "Car_0_2",
+      "node": "fleet24-start-02",
+      "source_edge": "road_j_2_0_j_1_0__p0",
+      "source_slice": 1,
+      "rear_xy_m": [
+        -90.29369296012402,
+        204.6889499999932
+      ],
+      "heading_deg": -89.99991073546691
+    },
+    {
+      "vehicle": "Car_1_0",
+      "node": "fleet24-start-03",
+      "source_edge": "road_j_1_2_j_1_1__p3",
+      "source_slice": 0,
+      "rear_xy_m": [
+        9.164250000000003,
+        135.107
+      ],
+      "heading_deg": 180.0
+    },
+    {
+      "vehicle": "Car_1_1",
+      "node": "fleet24-start-04",
+      "source_edge": "road_j_2_1_j_2_2",
+      "source_slice": 1,
+      "rear_xy_m": [
+        2.4557499999999997,
+        219.123775
+      ],
+      "heading_deg": 0.01079039774463137
+    },
+    {
+      "vehicle": "Car_1_2",
+      "node": "fleet24-start-05",
+      "source_edge": "road_gate_south_1_in_j_0_1__service_0",
+      "source_slice": 0,
+      "rear_xy_m": [
+        -12.107,
+        49.3973
+      ],
+      "heading_deg": 90.0
+    },
+    {
+      "vehicle": "Car_2_0",
+      "node": "fleet24-start-06",
+      "source_edge": "road_j_3_0_j_3_1",
+      "source_slice": 3,
+      "rear_xy_m": [
+        -65.88714615384615,
+        266.92746153846156
+      ],
+      "heading_deg": 0.0042530694175916695
+    },
+    {
+      "vehicle": "Car_2_1",
+      "node": "fleet24-start-07",
+      "source_edge": "road_j_1_0_j_1_1",
+      "source_slice": 7,
+      "rear_xy_m": [
+        -46.81956153846154,
+        138.90487692307693
+      ],
+      "heading_deg": 0.004253076280825272
+    },
+    {
+      "vehicle": "Car_2_2",
+      "node": "fleet24-start-08",
+      "source_edge": "road_j_1_0_j_2_0__p0",
+      "source_slice": 2,
+      "rear_xy_m": [
+        -94.09361407975197,
+        154.0584000000136
+      ],
+      "heading_deg": 90.00008926453306
+    },
+    {
+      "vehicle": "Car_3_0",
+      "node": "fleet24-start-09",
+      "source_edge": "road_j_0_0_j_0_1",
+      "source_slice": 10,
+      "rear_xy_m": [
+        -32.52308461538462,
+        91.09970769230769
+      ],
+      "heading_deg": -0.003236318315176188
+    },
+    {
+      "vehicle": "Car_3_1",
+      "node": "fleet24-start-10",
+      "source_edge": "road_j_2_0_j_2_1",
+      "source_slice": 7,
+      "rear_xy_m": [
+        -46.82256923076922,
+        219.12451538461536
+      ],
+      "heading_deg": -0.00323631831517619
+    },
+    {
+      "vehicle": "Car_3_2",
+      "node": "fleet24-start-11",
+      "source_edge": "road_j_3_2_j_3_1__p3",
+      "source_slice": 0,
+      "rear_xy_m": [
+        9.164250000000003,
+        263.131
+      ],
+      "heading_deg": 180.0
+    },
+    {
+      "vehicle": "Car_4_0",
+      "node": "fleet24-start-12",
+      "source_edge": "road_j_0_1_j_0_2",
+      "source_slice": 2,
+      "rear_xy_m": [
+        7.1019749999999995,
+        91.10065
+      ],
+      "heading_deg": 0.010790426775202845
+    },
+    {
+      "vehicle": "Car_4_1",
+      "node": "fleet24-start-13",
+      "source_edge": "road_j_3_1_j_3_0",
+      "source_slice": 2,
+      "rear_xy_m": [
+        -27.75206923076923,
+        263.1302923076923
+      ],
+      "heading_deg": -179.99574693058238
+    },
+    {
+      "vehicle": "Car_4_2",
+      "node": "fleet24-start-14",
+      "source_edge": "road_j_2_1_j_1_1",
+      "source_slice": 10,
+      "rear_xy_m": [
+        -8.302484615384616,
+        159.83493076923077
+      ],
+      "heading_deg": -89.99464375251507
+    },
+    {
+      "vehicle": "Car_5_0",
+      "node": "fleet24-start-15",
+      "source_edge": "road_j_0_1_j_1_1__service_1",
+      "source_slice": 1,
+      "rear_xy_m": [
+        -12.104370898369321,
+        111.37501542940396
+      ],
+      "heading_deg": 89.9893610194673
+    },
+    {
+      "vehicle": "Car_5_1",
+      "node": "fleet24-start-16",
+      "source_edge": "road_j_3_1_j_2_1",
+      "source_slice": 3,
+      "rear_xy_m": [
+        -8.303671428571429,
+        243.39678571428573
+      ],
+      "heading_deg": -90.01081930223239
+    },
+    {
+      "vehicle": "Car_5_2",
+      "node": "fleet24-start-17",
+      "source_edge": "road_j_1_1_j_1_0",
+      "source_slice": 1,
+      "rear_xy_m": [
+        -22.98517692307692,
+        135.10664615384616
+      ],
+      "heading_deg": -179.99574692371917
+    },
+    {
+      "vehicle": "Car_6_0",
+      "node": "fleet24-start-18",
+      "source_edge": "road_j_2_1_j_2_0",
+      "source_slice": 1,
+      "rear_xy_m": [
+        -22.99026153846154,
+        215.32316923076922
+      ],
+      "heading_deg": 179.9967636816848
+    },
+    {
+      "vehicle": "Car_6_1",
+      "node": "fleet24-start-19",
+      "source_edge": "road_j_0_1_j_0_0",
+      "source_slice": 8,
+      "rear_xy_m": [
+        -56.355392307692306,
+        87.30105384615385
+      ],
+      "heading_deg": 179.9967636816848
+    },
+    {
+      "vehicle": "Car_6_2",
+      "node": "fleet24-start-20",
+      "source_edge": "road_j_1_0_j_1_1",
+      "source_slice": 1,
+      "rear_xy_m": [
+        -75.42082307692309,
+        138.90275384615384
+      ],
+      "heading_deg": 0.004253076280825272
+    },
+    {
+      "vehicle": "Car_7_0",
+      "node": "fleet24-start-21",
+      "source_edge": "road_j_2_0_j_2_1",
+      "source_slice": 2,
+      "rear_xy_m": [
+        -70.65487692307691,
+        219.12586153846152
+      ],
+      "heading_deg": -0.003236318315186542
+    },
+    {
+      "vehicle": "Car_7_1",
+      "node": "fleet24-start-22",
+      "source_edge": "road_gate_south_1_in_j_0_1__service_1",
+      "source_slice": 0,
+      "rear_xy_m": [
+        -12.107,
+        68.83575
+      ],
+      "heading_deg": 90.0
+    },
+    {
+      "vehicle": "Car_7_2",
+      "node": "fleet24-start-23",
+      "source_edge": "road_j_3_1_j_3_0",
+      "source_slice": 6,
+      "rear_xy_m": [
+        -46.81960769230769,
+        263.1288769230769
+      ],
+      "heading_deg": -179.99574693058236
+    }
+  ],
+  "rolling_resources": true
+}

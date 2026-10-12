@@ -1,0 +1,7 @@
+{
+  "latest_retained": "/mnt/190c1d31-5aef-e142-8902-edc8e0c6e516/Traffic/Global_Traffic_Management/runs/ue_full_verified_20261007",
+  "archive": "/mnt/190c1d31-5aef-e142-8902-edc8e0c6e516/实验数据/Global_Traffic_Management_历史测试_20261007_100421",
+  "manifest": "/mnt/190c1d31-5aef-e142-8902-edc8e0c6e516/实验数据/Global_Traffic_Management_历史测试_20261007_100421/迁移清单.json",
+  "total_archived_bytes": 1901485380,
+  "retained_files_unchanged": true
+}

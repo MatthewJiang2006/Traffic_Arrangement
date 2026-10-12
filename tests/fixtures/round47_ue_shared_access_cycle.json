@@ -1,0 +1,103 @@
+{
+  "origin": "W2-loading",
+  "destination": "W1-unloading",
+  "route": {
+    "edge_ids": [
+      "access_010",
+      "access_012",
+      "access_013",
+      "road_j_3_2_j_2_2__service_3",
+      "turn_j_2_2_N_W_single_single",
+      "road_j_2_2_j_2_1__service_0",
+      "road_j_2_2_j_2_1__service_1",
+      "road_j_2_2_j_2_1__service_2",
+      "turn_j_2_1_E_S_single_single",
+      "road_j_2_1_j_1_1",
+      "turn_j_1_1_N_E_single_single",
+      "road_j_1_1_j_1_2__p0__service_0",
+      "access_000",
+      "access_002",
+      "access_003",
+      "access_004",
+      "road_j_1_2_j_0_2__service_2",
+      "road_j_1_2_j_0_2__service_3",
+      "turn_j_0_2_N_W_single_single",
+      "road_j_0_2_j_0_1__service_0",
+      "access_014",
+      "access_015"
+    ]
+  },
+  "progress_m": 187.59484905216678,
+  "states": {
+    "Car_7_0": {
+      "x": 5.775803231215098,
+      "y": 138.90602625487344,
+      "heading": -0.0076086507142077335,
+      "speed": 0.0
+    },
+    "Car_0_0": {
+      "x": 27.024185335977503,
+      "y": 123.99953169891376,
+      "heading": -0.0006902912895299572,
+      "speed": 0.0
+    }
+  },
+  "evidence": "runs/fleet16_round47_proactive_full_v21/physical_acceptance.json",
+  "blocked_alias": "access_002",
+  "group_start": 47,
+  "parked_route": {
+    "origin": "W6-unloading",
+    "destination": "W1-loading",
+    "route": {
+      "edge_ids": [
+        "access_050",
+        "access_051",
+        "road_j_1_1_j_2_1__service_6",
+        "road_j_1_1_j_2_1__service_7",
+        "turn_j_2_1_S_W_single_single",
+        "road_j_2_1_j_2_0",
+        "turn_j_2_0_E_N_single_left",
+        "road_j_2_0_j_3_0__p0",
+        "road_j_2_0_j_3_0__p1",
+        "road_j_2_0_j_3_0__p2",
+        "road_j_2_0_j_3_0__p3",
+        "road_j_2_0_j_3_0__p4",
+        "turn_j_3_0_S_N_left_left",
+        "road_j_3_0_gate_north_0_out__p0",
+        "road_j_3_0_gate_north_0_out__p1",
+        "road_j_3_0_gate_north_0_out__p2",
+        "road_j_3_0_gate_north_0_out__p3",
+        "road_j_3_0_gate_north_0_out__p4",
+        "uturn_C",
+        "road_gate_north_0_in_j_3_0_right__p1",
+        "change_road_gate_north_0_in_j_3_0_R_L",
+        "road_gate_north_0_in_j_3_0__p2",
+        "turn_j_3_0_N_S_left_left",
+        "road_j_3_0_j_2_0__p0",
+        "road_j_3_0_j_2_0__p1",
+        "road_j_3_0_j_2_0__p2",
+        "road_j_3_0_j_2_0__p3",
+        "road_j_3_0_j_2_0__p4",
+        "turn_j_2_0_N_S_left_left",
+        "road_j_2_0_j_1_0__p0",
+        "road_j_2_0_j_1_0__p1",
+        "change_road_j_2_0_j_1_0_L_R",
+        "road_j_2_0_j_1_0_right__p4",
+        "road_j_2_0_j_1_0_right__p5__service_0",
+        "road_j_2_0_j_1_0_right__p5__service_1",
+        "turn_j_1_0_N_E_right_single",
+        "road_j_1_0_j_1_1",
+        "turn_j_1_1_W_E_single_single",
+        "road_j_1_1_j_1_2__p0__service_0",
+        "road_j_1_1_j_1_2__p0__service_1",
+        "road_j_1_1_j_1_2__p1",
+        "road_j_1_1_j_1_2__p2",
+        "turn_j_1_2_W_S_single_single",
+        "road_j_1_2_j_0_2__service_0",
+        "access_001",
+        "access_002"
+      ]
+    }
+  },
+  "parked_progress_m": 536.8777908964973
+}

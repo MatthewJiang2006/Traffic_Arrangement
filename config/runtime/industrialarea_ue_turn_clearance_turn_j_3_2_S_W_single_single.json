@@ -1,0 +1,70 @@
+{
+  "application": "shared_transport",
+  "map": "config/topology/industrialarea_ue_turn_clearance_turn_j_3_2_S_W_single_single.json",
+  "max_runtime_s": 140,
+  "service_s": 2,
+  "body_prefix": "turnclear",
+  "expected_shared_order": [
+    "Car_0_0",
+    "Car_0_1"
+  ],
+  "minimum_wait_s": 0,
+  "adapter": {
+    "vehicle_ids": [
+      "Car_0_0"
+    ],
+    "origin_ue_m": [
+      56.81,
+      88.14,
+      8.05
+    ],
+    "throttle_rise_per_s": 0.24,
+    "speed_rise_m_s2": 0.8,
+    "max_throttle": 0.7,
+    "speed_error_gain": 0.6
+  },
+  "routes": {
+    "Car_0_0": {
+      "edges": [
+        "approach",
+        "turn_j_3_2_S_W_single_single",
+        "exit"
+      ],
+      "origin": "turn_approach",
+      "stops": [
+        "turn_exit"
+      ]
+    }
+  },
+  "verified_ground_actors": [
+    "TrafficStationQ3CurbRamp",
+    "TrafficStationQ4Q5CurbRamp",
+    "TrafficStationQ6CurbRamp",
+    "TrafficStationQ7Q8CurbRamp",
+    "TrafficW1CurbToHardstand",
+    "TrafficW1LaneTaperHighY",
+    "TrafficW1LaneTaperLowY",
+    "TrafficW1RoadToCurb",
+    "TrafficW1UnloadingCurbToHardstand",
+    "TrafficW1UnloadingRoadToCurb",
+    "TrafficW2CurbToHardstand",
+    "TrafficW2LaneTaperHighY",
+    "TrafficW2LaneTaperLowY",
+    "TrafficW2RoadToCurb",
+    "TrafficW2UnloadingCurbToHardstand",
+    "TrafficW2UnloadingRoadToCurb",
+    "TrafficW5CurbToHardstand",
+    "TrafficW5RoadToCurb",
+    "TrafficW6CurbToHardstand",
+    "TrafficW6RoadToCurb",
+    "TrafficWaitingQ11Q12CurbToHardstand",
+    "TrafficWaitingQ11Q12RoadToCurb",
+    "TrafficWaitingQ9Q10CurbToHardstand",
+    "TrafficWaitingQ9Q10RoadToCurb",
+    "Traffic_SeamBridge_Left",
+    "Traffic_SeamBridge_Middle"
+  ],
+  "shared_resources_enabled": false,
+  "scope": "turn_j_3_2_S_W_single_single delayed right-turn yaw inside surveyed drivable surface",
+  "require_parallel_motion": false
+}

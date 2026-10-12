@@ -1,0 +1,48 @@
+{
+  "map": "config/topology/industrialarea_ue_internal_waiting_transport.json",
+  "positions": {
+    "Car_0_0": "Q1",
+    "Car_0_1": "Q2"
+  },
+  "tasks": [
+    [
+      "W5-loading",
+      "W5-unloading"
+    ],
+    [
+      "W5-loading",
+      "W5-unloading"
+    ]
+  ],
+  "map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "1ec14ed6f76f61b88724a656fdac54c4e2997108e80c4e26acf64b372fbc2351",
+    "IndustrialArea_Copy.umap": "db5f86ed1f2f5682873362c1452696024b38f10427d6fe8e134a508e6c1123e9"
+  },
+  "scope": "Targeted berth admission + two real parked queue sources; final parking required",
+  "blocked_candidate_edges": [
+    "access_133",
+    "access_134",
+    "access_167"
+  ],
+  "traffic_routing": true,
+  "output": "runs/berth_admission_pair_round3",
+  "network": "config/topology/industrialarea_ue_internal_waiting_network.json",
+  "local_traffic": true,
+  "batch_observer": true,
+  "stall_limit_s": 120,
+  "early_stall_check_s": 15,
+  "physical_limit_s": 900,
+  "light_dt_s": 0.1,
+  "light_max_sim_s": 1200,
+  "light_status_interval_s": 30,
+  "light_checkpoints": true,
+  "early_stall_displacement_m": 0.25,
+  "world_time_scale": 1,
+  "adapter_options": {
+    "speed_rise_m_s2": 0.6,
+    "speed_error_gain": 0.6
+  },
+  "diagnostic_preflight_s": null,
+  "park_idle_vehicles": true,
+  "offroad_busy_wait": true
+}

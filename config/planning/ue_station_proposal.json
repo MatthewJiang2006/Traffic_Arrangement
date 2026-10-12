@@ -1,0 +1,554 @@
+{
+  "status": "APPROVED_FOR_UE_VALIDATION",
+  "user_approved": true,
+  "coordinate_frame": "UE absolute world metres; parking-envelope centres, not Actor spawn positions",
+  "stations": [
+    {
+      "id": "W1",
+      "description": "保留：低 Y 园区右侧低棚厂房",
+      "building_actor": "existing east-side low-roof building",
+      "building_bounds_m": [
+        22.8,
+        97.2,
+        36.3,
+        122.2
+      ],
+      "loading": {
+        "xy_m": [
+          28,
+          124
+        ],
+        "heading_deg": 0,
+        "ground_z_m": 1.073992919921875,
+        "surface_actor": "SM_Floor_447",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "unloading": {
+        "xy_m": [
+          20,
+          112
+        ],
+        "heading_deg": 90,
+        "ground_z_m": 1.07391357421875,
+        "surface_actor": "SM_Floor_428",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "waiting": null
+    },
+    {
+      "id": "W2",
+      "description": "保留：高 Y 园区右侧低棚厂房",
+      "building_actor": "existing east-side low-roof building",
+      "building_bounds_m": [
+        22.8,
+        225.2,
+        36.3,
+        250.2
+      ],
+      "loading": {
+        "xy_m": [
+          28,
+          252
+        ],
+        "heading_deg": 0,
+        "ground_z_m": 1.073994140625,
+        "surface_actor": "SM_Floor_447",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "unloading": {
+        "xy_m": [
+          20,
+          240
+        ],
+        "heading_deg": 90,
+        "ground_z_m": 1.07391357421875,
+        "surface_actor": "SM_Floor_428",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "waiting": null
+    },
+    {
+      "id": "W3",
+      "description": "新增：宽路低 Y 端西侧建筑",
+      "building_actor": "SM_Build_54 / SM_Floor_5 / SM_Floor_6",
+      "building_bounds_m": [
+        -119.2,
+        49.7,
+        -104.4,
+        91.2
+      ],
+      "loading": {
+        "xy_m": [
+          -98,
+          66
+        ],
+        "heading_deg": 90,
+        "ground_z_m": 1.1,
+        "surface_actor": "SM_Road_71",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/road_service_ground_clearance.json",
+        "kind": "roadside service"
+      },
+      "unloading": {
+        "xy_m": [
+          -98,
+          80
+        ],
+        "heading_deg": 90,
+        "ground_z_m": 1.1,
+        "surface_actor": "SM_Road_70",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/road_service_ground_clearance.json",
+        "kind": "roadside service"
+      },
+      "waiting": null
+    },
+    {
+      "id": "W4",
+      "description": "新增：宽路高 Y 端西侧建筑",
+      "building_actor": "SM_Build_642",
+      "building_bounds_m": [
+        -128.3,
+        280.3,
+        -103.7,
+        305.3
+      ],
+      "loading": {
+        "xy_m": [
+          -98,
+          274
+        ],
+        "heading_deg": 90,
+        "ground_z_m": 1.1,
+        "surface_actor": "SM_Road_80",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/road_service_ground_clearance.json",
+        "kind": "roadside service"
+      },
+      "unloading": {
+        "xy_m": [
+          -98,
+          288
+        ],
+        "heading_deg": 90,
+        "ground_z_m": 1.1,
+        "surface_actor": "SM_Road_79",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/road_service_ground_clearance.json",
+        "kind": "roadside service"
+      },
+      "waiting": null
+    },
+    {
+      "id": "W5",
+      "description": "新增：中间建筑排低 Y 侧",
+      "building_actor": "SM_Build_197",
+      "building_bounds_m": [
+        -65.1,
+        143.4,
+        -37.7,
+        169.1
+      ],
+      "loading": {
+        "xy_m": [
+          -40,
+          173
+        ],
+        "heading_deg": 0,
+        "ground_z_m": 1.0739129638671876,
+        "surface_actor": "SM_Floor_507",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "unloading": {
+        "xy_m": [
+          -28,
+          173
+        ],
+        "heading_deg": 0,
+        "ground_z_m": 1.0740008544921875,
+        "surface_actor": "SM_Floor_507",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "waiting": null
+    },
+    {
+      "id": "W6",
+      "description": "新增：中间建筑排高 Y 侧",
+      "building_actor": "SM_Build_169",
+      "building_bounds_m": [
+        -33.1,
+        195.0,
+        -17.8,
+        209.3
+      ],
+      "loading": {
+        "xy_m": [
+          -36,
+          184
+        ],
+        "heading_deg": 0,
+        "ground_z_m": 1.07393310546875,
+        "surface_actor": "SM_Floor_153",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "unloading": {
+        "xy_m": [
+          -24,
+          184
+        ],
+        "heading_deg": 0,
+        "ground_z_m": 1.074022216796875,
+        "surface_actor": "SM_Floor_153",
+        "parking_envelope_m": [
+          9.0,
+          3.3
+        ],
+        "static_parking_probe": "PASS",
+        "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+        "kind": "off-road hardstand"
+      },
+      "waiting": null
+    }
+  ],
+  "shared_waiting": [
+    {
+      "id": "Q1",
+      "xy_m": [
+        -64,
+        173
+      ],
+      "heading_deg": 0,
+      "ground_z_m": 1.0739727783203126,
+      "surface_actor": "SM_Floor_505",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/ground_clearance.json",
+      "kind": "off-road hardstand"
+    },
+    {
+      "id": "Q2",
+      "xy_m": [
+        -52,
+        173
+      ],
+      "heading_deg": 0,
+      "ground_z_m": 1.0740716552734375,
+      "surface_actor": "SM_Floor_505",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/ground_clearance.json",
+      "kind": "off-road hardstand"
+    },
+    {
+      "id": "Q3",
+      "zone": "W3 low-end curb",
+      "xy_m": [
+        -82,
+        68
+      ],
+      "heading_deg": 270,
+      "ground_z_m": 1.24997314453125,
+      "surface_actor": "SM_Road_71",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_directional_clearance.json",
+      "kind": "road-edge shoulder"
+    },
+    {
+      "id": "Q4",
+      "zone": "W3 lower road curb",
+      "xy_m": [
+        -82,
+        104
+      ],
+      "heading_deg": 270,
+      "ground_z_m": 1.2499755859375,
+      "surface_actor": "SM_Road_76",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_directional_clearance.json",
+      "kind": "road-edge shoulder"
+    },
+    {
+      "id": "Q5",
+      "zone": "W3 lower road curb",
+      "xy_m": [
+        -82,
+        122
+      ],
+      "heading_deg": 270,
+      "ground_z_m": 1.249984130859375,
+      "surface_actor": "SM_Road_74",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_directional_clearance.json",
+      "kind": "road-edge shoulder"
+    },
+    {
+      "id": "Q6",
+      "zone": "central connector curb",
+      "xy_m": [
+        -82,
+        196
+      ],
+      "heading_deg": 270,
+      "ground_z_m": 1.24997314453125,
+      "surface_actor": "SM_Road_71",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_directional_clearance.json",
+      "kind": "road-edge shoulder"
+    },
+    {
+      "id": "Q7",
+      "zone": "W4 upper road curb",
+      "xy_m": [
+        -82,
+        234
+      ],
+      "heading_deg": 270,
+      "ground_z_m": 1.249971923828125,
+      "surface_actor": "SM_Road_76",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_directional_clearance.json",
+      "kind": "road-edge shoulder"
+    },
+    {
+      "id": "Q8",
+      "zone": "W4 upper road curb",
+      "xy_m": [
+        -82,
+        250
+      ],
+      "heading_deg": 270,
+      "ground_z_m": 1.249984130859375,
+      "surface_actor": "SM_Road_74",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_directional_clearance.json",
+      "kind": "road-edge shoulder"
+    },
+    {
+      "id": "Q9",
+      "zone": "W1 inner roadside hardstand",
+      "xy_m": [
+        -20,
+        110
+      ],
+      "heading_deg": 90,
+      "ground_z_m": 1.07400390625,
+      "surface_actor": "SM_Floor_17",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+      "kind": "off-road hardstand"
+    },
+    {
+      "id": "Q10",
+      "zone": "W1 inner roadside hardstand",
+      "xy_m": [
+        -20,
+        124
+      ],
+      "heading_deg": 90,
+      "ground_z_m": 1.074017333984375,
+      "surface_actor": "SM_Floor_18",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+      "kind": "off-road hardstand"
+    },
+    {
+      "id": "Q11",
+      "zone": "W2 inner roadside hardstand",
+      "xy_m": [
+        -20,
+        238
+      ],
+      "heading_deg": 90,
+      "ground_z_m": 1.07400390625,
+      "surface_actor": "SM_Floor_17",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+      "kind": "off-road hardstand"
+    },
+    {
+      "id": "Q12",
+      "zone": "W2 inner roadside hardstand",
+      "xy_m": [
+        -20,
+        252
+      ],
+      "heading_deg": 90,
+      "ground_z_m": 1.0740185546875,
+      "surface_actor": "SM_Floor_18",
+      "parking_envelope_m": [
+        9.0,
+        3.3
+      ],
+      "static_parking_probe": "PASS",
+      "probe_source": "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+      "kind": "off-road hardstand"
+    }
+  ],
+  "loading_capacity_per_station": 1,
+  "unloading_capacity_per_station": 1,
+  "shared_waiting_capacity": 12,
+  "total_waiting_capacity": 12,
+  "retired_waiting": [
+    {
+      "id": "W1-local",
+      "xy_m": [
+        20,
+        102
+      ],
+      "reason": "用户弃用：阻挡卸货位通道"
+    },
+    {
+      "id": "W2-local",
+      "xy_m": [
+        20,
+        230
+      ],
+      "reason": "用户弃用：阻挡卸货位通道"
+    }
+  ],
+  "waiting_assignment": {
+    "W1": [
+      "Q9",
+      "Q10"
+    ],
+    "W2": [
+      "Q11",
+      "Q12"
+    ],
+    "W3": [
+      "Q3",
+      "Q4",
+      "Q5"
+    ],
+    "W4": [
+      "Q7",
+      "Q8"
+    ],
+    "W5": [
+      "Q1",
+      "Q2",
+      "Q6"
+    ],
+    "W6": [
+      "Q1",
+      "Q2",
+      "Q6"
+    ]
+  },
+  "scene_modified": false,
+  "entry_exit_driving_validated": false,
+  "road_service_rule": "W3/W4 occupy the northbound right lane while serving; reserve the lane and terminal turn zone. Adjacent-lane passing requires a separate swept-clearance check before authorization.",
+  "required_after_approval": [
+    "confirm curb/fence access and service-side reach from each building",
+    "validate complete truck approach, stop, loading/unloading and departure in UE",
+    "verify shoulder waiting entry/exit, tire contact and live-lane clearance; then enforce lane/berth reservations and queue limits",
+    "add warehouse/berth/queue nodes to transport topology and task state machine"
+  ],
+  "survey_sources": [
+    "runs/ue_scene/station_siting/ground_clearance.json",
+    "runs/ue_scene/station_siting/expanded_ground_clearance.json",
+    "runs/ue_scene/station_siting/road_service_ground_clearance.json",
+    "runs/ue_scene/station_siting/waiting_ground_clearance.json",
+    "runs/ue_scene/station_siting/waiting_directional_clearance.json"
+  ]
+}

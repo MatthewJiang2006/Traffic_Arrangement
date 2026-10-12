@@ -1,0 +1,143 @@
+{
+  "vehicle_nodes": {
+    "car_00": "G0",
+    "car_01": "G1",
+    "car_02": "G2",
+    "car_03": "G3"
+  },
+  "stations": [
+    {
+      "station_id": "W",
+      "berth_nodes": [
+        "w0",
+        "w1",
+        "w2"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 2,
+      "service_time": 40
+    },
+    {
+      "station_id": "S",
+      "berth_nodes": [
+        "s0",
+        "s1",
+        "s2"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 2,
+      "service_time": 8
+    },
+    {
+      "station_id": "G0",
+      "berth_nodes": [
+        "G0"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 0
+    },
+    {
+      "station_id": "G1",
+      "berth_nodes": [
+        "G1"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 0
+    },
+    {
+      "station_id": "G2",
+      "berth_nodes": [
+        "G2"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 0
+    },
+    {
+      "station_id": "G3",
+      "berth_nodes": [
+        "G3"
+      ],
+      "service_capacity": 1,
+      "waiting_capacity": 0,
+      "service_time": 0
+    }
+  ],
+  "fixed": [
+    {
+      "task_id": "fixed_0_out",
+      "vehicle_id": "car_00",
+      "origin": "G0",
+      "destination": "W",
+      "release_time": 0
+    },
+    {
+      "task_id": "fixed_0_return",
+      "vehicle_id": "car_00",
+      "origin": "W",
+      "destination": "G0",
+      "release_time": 0
+    },
+    {
+      "task_id": "fixed_1_out",
+      "vehicle_id": "car_01",
+      "origin": "G1",
+      "destination": "W",
+      "release_time": 0
+    },
+    {
+      "task_id": "fixed_1_return",
+      "vehicle_id": "car_01",
+      "origin": "W",
+      "destination": "G1",
+      "release_time": 0
+    },
+    {
+      "task_id": "fixed_2_out",
+      "vehicle_id": "car_02",
+      "origin": "G2",
+      "destination": "W",
+      "release_time": 0
+    },
+    {
+      "task_id": "fixed_2_return",
+      "vehicle_id": "car_02",
+      "origin": "W",
+      "destination": "G2",
+      "release_time": 0
+    },
+    {
+      "task_id": "fixed_3_out",
+      "vehicle_id": "car_03",
+      "origin": "G3",
+      "destination": "W",
+      "release_time": 0
+    },
+    {
+      "task_id": "fixed_3_return",
+      "vehicle_id": "car_03",
+      "origin": "W",
+      "destination": "G3",
+      "release_time": 0
+    }
+  ],
+  "random": {
+    "destinations": [
+      "W",
+      "S"
+    ],
+    "trips_per_vehicle": 1,
+    "seed": 2026,
+    "release_interval": 1
+  },
+  "cyclic": {
+    "stops": [
+      "W",
+      "S"
+    ],
+    "cycles": 2,
+    "release_interval": 0
+  }
+}

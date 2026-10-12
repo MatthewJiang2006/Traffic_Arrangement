@@ -1,0 +1,187 @@
+{
+  "map": "config/topology/industrialarea_ue_internal_waiting_transport.json",
+  "positions": {
+    "Car_0_0": "fleet24-start-00",
+    "Car_0_1": "fleet24-start-01",
+    "Car_1_0": "fleet24-start-03",
+    "Car_1_1": "fleet24-start-04",
+    "Car_2_0": "fleet24-start-06",
+    "Car_2_1": "fleet24-start-07",
+    "Car_3_0": "fleet24-start-09",
+    "Car_3_1": "fleet24-start-10",
+    "Car_4_0": "fleet24-start-12",
+    "Car_4_1": "fleet24-start-13",
+    "Car_5_0": "fleet24-start-15",
+    "Car_5_1": "fleet24-start-16",
+    "Car_6_0": "fleet24-start-18",
+    "Car_6_1": "fleet24-start-19",
+    "Car_7_0": "fleet24-start-21",
+    "Car_7_1": "fleet24-start-22"
+  },
+  "tasks": [
+    [
+      "W1-loading",
+      "W3-unloading"
+    ],
+    [
+      "W2-loading",
+      "W4-unloading"
+    ],
+    [
+      "W3-loading",
+      "W5-unloading"
+    ],
+    [
+      "W4-loading",
+      "W6-unloading"
+    ],
+    [
+      "W5-loading",
+      "W1-unloading"
+    ],
+    [
+      "W6-loading",
+      "W2-unloading"
+    ],
+    [
+      "W1-loading",
+      "W4-unloading"
+    ],
+    [
+      "W2-loading",
+      "W5-unloading"
+    ],
+    [
+      "W3-loading",
+      "W6-unloading"
+    ],
+    [
+      "W4-loading",
+      "W1-unloading"
+    ],
+    [
+      "W5-loading",
+      "W2-unloading"
+    ],
+    [
+      "W6-loading",
+      "W3-unloading"
+    ],
+    [
+      "W1-loading",
+      "W5-unloading"
+    ],
+    [
+      "W2-loading",
+      "W6-unloading"
+    ],
+    [
+      "W3-loading",
+      "W1-unloading"
+    ],
+    [
+      "W4-loading",
+      "W2-unloading"
+    ],
+    [
+      "W5-loading",
+      "W3-unloading"
+    ],
+    [
+      "W6-loading",
+      "W4-unloading"
+    ],
+    [
+      "W1-loading",
+      "W2-unloading"
+    ],
+    [
+      "W2-loading",
+      "W3-unloading"
+    ],
+    [
+      "W3-loading",
+      "W4-unloading"
+    ],
+    [
+      "W4-loading",
+      "W5-unloading"
+    ],
+    [
+      "W5-loading",
+      "W6-unloading"
+    ],
+    [
+      "W6-loading",
+      "W1-unloading"
+    ],
+    [
+      "W1-loading",
+      "W6-unloading"
+    ],
+    [
+      "W2-loading",
+      "W1-unloading"
+    ],
+    [
+      "W3-loading",
+      "W2-unloading"
+    ],
+    [
+      "W4-loading",
+      "W3-unloading"
+    ],
+    [
+      "W5-loading",
+      "W4-unloading"
+    ],
+    [
+      "W6-loading",
+      "W5-unloading"
+    ],
+    [
+      "W1-loading",
+      "W3-unloading"
+    ],
+    [
+      "W2-loading",
+      "W4-unloading"
+    ]
+  ],
+  "map_sha256": {
+    "IndustrialArea（复件）.umap": "1ec14ed6f76f61b88724a656fdac54c4e2997108e80c4e26acf64b372fbc2351",
+    "IndustrialArea_Copy.umap": "db5f86ed1f2f5682873362c1452696024b38f10427d6fe8e134a508e6c1123e9"
+  },
+  "scope": "16 trucks proactive maneuver admission and safe landing",
+  "blocked_candidate_edges": [
+    "access_133",
+    "access_134",
+    "access_167"
+  ],
+  "traffic_routing": true,
+  "output": "runs/fleet16_round47_proactive_full_v13",
+  "network": "config/topology/industrialarea_ue_internal_waiting_network.json",
+  "local_traffic": true,
+  "batch_observer": true,
+  "stall_limit_s": 120,
+  "early_stall_check_s": 15,
+  "physical_limit_s": 3600,
+  "light_dt_s": 0.1,
+  "light_max_sim_s": 3600,
+  "light_status_interval_s": 30,
+  "light_checkpoints": true,
+  "early_stall_displacement_m": 0.25,
+  "world_time_scale": 1,
+  "adapter_options": {
+    "speed_rise_m_s2": 0.6,
+    "speed_error_gain": 0.6
+  },
+  "park_idle_vehicles": true,
+  "offroad_busy_wait": true,
+  "local_stall_check_s": 20,
+  "local_wait_limit_s": 90,
+  "efficiency_policy": {
+    "proactive_admission": true
+  },
+  "physics_substepping": true
+}

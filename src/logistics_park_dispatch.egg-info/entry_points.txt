@@ -1,0 +1,4 @@
+[console_scripts]
+logistics-park = logistics_park.simulation.lightweight.cli:main
+logistics-park-fcfs = logistics_park.simulation.lightweight.fcfs_cli:main
+logistics-park-tasks = logistics_park.simulation.lightweight.task_cli:main

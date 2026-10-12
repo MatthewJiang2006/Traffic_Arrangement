@@ -1,0 +1,40 @@
+{
+  "description": "Collision-only road surface bridges across the two copied IndustrialArea seams; fixed road layout is preserved",
+  "coordinate_frame": "UE absolute world metres",
+  "patches": [
+    {
+      "label": "Traffic_SeamBridge_Left",
+      "center_m": [
+        -92.2034,
+        177.1133,
+        1.054
+      ],
+      "size_m": [
+        24.2,
+        1.45,
+        0.12
+      ],
+      "gap_y_m": [
+        176.8027,
+        177.4239
+      ]
+    },
+    {
+      "label": "Traffic_SeamBridge_Middle",
+      "center_m": [
+        -10.2,
+        177.1107,
+        1.054
+      ],
+      "size_m": [
+        16.2,
+        1.45,
+        0.12
+      ],
+      "gap_y_m": [
+        176.8,
+        177.4213
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "map": "config/topology/industrialarea_ue_fleet24_transport.json",
+  "positions": {
+    "Car_0_0": "W5-loading",
+    "Car_0_1": "W6-loading",
+    "Car_0_2": "W3-loading",
+    "Car_1_0": "W4-loading"
+  },
+  "tasks": [
+    [
+      "W5-loading",
+      "W3-unloading"
+    ],
+    [
+      "W6-loading",
+      "W5-unloading"
+    ],
+    [
+      "W3-loading",
+      "W4-unloading"
+    ],
+    [
+      "W4-loading",
+      "W6-unloading"
+    ],
+    [
+      "W5-loading",
+      "W1-unloading"
+    ],
+    [
+      "W3-loading",
+      "W5-unloading"
+    ],
+    [
+      "W4-loading",
+      "W3-unloading"
+    ],
+    [
+      "W6-loading",
+      "W4-unloading"
+    ],
+    [
+      "W1-loading",
+      "W6-unloading"
+    ],
+    [
+      "W2-loading",
+      "W3-unloading"
+    ],
+    [
+      "W3-loading",
+      "W1-unloading"
+    ],
+    [
+      "W4-loading",
+      "W2-unloading"
+    ]
+  ],
+  "map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "9d3251cd123f3d55580c6b3049f501426651c9584ee2f57156ecec8a9d36e4d4",
+    "IndustrialArea_Copy.umap": "a50fe748ddcead7dd47b1a485c45ea50c153591303ebbf0da56ab88a5274a956"
+  },
+  "scope": "Four-truck scheduler debugging: shared docks, waiting clearance and repeated transport",
+  "blocked_candidate_edges": [],
+  "traffic_routing": true,
+  "output": "runs/fleet4_scheduler_round4",
+  "network": "config/topology/industrialarea_ue_fleet24_repair_network.json",
+  "local_traffic": true,
+  "batch_observer": true,
+  "stall_limit_s": 120,
+  "early_stall_check_s": 15,
+  "physical_limit_s": 1800,
+  "light_dt_s": 0.1,
+  "light_max_sim_s": 3600,
+  "light_status_interval_s": 30,
+  "light_checkpoints": true,
+  "early_stall_displacement_m": 0.25,
+  "world_time_scale": 4
+}

@@ -1,0 +1,40 @@
+{
+  "origin": "fleet24-start-03",
+  "destination": "W5-loading",
+  "route": {
+    "edge_ids": [
+      "fleet24_depart_03",
+      "turn_j_1_1_E_N_single_single",
+      "road_j_1_1_j_2_1__service_0",
+      "road_j_1_1_j_2_1__service_1__internal_0",
+      "road_j_1_1_j_2_1__service_1__internal_1",
+      "road_j_1_1_j_2_1__service_2",
+      "access_028",
+      "access_029",
+      "access_030"
+    ],
+    "distance_m": 90.78523935734952,
+    "estimated_travel_time_s": 45.93072052837178,
+    "freeflow_travel_time_s": 45.93072052837178,
+    "congestion_delay_s": 0.0,
+    "attachment_validation_required": false,
+    "access_validation_required": false,
+    "initial_direction": 1,
+    "gear_change_nodes": [
+      "access_point_236"
+    ],
+    "required_resources": [
+      "access:W5_W6_merge",
+      "j_1_1"
+    ],
+    "must_be_empty_nodes": []
+  },
+  "checkpoint_s": 116.0,
+  "state": {
+    "x": 5.889212210310906,
+    "y": 135.107,
+    "heading": 3.141592653589793,
+    "speed": 0.0
+  },
+  "progress": 3.2750377896890965
+}

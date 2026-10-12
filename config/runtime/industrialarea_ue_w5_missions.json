@@ -1,0 +1,108 @@
+{
+  "application": "shared_transport",
+  "map": "config/topology/industrialarea_ue_w5_missions.json",
+  "scope": "W5 local waiting/loading/unloading/road exit; not inter-warehouse transport",
+  "max_runtime_s": 320,
+  "body_prefix": "warehouse",
+  "expected_shared_order": [
+    "Car_0_0",
+    "Car_0_1"
+  ],
+  "minimum_wait_s": 2,
+  "require_parallel_motion": true,
+  "adapter": {
+    "vehicle_ids": [
+      "Car_0_0",
+      "Car_0_1"
+    ],
+    "origin_ue_m": [
+      56.81,
+      88.14,
+      8.05
+    ],
+    "throttle_rise_per_s": 0.24,
+    "speed_rise_m_s2": 0.8,
+    "max_throttle": 0.7,
+    "speed_error_gain": 0.6
+  },
+  "verified_ground_actors": [
+    "TrafficW5RoadToCurb",
+    "TrafficW5CurbToHardstand",
+    "TrafficW6RoadToCurb",
+    "TrafficW6CurbToHardstand"
+  ],
+  "routes": {
+    "Car_0_0": {
+      "edges": [
+        "Car_0_0_waiting_to_loading",
+        "Car_0_0_loading_to_unloading",
+        "Car_0_0_forward_exit",
+        "Car_0_0_north_recovery"
+      ],
+      "origin": "Q2",
+      "stops": [
+        "W5-loading",
+        "W5-unloading"
+      ],
+      "checkpoints": [
+        {
+          "leg": 0,
+          "site": "W5-loading",
+          "node": "Car_0_0_node_1",
+          "after_edge_count": 1,
+          "event": "ARRIVAL",
+          "operation": "LOADING",
+          "channel_id": "W5_work_access"
+        },
+        {
+          "leg": 1,
+          "site": "W5-unloading",
+          "node": "Car_0_0_node_2",
+          "after_edge_count": 2,
+          "event": "ARRIVAL",
+          "operation": "UNLOADING",
+          "channel_id": "W5_work_access"
+        }
+      ]
+    },
+    "Car_0_1": {
+      "edges": [
+        "Car_0_1_waiting_to_loading",
+        "Car_0_1_loading_to_unloading",
+        "Car_0_1_forward_exit",
+        "Car_0_1_north_recovery"
+      ],
+      "origin": "Q1",
+      "stops": [
+        "W5-loading",
+        "W5-unloading"
+      ],
+      "checkpoints": [
+        {
+          "leg": 0,
+          "site": "W5-loading",
+          "node": "Car_0_1_node_1",
+          "after_edge_count": 1,
+          "event": "ARRIVAL",
+          "operation": "LOADING",
+          "channel_id": "W5_work_access"
+        },
+        {
+          "leg": 1,
+          "site": "W5-unloading",
+          "node": "Car_0_1_node_2",
+          "after_edge_count": 2,
+          "event": "ARRIVAL",
+          "operation": "UNLOADING",
+          "channel_id": "W5_work_access"
+        }
+      ]
+    }
+  },
+  "station_plan_sha256": "6eea00da578b211f288a44b4955f7cda3c05d991c58f9180274e01db2e599c60",
+  "source_routes_sha256": "80de73b716cc8cb4abc0c532d9204bfce45da238aa390924799361abc42b12f0",
+  "source_map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "ffd5edcccf61022200440dc7561e3223ed845fb063e4b9df03e00442f1dae905",
+    "IndustrialArea_Copy.umap": "678f87b2636e3e9b3189944bb5014fc817856d9fa0716d35d61d7d1f2f5d0171"
+  }
+}

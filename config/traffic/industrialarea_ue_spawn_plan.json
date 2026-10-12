@@ -1,0 +1,373 @@
+{
+  "description": "24-truck road-lane spawn proposal; no UE setting or live vehicle is modified by this file",
+  "coordinate_frame": "UE absolute world metres; convert with each session's AirSim world origin",
+  "truck_length_m_from_pawn_bounds": 8.344,
+  "truck_width_m_from_pawn_bounds": 3.836,
+  "minimum_body_clearance_m": 2.22,
+  "vehicles_per_lane": 6,
+  "targets": [
+    {
+      "vehicle_id": "Car_0_0",
+      "source_ue_position_m": [
+        -75.616,
+        86.054,
+        2.0628
+      ],
+      "target_ue_position_m": [
+        -75.6157,
+        87.3024,
+        0.8938
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_0_1_j_0_0"
+    },
+    {
+      "vehicle_id": "Car_0_1",
+      "source_ue_position_m": [
+        -65.0511,
+        86.0539,
+        2.0627
+      ],
+      "target_ue_position_m": [
+        -65.0517,
+        87.3024,
+        0.8938
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_0_1_j_0_0"
+    },
+    {
+      "vehicle_id": "Car_0_2",
+      "source_ue_position_m": [
+        -54.4871,
+        86.0539,
+        2.0627
+      ],
+      "target_ue_position_m": [
+        -54.4877,
+        87.3024,
+        0.8936
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_0_1_j_0_0"
+    },
+    {
+      "vehicle_id": "Car_1_0",
+      "source_ue_position_m": [
+        -43.9231,
+        86.0539,
+        2.0617
+      ],
+      "target_ue_position_m": [
+        -43.9237,
+        87.3024,
+        0.8946
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_0_1_j_0_0"
+    },
+    {
+      "vehicle_id": "Car_1_1",
+      "source_ue_position_m": [
+        -33.3591,
+        86.0539,
+        2.0617
+      ],
+      "target_ue_position_m": [
+        -33.3597,
+        87.3024,
+        0.8948
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_0_1_j_0_0"
+    },
+    {
+      "vehicle_id": "Car_1_2",
+      "source_ue_position_m": [
+        -22.7951,
+        86.0551,
+        2.061
+      ],
+      "target_ue_position_m": [
+        -22.7957,
+        87.3024,
+        0.8938
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_0_1_j_0_0"
+    },
+    {
+      "vehicle_id": "Car_2_0",
+      "source_ue_position_m": [
+        -75.6151,
+        214.0779,
+        2.0616
+      ],
+      "target_ue_position_m": [
+        -75.6157,
+        215.3264,
+        0.8938
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_2_1_j_2_0"
+    },
+    {
+      "vehicle_id": "Car_2_1",
+      "source_ue_position_m": [
+        -65.0513,
+        214.0779,
+        2.0666
+      ],
+      "target_ue_position_m": [
+        -65.0517,
+        215.3264,
+        0.8938
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_2_1_j_2_0"
+    },
+    {
+      "vehicle_id": "Car_2_2",
+      "source_ue_position_m": [
+        -54.4871,
+        214.0779,
+        2.0666
+      ],
+      "target_ue_position_m": [
+        -54.4877,
+        215.3264,
+        0.8936
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_2_1_j_2_0"
+    },
+    {
+      "vehicle_id": "Car_3_0",
+      "source_ue_position_m": [
+        -43.9231,
+        214.0779,
+        2.0636
+      ],
+      "target_ue_position_m": [
+        -43.9237,
+        215.3264,
+        0.8946
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_2_1_j_2_0"
+    },
+    {
+      "vehicle_id": "Car_3_1",
+      "source_ue_position_m": [
+        -33.3591,
+        214.0779,
+        2.0666
+      ],
+      "target_ue_position_m": [
+        -33.3597,
+        215.3264,
+        0.8948
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_2_1_j_2_0"
+    },
+    {
+      "vehicle_id": "Car_3_2",
+      "source_ue_position_m": [
+        -22.7951,
+        214.0779,
+        2.0616
+      ],
+      "target_ue_position_m": [
+        -22.7957,
+        215.3264,
+        0.8938
+      ],
+      "target_ue_yaw_deg": 180,
+      "road_edge": "road_j_2_1_j_2_0"
+    },
+    {
+      "vehicle_id": "Car_4_0",
+      "source_ue_position_m": [
+        -22.7951,
+        140.1539,
+        2.0541
+      ],
+      "target_ue_position_m": [
+        -22.7957,
+        138.9024,
+        0.8937
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_1_0_j_1_1"
+    },
+    {
+      "vehicle_id": "Car_4_1",
+      "source_ue_position_m": [
+        -33.3591,
+        140.1539,
+        2.0537
+      ],
+      "target_ue_position_m": [
+        -33.3597,
+        138.9024,
+        0.8947
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_1_0_j_1_1"
+    },
+    {
+      "vehicle_id": "Car_4_2",
+      "source_ue_position_m": [
+        -43.9231,
+        140.1539,
+        2.1528
+      ],
+      "target_ue_position_m": [
+        -43.9237,
+        138.9024,
+        0.8949
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_1_0_j_1_1"
+    },
+    {
+      "vehicle_id": "Car_5_0",
+      "source_ue_position_m": [
+        -54.4878,
+        140.1542,
+        2.0635
+      ],
+      "target_ue_position_m": [
+        -54.4877,
+        138.9024,
+        0.8939
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_1_0_j_1_1"
+    },
+    {
+      "vehicle_id": "Car_5_1",
+      "source_ue_position_m": [
+        -65.0511,
+        140.1539,
+        2.0634
+      ],
+      "target_ue_position_m": [
+        -65.0517,
+        138.9024,
+        0.8937
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_1_0_j_1_1"
+    },
+    {
+      "vehicle_id": "Car_5_2",
+      "source_ue_position_m": [
+        -75.6151,
+        140.153,
+        2.0617
+      ],
+      "target_ue_position_m": [
+        -75.6157,
+        138.9024,
+        0.8937
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_1_0_j_1_1"
+    },
+    {
+      "vehicle_id": "Car_6_0",
+      "source_ue_position_m": [
+        -22.7951,
+        268.1779,
+        2.0854
+      ],
+      "target_ue_position_m": [
+        -22.7957,
+        266.9264,
+        0.8937
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_3_0_j_3_1"
+    },
+    {
+      "vehicle_id": "Car_6_1",
+      "source_ue_position_m": [
+        -33.3591,
+        268.1779,
+        2.0616
+      ],
+      "target_ue_position_m": [
+        -33.3597,
+        266.9264,
+        0.8947
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_3_0_j_3_1"
+    },
+    {
+      "vehicle_id": "Car_6_2",
+      "source_ue_position_m": [
+        -43.9231,
+        268.1779,
+        2.3515
+      ],
+      "target_ue_position_m": [
+        -43.9237,
+        266.9264,
+        0.8949
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_3_0_j_3_1"
+    },
+    {
+      "vehicle_id": "Car_7_0",
+      "source_ue_position_m": [
+        -54.4871,
+        268.1779,
+        2.0989
+      ],
+      "target_ue_position_m": [
+        -54.4877,
+        266.9264,
+        0.8939
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_3_0_j_3_1"
+    },
+    {
+      "vehicle_id": "Car_7_1",
+      "source_ue_position_m": [
+        -65.0511,
+        268.1779,
+        2.0616
+      ],
+      "target_ue_position_m": [
+        -65.0517,
+        266.9264,
+        0.8937
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_3_0_j_3_1"
+    },
+    {
+      "vehicle_id": "Car_7_2",
+      "source_ue_position_m": [
+        -75.6151,
+        268.1779,
+        2.0616
+      ],
+      "target_ue_position_m": [
+        -75.6157,
+        266.9264,
+        0.8937
+      ],
+      "target_ue_yaw_deg": 0,
+      "road_edge": "road_j_3_0_j_3_1"
+    }
+  ],
+  "vertical_placement": "UE actor origin calibrated to visible tire bottoms and settled SUV physics; visual actor relative Z is +21 cm",
+  "visual_z_offset_cm": 21,
+  "driving_side": "right, verified against painted arrows and UE body axes"
+}

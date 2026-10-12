@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: logistics-park-dispatch
+Version: 0.3.0
+Summary: Reproducible lightweight multi-vehicle logistics park simulation
+Requires-Python: >=3.10
+Provides-Extra: dev
+Requires-Dist: pytest>=6.2; extra == "dev"

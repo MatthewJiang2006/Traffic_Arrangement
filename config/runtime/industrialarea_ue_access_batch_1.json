@@ -1,0 +1,159 @@
+{
+  "application": "shared_transport",
+  "map": "config/topology/industrialarea_ue_access_batch_1.json",
+  "routes": {
+    "Car_0_0": {
+      "edges": [
+        "Car_0_0_0",
+        "Car_0_0_1"
+      ],
+      "origin": "W1-exit-start",
+      "stops": [
+        "W1-exit"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 2,
+          "leg": 0,
+          "site": "W1-exit",
+          "node": "Car_0_0_2_node"
+        }
+      ],
+      "case": "W1-exit"
+    },
+    "Car_0_1": {
+      "edges": [
+        "Car_0_1_0",
+        "Car_0_1_1"
+      ],
+      "origin": "W2-exit-start",
+      "stops": [
+        "W2-exit"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 2,
+          "leg": 0,
+          "site": "W2-exit",
+          "node": "Car_0_1_2_node"
+        }
+      ],
+      "case": "W2-exit"
+    },
+    "Car_0_2": {
+      "edges": [
+        "Car_0_2_0",
+        "Car_0_2_1",
+        "Car_0_2_2",
+        "Car_0_2_3"
+      ],
+      "origin": "Q5-access-start",
+      "stops": [
+        "Q5-access"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 4,
+          "leg": 0,
+          "site": "Q5-access",
+          "node": "Car_0_2_4_node"
+        }
+      ],
+      "case": "Q5-access"
+    },
+    "Car_1_0": {
+      "edges": [
+        "Car_1_0_0"
+      ],
+      "origin": "W3-reverse-entry-start",
+      "stops": [
+        "W3-reverse-entry"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 1,
+          "leg": 0,
+          "site": "W3-reverse-entry",
+          "node": "Car_1_0_1_node"
+        }
+      ],
+      "case": "W3-reverse-entry"
+    },
+    "Car_1_1": {
+      "edges": [
+        "Car_1_1_0"
+      ],
+      "origin": "Q9-reverse-entry-start",
+      "stops": [
+        "Q9-reverse-entry"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 1,
+          "leg": 0,
+          "site": "Q9-reverse-entry",
+          "node": "Car_1_1_1_node"
+        }
+      ],
+      "case": "Q9-reverse-entry"
+    }
+  },
+  "scope": "Spatially disjoint access acceptance; no full-park dispatch",
+  "max_runtime_s": 240,
+  "body_prefix": "accessbatch1",
+  "minimum_wait_s": 0,
+  "require_parallel_motion": true,
+  "service_s": 2,
+  "adapter": {
+    "vehicle_ids": [
+      "Car_0_0",
+      "Car_0_1",
+      "Car_0_2",
+      "Car_1_0",
+      "Car_1_1"
+    ],
+    "origin_ue_m": [
+      56.81,
+      88.14,
+      8.05
+    ],
+    "throttle_rise_per_s": 0.4,
+    "speed_rise_m_s2": 1.2,
+    "max_throttle": 0.85,
+    "speed_error_gain": 1.0,
+    "allow_reverse": true
+  },
+  "verified_ground_actors": [
+    "TrafficStationQ3CurbRamp",
+    "TrafficStationQ4Q5CurbRamp",
+    "TrafficStationQ6CurbRamp",
+    "TrafficStationQ7Q8CurbRamp",
+    "TrafficW1CurbToHardstand",
+    "TrafficW1LaneTaperHighY",
+    "TrafficW1LaneTaperLowY",
+    "TrafficW1RoadToCurb",
+    "TrafficW1UnloadingCurbToHardstand",
+    "TrafficW1UnloadingRoadToCurb",
+    "TrafficW2CurbToHardstand",
+    "TrafficW2LaneTaperHighY",
+    "TrafficW2LaneTaperLowY",
+    "TrafficW2RoadToCurb",
+    "TrafficW2UnloadingCurbToHardstand",
+    "TrafficW2UnloadingRoadToCurb",
+    "TrafficW5CurbToHardstand",
+    "TrafficW5RoadToCurb",
+    "TrafficW6CurbToHardstand",
+    "TrafficW6RoadToCurb",
+    "TrafficWaitingQ11Q12CurbToHardstand",
+    "TrafficWaitingQ11Q12RoadToCurb",
+    "TrafficWaitingQ9Q10CurbToHardstand",
+    "TrafficWaitingQ9Q10RoadToCurb",
+    "Traffic_SeamBridge_Left",
+    "Traffic_SeamBridge_Middle"
+  ]
+}

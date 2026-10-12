@@ -1,0 +1,3680 @@
+{
+  "nodes": [
+    {
+      "node_id": "Q26__point0",
+      "node_type": "WAYPOINT",
+      "position": [
+        -50.50625675287266,
+        217.5604029836876
+      ]
+    },
+    {
+      "node_id": "Q26__point1",
+      "node_type": "WAYPOINT",
+      "position": [
+        -46.6509530860279,
+        216.73212325685913
+      ]
+    },
+    {
+      "node_id": "Q26__point2",
+      "node_type": "WAYPOINT",
+      "position": [
+        -44.42008797289585,
+        213.39650303448272
+      ]
+    },
+    {
+      "node_id": "Q26__point3",
+      "node_type": "WAYPOINT",
+      "position": [
+        -41.16425,
+        211.0
+      ]
+    },
+    {
+      "node_id": "Q26__point4",
+      "node_type": "WAYPOINT",
+      "position": [
+        -37.30894633315524,
+        211.82827972682847
+      ]
+    },
+    {
+      "node_id": "Q26__point5",
+      "node_type": "WAYPOINT",
+      "position": [
+        -35.13119862611968,
+        215.23406420291388
+      ]
+    },
+    {
+      "node_id": "Q26__point6",
+      "node_type": "WAYPOINT",
+      "position": [
+        -32.22130991180581,
+        217.89525967483445
+      ]
+    },
+    {
+      "node_id": "Q28__point0",
+      "node_type": "WAYPOINT",
+      "position": [
+        -50.50625675287266,
+        89.56040298368762
+      ]
+    },
+    {
+      "node_id": "Q28__point1",
+      "node_type": "WAYPOINT",
+      "position": [
+        -46.650953086027904,
+        88.73212325685914
+      ]
+    },
+    {
+      "node_id": "Q28__point2",
+      "node_type": "WAYPOINT",
+      "position": [
+        -44.420087972895836,
+        85.39650303448275
+      ]
+    },
+    {
+      "node_id": "Q28__point3",
+      "node_type": "WAYPOINT",
+      "position": [
+        -41.16425,
+        83.0
+      ]
+    },
+    {
+      "node_id": "Q28__point4",
+      "node_type": "WAYPOINT",
+      "position": [
+        -37.30894633315524,
+        83.8282797268285
+      ]
+    },
+    {
+      "node_id": "Q28__point5",
+      "node_type": "WAYPOINT",
+      "position": [
+        -35.13119862611968,
+        87.23406420291394
+      ]
+    },
+    {
+      "node_id": "Q28__point6",
+      "node_type": "WAYPOINT",
+      "position": [
+        -32.22130991180581,
+        89.8952596748345
+      ]
+    },
+    {
+      "node_id": "Q29__point0",
+      "node_type": "WAYPOINT",
+      "position": [
+        -17.316081150571637,
+        266.4709169455668
+      ]
+    },
+    {
+      "node_id": "Q29__point1",
+      "node_type": "WAYPOINT",
+      "position": [
+        -20.502394148267687,
+        269.00680375655435
+      ]
+    },
+    {
+      "node_id": "Q29__point2",
+      "node_type": "WAYPOINT",
+      "position": [
+        -21.58599213284777,
+        273.0559364533044
+      ]
+    },
+    {
+      "node_id": "Q29__point3",
+      "node_type": "WAYPOINT",
+      "position": [
+        -25.16425,
+        275.0
+      ]
+    },
+    {
+      "node_id": "Q29__point4",
+      "node_type": "WAYPOINT",
+      "position": [
+        -21.58599213284777,
+        273.0559364533044
+      ]
+    },
+    {
+      "node_id": "Q29__point5",
+      "node_type": "WAYPOINT",
+      "position": [
+        -20.502394148267687,
+        269.00680375655435
+      ]
+    },
+    {
+      "node_id": "Q29__point6",
+      "node_type": "WAYPOINT",
+      "position": [
+        -17.316081150571637,
+        266.4709169455668
+      ]
+    },
+    {
+      "node_id": "Q35__point0",
+      "node_type": "WAYPOINT",
+      "position": [
+        -13.227362899888856,
+        304.2315067873355
+      ]
+    },
+    {
+      "node_id": "Q35__point1",
+      "node_type": "WAYPOINT",
+      "position": [
+        -15.912535176730705,
+        300.5009271526302
+      ]
+    },
+    {
+      "node_id": "Q35__point2",
+      "node_type": "WAYPOINT",
+      "position": [
+        -20.48113848073276,
+        299.3877360003113
+      ]
+    },
+    {
+      "node_id": "Q35__point3",
+      "node_type": "WAYPOINT",
+      "position": [
+        -25.16425,
+        299.0
+      ]
+    },
+    {
+      "node_id": "Q35__point4",
+      "node_type": "WAYPOINT",
+      "position": [
+        -20.48113848073276,
+        299.3877360003113
+      ]
+    },
+    {
+      "node_id": "Q35__point5",
+      "node_type": "WAYPOINT",
+      "position": [
+        -15.912535176730703,
+        300.5009271526302
+      ]
+    },
+    {
+      "node_id": "Q35__point6",
+      "node_type": "WAYPOINT",
+      "position": [
+        -13.227362899888856,
+        304.2315067873355
+      ]
+    },
+    {
+      "node_id": "Q36__point0",
+      "node_type": "WAYPOINT",
+      "position": [
+        -13.470270299896612,
+        57.40442295950274
+      ]
+    },
+    {
+      "node_id": "Q36__point1",
+      "node_type": "WAYPOINT",
+      "position": [
+        -16.6725037244307,
+        54.98067084247183
+      ]
+    },
+    {
+      "node_id": "Q36__point2",
+      "node_type": "WAYPOINT",
+      "position": [
+        -20.82184838137105,
+        55.0
+      ]
+    },
+    {
+      "node_id": "Q36__point3",
+      "node_type": "WAYPOINT",
+      "position": [
+        -24.993049190685525,
+        55.0
+      ]
+    },
+    {
+      "node_id": "Q36__point4",
+      "node_type": "WAYPOINT",
+      "position": [
+        -29.16425,
+        55.0
+      ]
+    },
+    {
+      "node_id": "Q36__point5",
+      "node_type": "WAYPOINT",
+      "position": [
+        -24.993049190685525,
+        55.0
+      ]
+    },
+    {
+      "node_id": "Q36__point6",
+      "node_type": "WAYPOINT",
+      "position": [
+        -20.82184838137105,
+        55.0
+      ]
+    },
+    {
+      "node_id": "Q36__point7",
+      "node_type": "WAYPOINT",
+      "position": [
+        -16.6725037244307,
+        54.98067084247183
+      ]
+    },
+    {
+      "node_id": "Q36__point8",
+      "node_type": "WAYPOINT",
+      "position": [
+        -13.470270299896612,
+        57.40442295950274
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "Q26__0_0",
+      "from_node": "Q26__point0",
+      "to_node": "Q26__point1",
+      "centerline": [
+        [
+          -50.50625675287266,
+          217.5604029836876
+        ],
+        [
+          -48.966320582546125,
+          217.69944806286983
+        ],
+        [
+          -47.47169770889834,
+          217.30341850804652
+        ],
+        [
+          -46.6509530860279,
+          216.73212325685913
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q26__0_0",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886833,
+      "estimated_travel_time_s": 12.277204855886833,
+      "must_be_empty_nodes": [],
+      "site": "Q26",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q26__0_1",
+      "from_node": "Q26__point1",
+      "to_node": "Q26__point2",
+      "centerline": [
+        [
+          -46.6509530860279,
+          216.73212325685913
+        ],
+        [
+          -46.20266170877556,
+          216.42008132830307
+        ],
+        [
+          -45.45266170877556,
+          215.1210432226264
+        ],
+        [
+          -44.80311019445532,
+          213.717896839326
+        ],
+        [
+          -44.42008797289585,
+          213.39650303448272
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q26__0_1",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886833,
+      "estimated_travel_time_s": 12.277204855886833,
+      "must_be_empty_nodes": [],
+      "site": "Q26",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q26__0_2",
+      "from_node": "Q26__point2",
+      "to_node": "Q26__point3",
+      "centerline": [
+        [
+          -44.42008797289585,
+          213.39650303448272
+        ],
+        [
+          -43.65404352977686,
+          212.75371542479618
+        ],
+        [
+          -42.56376043782652,
+          211.65734882455158
+        ],
+        [
+          -41.16425,
+          211.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q26__0_2",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886833,
+      "estimated_travel_time_s": 12.277204855886833,
+      "must_be_empty_nodes": [],
+      "site": "Q26",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q26__1_0",
+      "from_node": "Q26__point3",
+      "to_node": "Q26__point4",
+      "centerline": [
+        [
+          -41.16425,
+          211.0
+        ],
+        [
+          -39.62431382967347,
+          210.86095492081776
+        ],
+        [
+          -38.129690956025684,
+          211.25698447564108
+        ],
+        [
+          -37.30894633315524,
+          211.82827972682847
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q26__1_0",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886838,
+      "estimated_travel_time_s": 12.277204855886838,
+      "must_be_empty_nodes": [],
+      "site": "Q26",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q26__1_1",
+      "from_node": "Q26__point4",
+      "to_node": "Q26__point5",
+      "centerline": [
+        [
+          -37.30894633315524,
+          211.82827972682847
+        ],
+        [
+          -36.8606549559029,
+          212.14032165538453
+        ],
+        [
+          -36.1106549559029,
+          213.43935976106118
+        ],
+        [
+          -35.3606549559029,
+          214.73839786673784
+        ],
+        [
+          -35.13119862611968,
+          215.23406420291388
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q26__1_1",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886838,
+      "estimated_travel_time_s": 12.277204855886838,
+      "must_be_empty_nodes": [],
+      "site": "Q26",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q26__1_2",
+      "from_node": "Q26__point5",
+      "to_node": "Q26__point6",
+      "centerline": [
+        [
+          -35.13119862611968,
+          215.23406420291388
+        ],
+        [
+          -34.711103441582665,
+          216.14154425003827
+        ],
+        [
+          -33.620820349632325,
+          217.23791085028287
+        ],
+        [
+          -32.22130991180581,
+          217.89525967483445
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q26__1_2",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886838,
+      "estimated_travel_time_s": 12.277204855886838,
+      "must_be_empty_nodes": [],
+      "site": "Q26",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q28__0_0",
+      "from_node": "Q28__point0",
+      "to_node": "Q28__point1",
+      "centerline": [
+        [
+          -50.50625675287266,
+          89.56040298368762
+        ],
+        [
+          -48.966320582546125,
+          89.69944806286985
+        ],
+        [
+          -47.47169770889834,
+          89.30341850804652
+        ],
+        [
+          -46.650953086027904,
+          88.73212325685914
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q28__0_0",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886826,
+      "estimated_travel_time_s": 12.277204855886826,
+      "must_be_empty_nodes": [],
+      "site": "Q28",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q28__0_1",
+      "from_node": "Q28__point1",
+      "to_node": "Q28__point2",
+      "centerline": [
+        [
+          -46.650953086027904,
+          88.73212325685914
+        ],
+        [
+          -46.20266170877556,
+          88.42008132830307
+        ],
+        [
+          -45.45266170877556,
+          87.12104322262641
+        ],
+        [
+          -44.80311019445532,
+          85.71789683932602
+        ],
+        [
+          -44.420087972895836,
+          85.39650303448275
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q28__0_1",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886826,
+      "estimated_travel_time_s": 12.277204855886826,
+      "must_be_empty_nodes": [],
+      "site": "Q28",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q28__0_2",
+      "from_node": "Q28__point2",
+      "to_node": "Q28__point3",
+      "centerline": [
+        [
+          -44.420087972895836,
+          85.39650303448275
+        ],
+        [
+          -43.65404352977686,
+          84.75371542479621
+        ],
+        [
+          -42.56376043782652,
+          83.65734882455159
+        ],
+        [
+          -41.16425,
+          83.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q28__0_2",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886826,
+      "estimated_travel_time_s": 12.277204855886826,
+      "must_be_empty_nodes": [],
+      "site": "Q28",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q28__1_0",
+      "from_node": "Q28__point3",
+      "to_node": "Q28__point4",
+      "centerline": [
+        [
+          -41.16425,
+          83.0
+        ],
+        [
+          -39.62431382967347,
+          82.86095492081778
+        ],
+        [
+          -38.129690956025684,
+          83.2569844756411
+        ],
+        [
+          -37.30894633315524,
+          83.8282797268285
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q28__1_0",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886852,
+      "estimated_travel_time_s": 12.277204855886852,
+      "must_be_empty_nodes": [],
+      "site": "Q28",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q28__1_1",
+      "from_node": "Q28__point4",
+      "to_node": "Q28__point5",
+      "centerline": [
+        [
+          -37.30894633315524,
+          83.8282797268285
+        ],
+        [
+          -36.8606549559029,
+          84.14032165538457
+        ],
+        [
+          -36.1106549559029,
+          85.43935976106123
+        ],
+        [
+          -35.3606549559029,
+          86.73839786673788
+        ],
+        [
+          -35.13119862611968,
+          87.23406420291394
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q28__1_1",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886852,
+      "estimated_travel_time_s": 12.277204855886852,
+      "must_be_empty_nodes": [],
+      "site": "Q28",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q28__1_2",
+      "from_node": "Q28__point5",
+      "to_node": "Q28__point6",
+      "centerline": [
+        [
+          -35.13119862611968,
+          87.23406420291394
+        ],
+        [
+          -34.711103441582665,
+          88.1415442500383
+        ],
+        [
+          -33.620820349632325,
+          89.23791085028292
+        ],
+        [
+          -32.22130991180581,
+          89.8952596748345
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q28__1_2",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.277204855886852,
+      "estimated_travel_time_s": 12.277204855886852,
+      "must_be_empty_nodes": [],
+      "site": "Q28",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q29__0_0",
+      "from_node": "Q29__point0",
+      "to_node": "Q29__point1",
+      "centerline": [
+        [
+          -17.316081150571637,
+          266.4709169455668
+        ],
+        [
+          -18.039606377114186,
+          266.66478494572243
+        ],
+        [
+          -18.71847480477825,
+          266.98134649242184
+        ],
+        [
+          -19.33205935991325,
+          267.4109830232564
+        ],
+        [
+          -19.861716586300176,
+          267.9406402496433
+        ],
+        [
+          -20.291353117134754,
+          268.5542248047783
+        ],
+        [
+          -20.502394148267687,
+          269.00680375655435
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q29__0_0",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.733823360410218,
+      "estimated_travel_time_s": 12.733823360410218,
+      "must_be_empty_nodes": [],
+      "site": "Q29",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q29__0_1",
+      "from_node": "Q29__point1",
+      "to_node": "Q29__point2",
+      "centerline": [
+        [
+          -20.502394148267687,
+          269.00680375655435
+        ],
+        [
+          -20.607914663834148,
+          269.23309323244234
+        ],
+        [
+          -20.80178266398977,
+          269.9566184589849
+        ],
+        [
+          -20.86706653651883,
+          270.70281653651887
+        ],
+        [
+          -20.932350409047892,
+          271.4490146140528
+        ],
+        [
+          -21.126218409203513,
+          272.1725398405954
+        ],
+        [
+          -21.442779955902907,
+          272.85140826825943
+        ],
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q29__0_1",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.733823360410218,
+      "estimated_travel_time_s": 12.733823360410218,
+      "must_be_empty_nodes": [],
+      "site": "Q29",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q29__0_2",
+      "from_node": "Q29__point2",
+      "to_node": "Q29__point3",
+      "centerline": [
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ],
+        [
+          -21.872416486737485,
+          273.4649928233944
+        ],
+        [
+          -22.402073713124413,
+          273.99465004978134
+        ],
+        [
+          -23.01565826825941,
+          274.4242865806159
+        ],
+        [
+          -23.694526695923475,
+          274.7408481273153
+        ],
+        [
+          -24.418051922466024,
+          274.93471612747095
+        ],
+        [
+          -25.16425,
+          275.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q29__0_2",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.733823360410218,
+      "estimated_travel_time_s": 12.733823360410218,
+      "must_be_empty_nodes": [],
+      "site": "Q29",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q29__1_0",
+      "from_node": "Q29__point3",
+      "to_node": "Q29__point4",
+      "centerline": [
+        [
+          -25.16425,
+          275.0
+        ],
+        [
+          -24.418051922466024,
+          274.93471612747095
+        ],
+        [
+          -23.694526695923475,
+          274.7408481273153
+        ],
+        [
+          -23.01565826825941,
+          274.4242865806159
+        ],
+        [
+          -22.402073713124413,
+          273.99465004978134
+        ],
+        [
+          -21.872416486737485,
+          273.4649928233944
+        ],
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q29__1_0",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.73382336041022,
+      "estimated_travel_time_s": 12.73382336041022,
+      "must_be_empty_nodes": [],
+      "site": "Q29",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q29__1_1",
+      "from_node": "Q29__point4",
+      "to_node": "Q29__point5",
+      "centerline": [
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ],
+        [
+          -21.442779955902907,
+          272.85140826825943
+        ],
+        [
+          -21.126218409203513,
+          272.1725398405954
+        ],
+        [
+          -20.932350409047892,
+          271.4490146140528
+        ],
+        [
+          -20.86706653651883,
+          270.70281653651887
+        ],
+        [
+          -20.80178266398977,
+          269.9566184589849
+        ],
+        [
+          -20.607914663834148,
+          269.23309323244234
+        ],
+        [
+          -20.502394148267687,
+          269.00680375655435
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q29__1_1",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.73382336041022,
+      "estimated_travel_time_s": 12.73382336041022,
+      "must_be_empty_nodes": [],
+      "site": "Q29",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q29__1_2",
+      "from_node": "Q29__point5",
+      "to_node": "Q29__point6",
+      "centerline": [
+        [
+          -20.502394148267687,
+          269.00680375655435
+        ],
+        [
+          -20.291353117134754,
+          268.5542248047783
+        ],
+        [
+          -19.861716586300176,
+          267.9406402496433
+        ],
+        [
+          -19.33205935991325,
+          267.4109830232564
+        ],
+        [
+          -18.71847480477825,
+          266.98134649242184
+        ],
+        [
+          -18.039606377114186,
+          266.66478494572243
+        ],
+        [
+          -17.316081150571637,
+          266.4709169455668
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q29__1_2",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 12.73382336041022,
+      "estimated_travel_time_s": 12.73382336041022,
+      "must_be_empty_nodes": [],
+      "site": "Q29",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q35__0_0",
+      "from_node": "Q35__point0",
+      "to_node": "Q35__point1",
+      "centerline": [
+        [
+          -13.227362899888856,
+          304.2315067873355
+        ],
+        [
+          -13.421230900044478,
+          303.5079815607929
+        ],
+        [
+          -13.737792446743873,
+          302.8291131331289
+        ],
+        [
+          -14.112792446743873,
+          302.17959408029054
+        ],
+        [
+          -14.542428977578451,
+          301.56600952515555
+        ],
+        [
+          -15.07208620396538,
+          301.03635229876863
+        ],
+        [
+          -15.68567075910038,
+          300.6067157679341
+        ],
+        [
+          -15.912535176730705,
+          300.5009271526302
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q35__0_0",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 14.236678061514366,
+      "estimated_travel_time_s": 14.236678061514366,
+      "must_be_empty_nodes": [],
+      "site": "Q35",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q35__0_1",
+      "from_node": "Q35__point1",
+      "to_node": "Q35__point2",
+      "centerline": [
+        [
+          -15.912535176730705,
+          300.5009271526302
+        ],
+        [
+          -16.364539186764443,
+          300.2901542212347
+        ],
+        [
+          -17.069308652353875,
+          300.03363911374043
+        ],
+        [
+          -17.774078117943308,
+          299.7771240062462
+        ],
+        [
+          -18.49760334448586,
+          299.58325600609055
+        ],
+        [
+          -19.236209159245018,
+          299.45301987284034
+        ],
+        [
+          -19.982407236778993,
+          299.3877360003113
+        ],
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q35__0_1",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 14.236678061514366,
+      "estimated_travel_time_s": 14.236678061514366,
+      "must_be_empty_nodes": [],
+      "site": "Q35",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q35__0_2",
+      "from_node": "Q35__point2",
+      "to_node": "Q35__point3",
+      "centerline": [
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ],
+        [
+          -20.732407236778993,
+          299.3877360003113
+        ],
+        [
+          -21.47860531431297,
+          299.45301987284034
+        ],
+        [
+          -22.224803391846944,
+          299.5183037453694
+        ],
+        [
+          -22.97100146938092,
+          299.45301987284034
+        ],
+        [
+          -23.69452669592347,
+          299.2591518726847
+        ],
+        [
+          -24.418051922466024,
+          299.06528387252905
+        ],
+        [
+          -25.164249999999996,
+          299.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q35__0_2",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 14.236678061514366,
+      "estimated_travel_time_s": 14.236678061514366,
+      "must_be_empty_nodes": [],
+      "site": "Q35",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q35__1_0",
+      "from_node": "Q35__point3",
+      "to_node": "Q35__point4",
+      "centerline": [
+        [
+          -25.16425,
+          299.0
+        ],
+        [
+          -24.418051922466024,
+          299.06528387252905
+        ],
+        [
+          -23.69452669592347,
+          299.2591518726847
+        ],
+        [
+          -22.97100146938092,
+          299.45301987284034
+        ],
+        [
+          -22.224803391846944,
+          299.5183037453694
+        ],
+        [
+          -21.47860531431297,
+          299.45301987284034
+        ],
+        [
+          -20.732407236778993,
+          299.3877360003113
+        ],
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q35__1_0",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 14.236678061514372,
+      "estimated_travel_time_s": 14.236678061514372,
+      "must_be_empty_nodes": [],
+      "site": "Q35",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q35__1_1",
+      "from_node": "Q35__point4",
+      "to_node": "Q35__point5",
+      "centerline": [
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ],
+        [
+          -19.982407236778993,
+          299.3877360003113
+        ],
+        [
+          -19.236209159245018,
+          299.45301987284034
+        ],
+        [
+          -18.49760334448586,
+          299.58325600609055
+        ],
+        [
+          -17.774078117943308,
+          299.7771240062462
+        ],
+        [
+          -17.069308652353875,
+          300.03363911374043
+        ],
+        [
+          -16.364539186764443,
+          300.2901542212347
+        ],
+        [
+          -15.912535176730703,
+          300.5009271526302
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q35__1_1",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 14.236678061514372,
+      "estimated_travel_time_s": 14.236678061514372,
+      "must_be_empty_nodes": [],
+      "site": "Q35",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q35__1_2",
+      "from_node": "Q35__point5",
+      "to_node": "Q35__point6",
+      "centerline": [
+        [
+          -15.912535176730703,
+          300.5009271526302
+        ],
+        [
+          -15.68567075910038,
+          300.6067157679341
+        ],
+        [
+          -15.07208620396538,
+          301.03635229876863
+        ],
+        [
+          -14.542428977578451,
+          301.56600952515555
+        ],
+        [
+          -14.112792446743873,
+          302.17959408029054
+        ],
+        [
+          -13.737792446743873,
+          302.8291131331289
+        ],
+        [
+          -13.421230900044478,
+          303.5079815607929
+        ],
+        [
+          -13.227362899888856,
+          304.2315067873355
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q35__1_2",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 14.236678061514372,
+      "estimated_travel_time_s": 14.236678061514372,
+      "must_be_empty_nodes": [],
+      "site": "Q35",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__0_0",
+      "from_node": "Q36__point0",
+      "to_node": "Q36__point1",
+      "centerline": [
+        [
+          -13.470270299896612,
+          57.40442295950274
+        ],
+        [
+          -14.360654955902904,
+          56.140321655384554
+        ],
+        [
+          -15.629690956025684,
+          55.256984475641104
+        ],
+        [
+          -16.6725037244307,
+          54.98067084247183
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__0_0",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__0_1",
+      "from_node": "Q36__point1",
+      "to_node": "Q36__point2",
+      "centerline": [
+        [
+          -16.6725037244307,
+          54.98067084247183
+        ],
+        [
+          -17.12431382967347,
+          54.860954920817775
+        ],
+        [
+          -18.66425,
+          55.0
+        ],
+        [
+          -20.16425,
+          55.0
+        ],
+        [
+          -20.82184838137105,
+          55.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__0_1",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__0_2",
+      "from_node": "Q36__point2",
+      "to_node": "Q36__point3",
+      "centerline": [
+        [
+          -20.82184838137105,
+          55.0
+        ],
+        [
+          -21.66425,
+          55.0
+        ],
+        [
+          -23.16425,
+          55.0
+        ],
+        [
+          -24.66425,
+          55.0
+        ],
+        [
+          -24.993049190685525,
+          55.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__0_2",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__0_3",
+      "from_node": "Q36__point3",
+      "to_node": "Q36__point4",
+      "centerline": [
+        [
+          -24.993049190685525,
+          55.0
+        ],
+        [
+          -26.16425,
+          55.0
+        ],
+        [
+          -27.66425,
+          55.0
+        ],
+        [
+          -29.16425,
+          55.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__0_3",
+      "required_resources": [],
+      "reverse": true,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_entry",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__1_0",
+      "from_node": "Q36__point4",
+      "to_node": "Q36__point5",
+      "centerline": [
+        [
+          -29.16425,
+          55.0
+        ],
+        [
+          -27.66425,
+          55.0
+        ],
+        [
+          -26.16425,
+          55.0
+        ],
+        [
+          -24.993049190685525,
+          55.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__1_0",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__1_1",
+      "from_node": "Q36__point5",
+      "to_node": "Q36__point6",
+      "centerline": [
+        [
+          -24.993049190685525,
+          55.0
+        ],
+        [
+          -24.66425,
+          55.0
+        ],
+        [
+          -23.16425,
+          55.0
+        ],
+        [
+          -21.66425,
+          55.0
+        ],
+        [
+          -20.82184838137105,
+          55.0
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__1_1",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__1_2",
+      "from_node": "Q36__point6",
+      "to_node": "Q36__point7",
+      "centerline": [
+        [
+          -20.82184838137105,
+          55.0
+        ],
+        [
+          -20.16425,
+          55.0
+        ],
+        [
+          -18.66425,
+          55.0
+        ],
+        [
+          -17.12431382967347,
+          54.860954920817775
+        ],
+        [
+          -16.6725037244307,
+          54.98067084247183
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__1_2",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    },
+    {
+      "edge_id": "Q36__1_3",
+      "from_node": "Q36__point7",
+      "to_node": "Q36__point8",
+      "centerline": [
+        [
+          -16.6725037244307,
+          54.98067084247183
+        ],
+        [
+          -15.629690956025684,
+          55.256984475641104
+        ],
+        [
+          -14.360654955902904,
+          56.140321655384554
+        ],
+        [
+          -13.470270299896612,
+          57.40442295950274
+        ]
+      ],
+      "width": 3.8,
+      "speed_limit": 1,
+      "planning_speed_limit_m_s": 1,
+      "storage_capacity": 1,
+      "lane_side": "SINGLE",
+      "kind": "service_access",
+      "maneuver": "STRAIGHT",
+      "resource": null,
+      "capacity_alias": "Q36__1_3",
+      "required_resources": [],
+      "reverse": false,
+      "attachment_validation_required": false,
+      "access_validation_required": true,
+      "length_m": 16.684803237257896,
+      "estimated_travel_time_s": 16.684803237257896,
+      "must_be_empty_nodes": [],
+      "site": "Q36",
+      "phase": "waiting_exit",
+      "maximum_path_error_m": 0.7
+    }
+  ],
+  "movements": [
+    {
+      "movement_id": "Q26__0_0__Q26__0_1",
+      "incoming_edge": "Q26__0_0",
+      "outgoing_edge": "Q26__0_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -46.6509530860279,
+          216.73212325685913
+        ],
+        [
+          -46.20266170877556,
+          216.42008132830307
+        ],
+        [
+          -45.45266170877556,
+          215.1210432226264
+        ],
+        [
+          -44.80311019445532,
+          213.717896839326
+        ],
+        [
+          -44.42008797289585,
+          213.39650303448272
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q26__0_1__Q26__0_2",
+      "incoming_edge": "Q26__0_1",
+      "outgoing_edge": "Q26__0_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -44.42008797289585,
+          213.39650303448272
+        ],
+        [
+          -43.65404352977686,
+          212.75371542479618
+        ],
+        [
+          -42.56376043782652,
+          211.65734882455158
+        ],
+        [
+          -41.16425,
+          211.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q26__0_2__Q26__1_0",
+      "incoming_edge": "Q26__0_2",
+      "outgoing_edge": "Q26__1_0",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -41.16425,
+          211.0
+        ],
+        [
+          -39.62431382967347,
+          210.86095492081776
+        ],
+        [
+          -38.129690956025684,
+          211.25698447564108
+        ],
+        [
+          -37.30894633315524,
+          211.82827972682847
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q26__1_0__Q26__1_1",
+      "incoming_edge": "Q26__1_0",
+      "outgoing_edge": "Q26__1_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -37.30894633315524,
+          211.82827972682847
+        ],
+        [
+          -36.8606549559029,
+          212.14032165538453
+        ],
+        [
+          -36.1106549559029,
+          213.43935976106118
+        ],
+        [
+          -35.3606549559029,
+          214.73839786673784
+        ],
+        [
+          -35.13119862611968,
+          215.23406420291388
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q26__1_1__Q26__1_2",
+      "incoming_edge": "Q26__1_1",
+      "outgoing_edge": "Q26__1_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -35.13119862611968,
+          215.23406420291388
+        ],
+        [
+          -34.711103441582665,
+          216.14154425003827
+        ],
+        [
+          -33.620820349632325,
+          217.23791085028287
+        ],
+        [
+          -32.22130991180581,
+          217.89525967483445
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q28__0_0__Q28__0_1",
+      "incoming_edge": "Q28__0_0",
+      "outgoing_edge": "Q28__0_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -46.650953086027904,
+          88.73212325685914
+        ],
+        [
+          -46.20266170877556,
+          88.42008132830307
+        ],
+        [
+          -45.45266170877556,
+          87.12104322262641
+        ],
+        [
+          -44.80311019445532,
+          85.71789683932602
+        ],
+        [
+          -44.420087972895836,
+          85.39650303448275
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q28__0_1__Q28__0_2",
+      "incoming_edge": "Q28__0_1",
+      "outgoing_edge": "Q28__0_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -44.420087972895836,
+          85.39650303448275
+        ],
+        [
+          -43.65404352977686,
+          84.75371542479621
+        ],
+        [
+          -42.56376043782652,
+          83.65734882455159
+        ],
+        [
+          -41.16425,
+          83.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q28__0_2__Q28__1_0",
+      "incoming_edge": "Q28__0_2",
+      "outgoing_edge": "Q28__1_0",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -41.16425,
+          83.0
+        ],
+        [
+          -39.62431382967347,
+          82.86095492081778
+        ],
+        [
+          -38.129690956025684,
+          83.2569844756411
+        ],
+        [
+          -37.30894633315524,
+          83.8282797268285
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q28__1_0__Q28__1_1",
+      "incoming_edge": "Q28__1_0",
+      "outgoing_edge": "Q28__1_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -37.30894633315524,
+          83.8282797268285
+        ],
+        [
+          -36.8606549559029,
+          84.14032165538457
+        ],
+        [
+          -36.1106549559029,
+          85.43935976106123
+        ],
+        [
+          -35.3606549559029,
+          86.73839786673788
+        ],
+        [
+          -35.13119862611968,
+          87.23406420291394
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q28__1_1__Q28__1_2",
+      "incoming_edge": "Q28__1_1",
+      "outgoing_edge": "Q28__1_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -35.13119862611968,
+          87.23406420291394
+        ],
+        [
+          -34.711103441582665,
+          88.1415442500383
+        ],
+        [
+          -33.620820349632325,
+          89.23791085028292
+        ],
+        [
+          -32.22130991180581,
+          89.8952596748345
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q29__0_0__Q29__0_1",
+      "incoming_edge": "Q29__0_0",
+      "outgoing_edge": "Q29__0_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -20.502394148267687,
+          269.00680375655435
+        ],
+        [
+          -20.607914663834148,
+          269.23309323244234
+        ],
+        [
+          -20.80178266398977,
+          269.9566184589849
+        ],
+        [
+          -20.86706653651883,
+          270.70281653651887
+        ],
+        [
+          -20.932350409047892,
+          271.4490146140528
+        ],
+        [
+          -21.126218409203513,
+          272.1725398405954
+        ],
+        [
+          -21.442779955902907,
+          272.85140826825943
+        ],
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q29__0_1__Q29__0_2",
+      "incoming_edge": "Q29__0_1",
+      "outgoing_edge": "Q29__0_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ],
+        [
+          -21.872416486737485,
+          273.4649928233944
+        ],
+        [
+          -22.402073713124413,
+          273.99465004978134
+        ],
+        [
+          -23.01565826825941,
+          274.4242865806159
+        ],
+        [
+          -23.694526695923475,
+          274.7408481273153
+        ],
+        [
+          -24.418051922466024,
+          274.93471612747095
+        ],
+        [
+          -25.16425,
+          275.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q29__0_2__Q29__1_0",
+      "incoming_edge": "Q29__0_2",
+      "outgoing_edge": "Q29__1_0",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -25.16425,
+          275.0
+        ],
+        [
+          -24.418051922466024,
+          274.93471612747095
+        ],
+        [
+          -23.694526695923475,
+          274.7408481273153
+        ],
+        [
+          -23.01565826825941,
+          274.4242865806159
+        ],
+        [
+          -22.402073713124413,
+          273.99465004978134
+        ],
+        [
+          -21.872416486737485,
+          273.4649928233944
+        ],
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q29__1_0__Q29__1_1",
+      "incoming_edge": "Q29__1_0",
+      "outgoing_edge": "Q29__1_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -21.58599213284777,
+          273.0559364533044
+        ],
+        [
+          -21.442779955902907,
+          272.85140826825943
+        ],
+        [
+          -21.126218409203513,
+          272.1725398405954
+        ],
+        [
+          -20.932350409047892,
+          271.4490146140528
+        ],
+        [
+          -20.86706653651883,
+          270.70281653651887
+        ],
+        [
+          -20.80178266398977,
+          269.9566184589849
+        ],
+        [
+          -20.607914663834148,
+          269.23309323244234
+        ],
+        [
+          -20.502394148267687,
+          269.00680375655435
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q29__1_1__Q29__1_2",
+      "incoming_edge": "Q29__1_1",
+      "outgoing_edge": "Q29__1_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -20.502394148267687,
+          269.00680375655435
+        ],
+        [
+          -20.291353117134754,
+          268.5542248047783
+        ],
+        [
+          -19.861716586300176,
+          267.9406402496433
+        ],
+        [
+          -19.33205935991325,
+          267.4109830232564
+        ],
+        [
+          -18.71847480477825,
+          266.98134649242184
+        ],
+        [
+          -18.039606377114186,
+          266.66478494572243
+        ],
+        [
+          -17.316081150571637,
+          266.4709169455668
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q35__0_0__Q35__0_1",
+      "incoming_edge": "Q35__0_0",
+      "outgoing_edge": "Q35__0_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -15.912535176730705,
+          300.5009271526302
+        ],
+        [
+          -16.364539186764443,
+          300.2901542212347
+        ],
+        [
+          -17.069308652353875,
+          300.03363911374043
+        ],
+        [
+          -17.774078117943308,
+          299.7771240062462
+        ],
+        [
+          -18.49760334448586,
+          299.58325600609055
+        ],
+        [
+          -19.236209159245018,
+          299.45301987284034
+        ],
+        [
+          -19.982407236778993,
+          299.3877360003113
+        ],
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q35__0_1__Q35__0_2",
+      "incoming_edge": "Q35__0_1",
+      "outgoing_edge": "Q35__0_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ],
+        [
+          -20.732407236778993,
+          299.3877360003113
+        ],
+        [
+          -21.47860531431297,
+          299.45301987284034
+        ],
+        [
+          -22.224803391846944,
+          299.5183037453694
+        ],
+        [
+          -22.97100146938092,
+          299.45301987284034
+        ],
+        [
+          -23.69452669592347,
+          299.2591518726847
+        ],
+        [
+          -24.418051922466024,
+          299.06528387252905
+        ],
+        [
+          -25.164249999999996,
+          299.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q35__0_2__Q35__1_0",
+      "incoming_edge": "Q35__0_2",
+      "outgoing_edge": "Q35__1_0",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -25.16425,
+          299.0
+        ],
+        [
+          -24.418051922466024,
+          299.06528387252905
+        ],
+        [
+          -23.69452669592347,
+          299.2591518726847
+        ],
+        [
+          -22.97100146938092,
+          299.45301987284034
+        ],
+        [
+          -22.224803391846944,
+          299.5183037453694
+        ],
+        [
+          -21.47860531431297,
+          299.45301987284034
+        ],
+        [
+          -20.732407236778993,
+          299.3877360003113
+        ],
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q35__1_0__Q35__1_1",
+      "incoming_edge": "Q35__1_0",
+      "outgoing_edge": "Q35__1_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -20.48113848073276,
+          299.3877360003113
+        ],
+        [
+          -19.982407236778993,
+          299.3877360003113
+        ],
+        [
+          -19.236209159245018,
+          299.45301987284034
+        ],
+        [
+          -18.49760334448586,
+          299.58325600609055
+        ],
+        [
+          -17.774078117943308,
+          299.7771240062462
+        ],
+        [
+          -17.069308652353875,
+          300.03363911374043
+        ],
+        [
+          -16.364539186764443,
+          300.2901542212347
+        ],
+        [
+          -15.912535176730703,
+          300.5009271526302
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q35__1_1__Q35__1_2",
+      "incoming_edge": "Q35__1_1",
+      "outgoing_edge": "Q35__1_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -15.912535176730703,
+          300.5009271526302
+        ],
+        [
+          -15.68567075910038,
+          300.6067157679341
+        ],
+        [
+          -15.07208620396538,
+          301.03635229876863
+        ],
+        [
+          -14.542428977578451,
+          301.56600952515555
+        ],
+        [
+          -14.112792446743873,
+          302.17959408029054
+        ],
+        [
+          -13.737792446743873,
+          302.8291131331289
+        ],
+        [
+          -13.421230900044478,
+          303.5079815607929
+        ],
+        [
+          -13.227362899888856,
+          304.2315067873355
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q36__0_0__Q36__0_1",
+      "incoming_edge": "Q36__0_0",
+      "outgoing_edge": "Q36__0_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -16.6725037244307,
+          54.98067084247183
+        ],
+        [
+          -17.12431382967347,
+          54.860954920817775
+        ],
+        [
+          -18.66425,
+          55.0
+        ],
+        [
+          -20.16425,
+          55.0
+        ],
+        [
+          -20.82184838137105,
+          55.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q36__0_1__Q36__0_2",
+      "incoming_edge": "Q36__0_1",
+      "outgoing_edge": "Q36__0_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -20.82184838137105,
+          55.0
+        ],
+        [
+          -21.66425,
+          55.0
+        ],
+        [
+          -23.16425,
+          55.0
+        ],
+        [
+          -24.66425,
+          55.0
+        ],
+        [
+          -24.993049190685525,
+          55.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q36__0_2__Q36__0_3",
+      "incoming_edge": "Q36__0_2",
+      "outgoing_edge": "Q36__0_3",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -24.993049190685525,
+          55.0
+        ],
+        [
+          -26.16425,
+          55.0
+        ],
+        [
+          -27.66425,
+          55.0
+        ],
+        [
+          -29.16425,
+          55.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q36__0_3__Q36__1_0",
+      "incoming_edge": "Q36__0_3",
+      "outgoing_edge": "Q36__1_0",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -29.16425,
+          55.0
+        ],
+        [
+          -27.66425,
+          55.0
+        ],
+        [
+          -26.16425,
+          55.0
+        ],
+        [
+          -24.993049190685525,
+          55.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q36__1_0__Q36__1_1",
+      "incoming_edge": "Q36__1_0",
+      "outgoing_edge": "Q36__1_1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -24.993049190685525,
+          55.0
+        ],
+        [
+          -24.66425,
+          55.0
+        ],
+        [
+          -23.16425,
+          55.0
+        ],
+        [
+          -21.66425,
+          55.0
+        ],
+        [
+          -20.82184838137105,
+          55.0
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q36__1_1__Q36__1_2",
+      "incoming_edge": "Q36__1_1",
+      "outgoing_edge": "Q36__1_2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -20.82184838137105,
+          55.0
+        ],
+        [
+          -20.16425,
+          55.0
+        ],
+        [
+          -18.66425,
+          55.0
+        ],
+        [
+          -17.12431382967347,
+          54.860954920817775
+        ],
+        [
+          -16.6725037244307,
+          54.98067084247183
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    },
+    {
+      "movement_id": "Q36__1_2__Q36__1_3",
+      "incoming_edge": "Q36__1_2",
+      "outgoing_edge": "Q36__1_3",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          -16.6725037244307,
+          54.98067084247183
+        ],
+        [
+          -15.629690956025684,
+          55.256984475641104
+        ],
+        [
+          -14.360654955902904,
+          56.140321655384554
+        ],
+        [
+          -13.470270299896612,
+          57.40442295950274
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 2
+    }
+  ],
+  "sites": {},
+  "control_zones": {},
+  "shared_resources": {
+    "waiting_region_0": {
+      "bounds": [
+        -56.00625675287266,
+        205.36095492081776,
+        -26.72130991180581,
+        223.39525967483445
+      ],
+      "sites": [
+        "Q26"
+      ],
+      "edge_ids": [
+        "Q26__0_0",
+        "Q26__0_1",
+        "Q26__0_2",
+        "Q26__1_0",
+        "Q26__1_1",
+        "Q26__1_2"
+      ],
+      "request_ahead_m": 200,
+      "approach_ahead_m": 200,
+      "stop_before_m": 0.5
+    },
+    "waiting_region_1": {
+      "bounds": [
+        -56.00625675287266,
+        77.36095492081778,
+        -26.72130991180581,
+        95.3952596748345
+      ],
+      "sites": [
+        "Q28"
+      ],
+      "edge_ids": [
+        "Q28__0_0",
+        "Q28__0_1",
+        "Q28__0_2",
+        "Q28__1_0",
+        "Q28__1_1",
+        "Q28__1_2"
+      ],
+      "request_ahead_m": 200,
+      "approach_ahead_m": 200,
+      "stop_before_m": 0.5
+    },
+    "waiting_region_2": {
+      "bounds": [
+        -30.66425,
+        260.9709169455668,
+        -11.816081150571637,
+        280.5
+      ],
+      "sites": [
+        "Q29"
+      ],
+      "edge_ids": [
+        "Q29__0_0",
+        "Q29__0_1",
+        "Q29__0_2",
+        "Q29__1_0",
+        "Q29__1_1",
+        "Q29__1_2"
+      ],
+      "request_ahead_m": 200,
+      "approach_ahead_m": 200,
+      "stop_before_m": 0.5
+    },
+    "waiting_region_3": {
+      "bounds": [
+        -30.66425,
+        293.5,
+        -7.727362899888856,
+        309.7315067873355
+      ],
+      "sites": [
+        "Q35"
+      ],
+      "edge_ids": [
+        "Q35__0_0",
+        "Q35__0_1",
+        "Q35__0_2",
+        "Q35__1_0",
+        "Q35__1_1",
+        "Q35__1_2"
+      ],
+      "request_ahead_m": 200,
+      "approach_ahead_m": 200,
+      "stop_before_m": 0.5
+    },
+    "waiting_region_4": {
+      "bounds": [
+        -34.664249999999996,
+        49.360954920817775,
+        -7.970270299896612,
+        62.90442295950274
+      ],
+      "sites": [
+        "Q36"
+      ],
+      "edge_ids": [
+        "Q36__0_0",
+        "Q36__0_1",
+        "Q36__0_2",
+        "Q36__0_3",
+        "Q36__1_0",
+        "Q36__1_1",
+        "Q36__1_2",
+        "Q36__1_3"
+      ],
+      "request_ahead_m": 200,
+      "approach_ahead_m": 200,
+      "stop_before_m": 0.5
+    }
+  },
+  "physical_centerlines": {
+    "Q26__0_0": [
+      [
+        -50.50625675287266,
+        217.5604029836876
+      ],
+      [
+        -48.966320582546125,
+        217.69944806286983
+      ],
+      [
+        -47.47169770889834,
+        217.30341850804652
+      ],
+      [
+        -46.6509530860279,
+        216.73212325685913
+      ]
+    ],
+    "Q26__0_1": [
+      [
+        -46.6509530860279,
+        216.73212325685913
+      ],
+      [
+        -46.20266170877556,
+        216.42008132830307
+      ],
+      [
+        -45.45266170877556,
+        215.1210432226264
+      ],
+      [
+        -44.80311019445532,
+        213.717896839326
+      ],
+      [
+        -44.42008797289585,
+        213.39650303448272
+      ]
+    ],
+    "Q26__0_2": [
+      [
+        -44.42008797289585,
+        213.39650303448272
+      ],
+      [
+        -43.65404352977686,
+        212.75371542479618
+      ],
+      [
+        -42.56376043782652,
+        211.65734882455158
+      ],
+      [
+        -41.16425,
+        211.0
+      ]
+    ],
+    "Q26__1_0": [
+      [
+        -41.16425,
+        211.0
+      ],
+      [
+        -39.62431382967347,
+        210.86095492081776
+      ],
+      [
+        -38.129690956025684,
+        211.25698447564108
+      ],
+      [
+        -37.30894633315524,
+        211.82827972682847
+      ]
+    ],
+    "Q26__1_1": [
+      [
+        -37.30894633315524,
+        211.82827972682847
+      ],
+      [
+        -36.8606549559029,
+        212.14032165538453
+      ],
+      [
+        -36.1106549559029,
+        213.43935976106118
+      ],
+      [
+        -35.3606549559029,
+        214.73839786673784
+      ],
+      [
+        -35.13119862611968,
+        215.23406420291388
+      ]
+    ],
+    "Q26__1_2": [
+      [
+        -35.13119862611968,
+        215.23406420291388
+      ],
+      [
+        -34.711103441582665,
+        216.14154425003827
+      ],
+      [
+        -33.620820349632325,
+        217.23791085028287
+      ],
+      [
+        -32.22130991180581,
+        217.89525967483445
+      ]
+    ],
+    "Q28__0_0": [
+      [
+        -50.50625675287266,
+        89.56040298368762
+      ],
+      [
+        -48.966320582546125,
+        89.69944806286985
+      ],
+      [
+        -47.47169770889834,
+        89.30341850804652
+      ],
+      [
+        -46.650953086027904,
+        88.73212325685914
+      ]
+    ],
+    "Q28__0_1": [
+      [
+        -46.650953086027904,
+        88.73212325685914
+      ],
+      [
+        -46.20266170877556,
+        88.42008132830307
+      ],
+      [
+        -45.45266170877556,
+        87.12104322262641
+      ],
+      [
+        -44.80311019445532,
+        85.71789683932602
+      ],
+      [
+        -44.420087972895836,
+        85.39650303448275
+      ]
+    ],
+    "Q28__0_2": [
+      [
+        -44.420087972895836,
+        85.39650303448275
+      ],
+      [
+        -43.65404352977686,
+        84.75371542479621
+      ],
+      [
+        -42.56376043782652,
+        83.65734882455159
+      ],
+      [
+        -41.16425,
+        83.0
+      ]
+    ],
+    "Q28__1_0": [
+      [
+        -41.16425,
+        83.0
+      ],
+      [
+        -39.62431382967347,
+        82.86095492081778
+      ],
+      [
+        -38.129690956025684,
+        83.2569844756411
+      ],
+      [
+        -37.30894633315524,
+        83.8282797268285
+      ]
+    ],
+    "Q28__1_1": [
+      [
+        -37.30894633315524,
+        83.8282797268285
+      ],
+      [
+        -36.8606549559029,
+        84.14032165538457
+      ],
+      [
+        -36.1106549559029,
+        85.43935976106123
+      ],
+      [
+        -35.3606549559029,
+        86.73839786673788
+      ],
+      [
+        -35.13119862611968,
+        87.23406420291394
+      ]
+    ],
+    "Q28__1_2": [
+      [
+        -35.13119862611968,
+        87.23406420291394
+      ],
+      [
+        -34.711103441582665,
+        88.1415442500383
+      ],
+      [
+        -33.620820349632325,
+        89.23791085028292
+      ],
+      [
+        -32.22130991180581,
+        89.8952596748345
+      ]
+    ],
+    "Q29__0_0": [
+      [
+        -17.316081150571637,
+        266.4709169455668
+      ],
+      [
+        -18.039606377114186,
+        266.66478494572243
+      ],
+      [
+        -18.71847480477825,
+        266.98134649242184
+      ],
+      [
+        -19.33205935991325,
+        267.4109830232564
+      ],
+      [
+        -19.861716586300176,
+        267.9406402496433
+      ],
+      [
+        -20.291353117134754,
+        268.5542248047783
+      ],
+      [
+        -20.502394148267687,
+        269.00680375655435
+      ]
+    ],
+    "Q29__0_1": [
+      [
+        -20.502394148267687,
+        269.00680375655435
+      ],
+      [
+        -20.607914663834148,
+        269.23309323244234
+      ],
+      [
+        -20.80178266398977,
+        269.9566184589849
+      ],
+      [
+        -20.86706653651883,
+        270.70281653651887
+      ],
+      [
+        -20.932350409047892,
+        271.4490146140528
+      ],
+      [
+        -21.126218409203513,
+        272.1725398405954
+      ],
+      [
+        -21.442779955902907,
+        272.85140826825943
+      ],
+      [
+        -21.58599213284777,
+        273.0559364533044
+      ]
+    ],
+    "Q29__0_2": [
+      [
+        -21.58599213284777,
+        273.0559364533044
+      ],
+      [
+        -21.872416486737485,
+        273.4649928233944
+      ],
+      [
+        -22.402073713124413,
+        273.99465004978134
+      ],
+      [
+        -23.01565826825941,
+        274.4242865806159
+      ],
+      [
+        -23.694526695923475,
+        274.7408481273153
+      ],
+      [
+        -24.418051922466024,
+        274.93471612747095
+      ],
+      [
+        -25.16425,
+        275.0
+      ]
+    ],
+    "Q29__1_0": [
+      [
+        -25.16425,
+        275.0
+      ],
+      [
+        -24.418051922466024,
+        274.93471612747095
+      ],
+      [
+        -23.694526695923475,
+        274.7408481273153
+      ],
+      [
+        -23.01565826825941,
+        274.4242865806159
+      ],
+      [
+        -22.402073713124413,
+        273.99465004978134
+      ],
+      [
+        -21.872416486737485,
+        273.4649928233944
+      ],
+      [
+        -21.58599213284777,
+        273.0559364533044
+      ]
+    ],
+    "Q29__1_1": [
+      [
+        -21.58599213284777,
+        273.0559364533044
+      ],
+      [
+        -21.442779955902907,
+        272.85140826825943
+      ],
+      [
+        -21.126218409203513,
+        272.1725398405954
+      ],
+      [
+        -20.932350409047892,
+        271.4490146140528
+      ],
+      [
+        -20.86706653651883,
+        270.70281653651887
+      ],
+      [
+        -20.80178266398977,
+        269.9566184589849
+      ],
+      [
+        -20.607914663834148,
+        269.23309323244234
+      ],
+      [
+        -20.502394148267687,
+        269.00680375655435
+      ]
+    ],
+    "Q29__1_2": [
+      [
+        -20.502394148267687,
+        269.00680375655435
+      ],
+      [
+        -20.291353117134754,
+        268.5542248047783
+      ],
+      [
+        -19.861716586300176,
+        267.9406402496433
+      ],
+      [
+        -19.33205935991325,
+        267.4109830232564
+      ],
+      [
+        -18.71847480477825,
+        266.98134649242184
+      ],
+      [
+        -18.039606377114186,
+        266.66478494572243
+      ],
+      [
+        -17.316081150571637,
+        266.4709169455668
+      ]
+    ],
+    "Q35__0_0": [
+      [
+        -13.227362899888856,
+        304.2315067873355
+      ],
+      [
+        -13.421230900044478,
+        303.5079815607929
+      ],
+      [
+        -13.737792446743873,
+        302.8291131331289
+      ],
+      [
+        -14.112792446743873,
+        302.17959408029054
+      ],
+      [
+        -14.542428977578451,
+        301.56600952515555
+      ],
+      [
+        -15.07208620396538,
+        301.03635229876863
+      ],
+      [
+        -15.68567075910038,
+        300.6067157679341
+      ],
+      [
+        -15.912535176730705,
+        300.5009271526302
+      ]
+    ],
+    "Q35__0_1": [
+      [
+        -15.912535176730705,
+        300.5009271526302
+      ],
+      [
+        -16.364539186764443,
+        300.2901542212347
+      ],
+      [
+        -17.069308652353875,
+        300.03363911374043
+      ],
+      [
+        -17.774078117943308,
+        299.7771240062462
+      ],
+      [
+        -18.49760334448586,
+        299.58325600609055
+      ],
+      [
+        -19.236209159245018,
+        299.45301987284034
+      ],
+      [
+        -19.982407236778993,
+        299.3877360003113
+      ],
+      [
+        -20.48113848073276,
+        299.3877360003113
+      ]
+    ],
+    "Q35__0_2": [
+      [
+        -20.48113848073276,
+        299.3877360003113
+      ],
+      [
+        -20.732407236778993,
+        299.3877360003113
+      ],
+      [
+        -21.47860531431297,
+        299.45301987284034
+      ],
+      [
+        -22.224803391846944,
+        299.5183037453694
+      ],
+      [
+        -22.97100146938092,
+        299.45301987284034
+      ],
+      [
+        -23.69452669592347,
+        299.2591518726847
+      ],
+      [
+        -24.418051922466024,
+        299.06528387252905
+      ],
+      [
+        -25.164249999999996,
+        299.0
+      ]
+    ],
+    "Q35__1_0": [
+      [
+        -25.16425,
+        299.0
+      ],
+      [
+        -24.418051922466024,
+        299.06528387252905
+      ],
+      [
+        -23.69452669592347,
+        299.2591518726847
+      ],
+      [
+        -22.97100146938092,
+        299.45301987284034
+      ],
+      [
+        -22.224803391846944,
+        299.5183037453694
+      ],
+      [
+        -21.47860531431297,
+        299.45301987284034
+      ],
+      [
+        -20.732407236778993,
+        299.3877360003113
+      ],
+      [
+        -20.48113848073276,
+        299.3877360003113
+      ]
+    ],
+    "Q35__1_1": [
+      [
+        -20.48113848073276,
+        299.3877360003113
+      ],
+      [
+        -19.982407236778993,
+        299.3877360003113
+      ],
+      [
+        -19.236209159245018,
+        299.45301987284034
+      ],
+      [
+        -18.49760334448586,
+        299.58325600609055
+      ],
+      [
+        -17.774078117943308,
+        299.7771240062462
+      ],
+      [
+        -17.069308652353875,
+        300.03363911374043
+      ],
+      [
+        -16.364539186764443,
+        300.2901542212347
+      ],
+      [
+        -15.912535176730703,
+        300.5009271526302
+      ]
+    ],
+    "Q35__1_2": [
+      [
+        -15.912535176730703,
+        300.5009271526302
+      ],
+      [
+        -15.68567075910038,
+        300.6067157679341
+      ],
+      [
+        -15.07208620396538,
+        301.03635229876863
+      ],
+      [
+        -14.542428977578451,
+        301.56600952515555
+      ],
+      [
+        -14.112792446743873,
+        302.17959408029054
+      ],
+      [
+        -13.737792446743873,
+        302.8291131331289
+      ],
+      [
+        -13.421230900044478,
+        303.5079815607929
+      ],
+      [
+        -13.227362899888856,
+        304.2315067873355
+      ]
+    ],
+    "Q36__0_0": [
+      [
+        -13.470270299896612,
+        57.40442295950274
+      ],
+      [
+        -14.360654955902904,
+        56.140321655384554
+      ],
+      [
+        -15.629690956025684,
+        55.256984475641104
+      ],
+      [
+        -16.6725037244307,
+        54.98067084247183
+      ]
+    ],
+    "Q36__0_1": [
+      [
+        -16.6725037244307,
+        54.98067084247183
+      ],
+      [
+        -17.12431382967347,
+        54.860954920817775
+      ],
+      [
+        -18.66425,
+        55.0
+      ],
+      [
+        -20.16425,
+        55.0
+      ],
+      [
+        -20.82184838137105,
+        55.0
+      ]
+    ],
+    "Q36__0_2": [
+      [
+        -20.82184838137105,
+        55.0
+      ],
+      [
+        -21.66425,
+        55.0
+      ],
+      [
+        -23.16425,
+        55.0
+      ],
+      [
+        -24.66425,
+        55.0
+      ],
+      [
+        -24.993049190685525,
+        55.0
+      ]
+    ],
+    "Q36__0_3": [
+      [
+        -24.993049190685525,
+        55.0
+      ],
+      [
+        -26.16425,
+        55.0
+      ],
+      [
+        -27.66425,
+        55.0
+      ],
+      [
+        -29.16425,
+        55.0
+      ]
+    ],
+    "Q36__1_0": [
+      [
+        -29.16425,
+        55.0
+      ],
+      [
+        -27.66425,
+        55.0
+      ],
+      [
+        -26.16425,
+        55.0
+      ],
+      [
+        -24.993049190685525,
+        55.0
+      ]
+    ],
+    "Q36__1_1": [
+      [
+        -24.993049190685525,
+        55.0
+      ],
+      [
+        -24.66425,
+        55.0
+      ],
+      [
+        -23.16425,
+        55.0
+      ],
+      [
+        -21.66425,
+        55.0
+      ],
+      [
+        -20.82184838137105,
+        55.0
+      ]
+    ],
+    "Q36__1_2": [
+      [
+        -20.82184838137105,
+        55.0
+      ],
+      [
+        -20.16425,
+        55.0
+      ],
+      [
+        -18.66425,
+        55.0
+      ],
+      [
+        -17.12431382967347,
+        54.860954920817775
+      ],
+      [
+        -16.6725037244307,
+        54.98067084247183
+      ]
+    ],
+    "Q36__1_3": [
+      [
+        -16.6725037244307,
+        54.98067084247183
+      ],
+      [
+        -15.629690956025684,
+        55.256984475641104
+      ],
+      [
+        -14.360654955902904,
+        56.140321655384554
+      ],
+      [
+        -13.470270299896612,
+        57.40442295950274
+      ]
+    ]
+  },
+  "physical_capacities": {
+    "Q26__0_0": 1,
+    "Q26__0_1": 1,
+    "Q26__0_2": 1,
+    "Q26__1_0": 1,
+    "Q26__1_1": 1,
+    "Q26__1_2": 1,
+    "Q28__0_0": 1,
+    "Q28__0_1": 1,
+    "Q28__0_2": 1,
+    "Q28__1_0": 1,
+    "Q28__1_1": 1,
+    "Q28__1_2": 1,
+    "Q29__0_0": 1,
+    "Q29__0_1": 1,
+    "Q29__0_2": 1,
+    "Q29__1_0": 1,
+    "Q29__1_1": 1,
+    "Q29__1_2": 1,
+    "Q35__0_0": 1,
+    "Q35__0_1": 1,
+    "Q35__0_2": 1,
+    "Q35__1_0": 1,
+    "Q35__1_1": 1,
+    "Q35__1_2": 1,
+    "Q36__0_0": 1,
+    "Q36__0_1": 1,
+    "Q36__0_2": 1,
+    "Q36__0_3": 1,
+    "Q36__1_0": 1,
+    "Q36__1_1": 1,
+    "Q36__1_2": 1,
+    "Q36__1_3": 1
+  },
+  "speed_limits": {
+    "straight_m_s": 2,
+    "turn_m_s": 1.5,
+    "uturn_m_s": 1,
+    "approach_deceleration_m_s2": 0.6
+  }
+}

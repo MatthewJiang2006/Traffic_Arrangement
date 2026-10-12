@@ -1,0 +1,3513 @@
+{
+  "description": "Phase 3 synthetic branched park, off-road warehouse/sorting berths; no intersection scheduling",
+  "nodes": [
+    {
+      "node_id": "h0",
+      "node_type": "INTERSECTION",
+      "position": [
+        0.4,
+        0.4
+      ]
+    },
+    {
+      "node_id": "h1",
+      "node_type": "INTERSECTION",
+      "position": [
+        1.6,
+        0.4
+      ]
+    },
+    {
+      "node_id": "h2",
+      "node_type": "INTERSECTION",
+      "position": [
+        1.6,
+        1.6
+      ]
+    },
+    {
+      "node_id": "h3",
+      "node_type": "INTERSECTION",
+      "position": [
+        0.4,
+        1.6
+      ]
+    },
+    {
+      "node_id": "G0",
+      "node_type": "GATE",
+      "position": [
+        0.15,
+        0.4
+      ]
+    },
+    {
+      "node_id": "G1",
+      "node_type": "GATE",
+      "position": [
+        1.6,
+        0.15
+      ]
+    },
+    {
+      "node_id": "G2",
+      "node_type": "GATE",
+      "position": [
+        1.85,
+        1.6
+      ]
+    },
+    {
+      "node_id": "G3",
+      "node_type": "GATE",
+      "position": [
+        0.4,
+        1.85
+      ]
+    },
+    {
+      "node_id": "wh",
+      "node_type": "INTERSECTION",
+      "position": [
+        0.95,
+        0.55
+      ]
+    },
+    {
+      "node_id": "sh",
+      "node_type": "INTERSECTION",
+      "position": [
+        0.95,
+        1.45
+      ]
+    },
+    {
+      "node_id": "w0",
+      "node_type": "WAREHOUSE",
+      "position": [
+        0.65,
+        0.85
+      ]
+    },
+    {
+      "node_id": "w1",
+      "node_type": "WAREHOUSE",
+      "position": [
+        0.95,
+        0.85
+      ]
+    },
+    {
+      "node_id": "w2",
+      "node_type": "WAREHOUSE",
+      "position": [
+        1.25,
+        0.85
+      ]
+    },
+    {
+      "node_id": "s0",
+      "node_type": "SORTING_CENTER",
+      "position": [
+        0.65,
+        1.15
+      ]
+    },
+    {
+      "node_id": "s1",
+      "node_type": "SORTING_CENTER",
+      "position": [
+        0.95,
+        1.15
+      ]
+    },
+    {
+      "node_id": "s2",
+      "node_type": "SORTING_CENTER",
+      "position": [
+        1.25,
+        1.15
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "edge_id": "h0_h1",
+      "from_node": "h0",
+      "to_node": "h1",
+      "centerline": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h1_h0",
+      "from_node": "h1",
+      "to_node": "h0",
+      "centerline": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h1_h2",
+      "from_node": "h1",
+      "to_node": "h2",
+      "centerline": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h2_h1",
+      "from_node": "h2",
+      "to_node": "h1",
+      "centerline": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h2_h3",
+      "from_node": "h2",
+      "to_node": "h3",
+      "centerline": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h3_h2",
+      "from_node": "h3",
+      "to_node": "h2",
+      "centerline": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h3_h0",
+      "from_node": "h3",
+      "to_node": "h0",
+      "centerline": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h0_h3",
+      "from_node": "h0",
+      "to_node": "h3",
+      "centerline": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "G0_h0",
+      "from_node": "G0",
+      "to_node": "h0",
+      "centerline": [
+        [
+          0.15,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h0_G0",
+      "from_node": "h0",
+      "to_node": "G0",
+      "centerline": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.15,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "G1_h1",
+      "from_node": "G1",
+      "to_node": "h1",
+      "centerline": [
+        [
+          1.6,
+          0.15
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h1_G1",
+      "from_node": "h1",
+      "to_node": "G1",
+      "centerline": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          0.15
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "G2_h2",
+      "from_node": "G2",
+      "to_node": "h2",
+      "centerline": [
+        [
+          1.85,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h2_G2",
+      "from_node": "h2",
+      "to_node": "G2",
+      "centerline": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.85,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "G3_h3",
+      "from_node": "G3",
+      "to_node": "h3",
+      "centerline": [
+        [
+          0.4,
+          1.85
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h3_G3",
+      "from_node": "h3",
+      "to_node": "G3",
+      "centerline": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          1.85
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h0_wh",
+      "from_node": "h0",
+      "to_node": "wh",
+      "centerline": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "wh_h0",
+      "from_node": "wh",
+      "to_node": "h0",
+      "centerline": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h1_wh",
+      "from_node": "h1",
+      "to_node": "wh",
+      "centerline": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "wh_h1",
+      "from_node": "wh",
+      "to_node": "h1",
+      "centerline": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h2_sh",
+      "from_node": "h2",
+      "to_node": "sh",
+      "centerline": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "sh_h2",
+      "from_node": "sh",
+      "to_node": "h2",
+      "centerline": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "h3_sh",
+      "from_node": "h3",
+      "to_node": "sh",
+      "centerline": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "sh_h3",
+      "from_node": "sh",
+      "to_node": "h3",
+      "centerline": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "wh_w0",
+      "from_node": "wh",
+      "to_node": "w0",
+      "centerline": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.65,
+          0.85
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "w0_wh",
+      "from_node": "w0",
+      "to_node": "wh",
+      "centerline": [
+        [
+          0.65,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "wh_w1",
+      "from_node": "wh",
+      "to_node": "w1",
+      "centerline": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.95,
+          0.85
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "w1_wh",
+      "from_node": "w1",
+      "to_node": "wh",
+      "centerline": [
+        [
+          0.95,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "wh_w2",
+      "from_node": "wh",
+      "to_node": "w2",
+      "centerline": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.25,
+          0.85
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "w2_wh",
+      "from_node": "w2",
+      "to_node": "wh",
+      "centerline": [
+        [
+          1.25,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "sh_s0",
+      "from_node": "sh",
+      "to_node": "s0",
+      "centerline": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.65,
+          1.15
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "s0_sh",
+      "from_node": "s0",
+      "to_node": "sh",
+      "centerline": [
+        [
+          0.65,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "sh_s1",
+      "from_node": "sh",
+      "to_node": "s1",
+      "centerline": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.95,
+          1.15
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "s1_sh",
+      "from_node": "s1",
+      "to_node": "sh",
+      "centerline": [
+        [
+          0.95,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "sh_s2",
+      "from_node": "sh",
+      "to_node": "s2",
+      "centerline": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.25,
+          1.15
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    },
+    {
+      "edge_id": "s2_sh",
+      "from_node": "s2",
+      "to_node": "sh",
+      "centerline": [
+        [
+          1.25,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "width": 0.3,
+      "speed_limit": 0.25,
+      "storage_capacity": 3
+    }
+  ],
+  "movements": [
+    {
+      "movement_id": "h0_h1__h1_h0",
+      "incoming_edge": "h0_h1",
+      "outgoing_edge": "h1_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_h1__h1_h2",
+      "incoming_edge": "h0_h1",
+      "outgoing_edge": "h1_h2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_h1__h1_G1",
+      "incoming_edge": "h0_h1",
+      "outgoing_edge": "h1_G1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          0.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_h1__h1_wh",
+      "incoming_edge": "h0_h1",
+      "outgoing_edge": "h1_wh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h0__h0_h1",
+      "incoming_edge": "h1_h0",
+      "outgoing_edge": "h0_h1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h0__h0_h3",
+      "incoming_edge": "h1_h0",
+      "outgoing_edge": "h0_h3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h0__h0_G0",
+      "incoming_edge": "h1_h0",
+      "outgoing_edge": "h0_G0",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.15,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h0__h0_wh",
+      "incoming_edge": "h1_h0",
+      "outgoing_edge": "h0_wh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h2__h2_h1",
+      "incoming_edge": "h1_h2",
+      "outgoing_edge": "h2_h1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h2__h2_h3",
+      "incoming_edge": "h1_h2",
+      "outgoing_edge": "h2_h3",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h2__h2_G2",
+      "incoming_edge": "h1_h2",
+      "outgoing_edge": "h2_G2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.85,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_h2__h2_sh",
+      "incoming_edge": "h1_h2",
+      "outgoing_edge": "h2_sh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h1__h1_h0",
+      "incoming_edge": "h2_h1",
+      "outgoing_edge": "h1_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h1__h1_h2",
+      "incoming_edge": "h2_h1",
+      "outgoing_edge": "h1_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h1__h1_G1",
+      "incoming_edge": "h2_h1",
+      "outgoing_edge": "h1_G1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          0.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h1__h1_wh",
+      "incoming_edge": "h2_h1",
+      "outgoing_edge": "h1_wh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h3__h3_h2",
+      "incoming_edge": "h2_h3",
+      "outgoing_edge": "h3_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h3__h3_h0",
+      "incoming_edge": "h2_h3",
+      "outgoing_edge": "h3_h0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h3__h3_G3",
+      "incoming_edge": "h2_h3",
+      "outgoing_edge": "h3_G3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          1.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_h3__h3_sh",
+      "incoming_edge": "h2_h3",
+      "outgoing_edge": "h3_sh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h2__h2_h1",
+      "incoming_edge": "h3_h2",
+      "outgoing_edge": "h2_h1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h2__h2_h3",
+      "incoming_edge": "h3_h2",
+      "outgoing_edge": "h2_h3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h2__h2_G2",
+      "incoming_edge": "h3_h2",
+      "outgoing_edge": "h2_G2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.85,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h2__h2_sh",
+      "incoming_edge": "h3_h2",
+      "outgoing_edge": "h2_sh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h0__h0_h1",
+      "incoming_edge": "h3_h0",
+      "outgoing_edge": "h0_h1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h0__h0_h3",
+      "incoming_edge": "h3_h0",
+      "outgoing_edge": "h0_h3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h0__h0_G0",
+      "incoming_edge": "h3_h0",
+      "outgoing_edge": "h0_G0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.15,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_h0__h0_wh",
+      "incoming_edge": "h3_h0",
+      "outgoing_edge": "h0_wh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_h3__h3_h2",
+      "incoming_edge": "h0_h3",
+      "outgoing_edge": "h3_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_h3__h3_h0",
+      "incoming_edge": "h0_h3",
+      "outgoing_edge": "h3_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_h3__h3_G3",
+      "incoming_edge": "h0_h3",
+      "outgoing_edge": "h3_G3",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          1.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_h3__h3_sh",
+      "incoming_edge": "h0_h3",
+      "outgoing_edge": "h3_sh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G0_h0__h0_h1",
+      "incoming_edge": "G0_h0",
+      "outgoing_edge": "h0_h1",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          0.15,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G0_h0__h0_h3",
+      "incoming_edge": "G0_h0",
+      "outgoing_edge": "h0_h3",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.15,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G0_h0__h0_G0",
+      "incoming_edge": "G0_h0",
+      "outgoing_edge": "h0_G0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.15,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.15,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G0_h0__h0_wh",
+      "incoming_edge": "G0_h0",
+      "outgoing_edge": "h0_wh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.15,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_G0__G0_h0",
+      "incoming_edge": "h0_G0",
+      "outgoing_edge": "G0_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.15,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G1_h1__h1_h0",
+      "incoming_edge": "G1_h1",
+      "outgoing_edge": "h1_h0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          0.15
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G1_h1__h1_h2",
+      "incoming_edge": "G1_h1",
+      "outgoing_edge": "h1_h2",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.15
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G1_h1__h1_G1",
+      "incoming_edge": "G1_h1",
+      "outgoing_edge": "h1_G1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.15
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          0.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G1_h1__h1_wh",
+      "incoming_edge": "G1_h1",
+      "outgoing_edge": "h1_wh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          0.15
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_G1__G1_h1",
+      "incoming_edge": "h1_G1",
+      "outgoing_edge": "G1_h1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          0.15
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G2_h2__h2_h1",
+      "incoming_edge": "G2_h2",
+      "outgoing_edge": "h2_h1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.85,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G2_h2__h2_h3",
+      "incoming_edge": "G2_h2",
+      "outgoing_edge": "h2_h3",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          1.85,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G2_h2__h2_G2",
+      "incoming_edge": "G2_h2",
+      "outgoing_edge": "h2_G2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.85,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.85,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G2_h2__h2_sh",
+      "incoming_edge": "G2_h2",
+      "outgoing_edge": "h2_sh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.85,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_G2__G2_h2",
+      "incoming_edge": "h2_G2",
+      "outgoing_edge": "G2_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.85,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G3_h3__h3_h2",
+      "incoming_edge": "G3_h3",
+      "outgoing_edge": "h3_h2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          1.85
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G3_h3__h3_h0",
+      "incoming_edge": "G3_h3",
+      "outgoing_edge": "h3_h0",
+      "maneuver": "STRAIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.85
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G3_h3__h3_G3",
+      "incoming_edge": "G3_h3",
+      "outgoing_edge": "h3_G3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.85
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          1.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "G3_h3__h3_sh",
+      "incoming_edge": "G3_h3",
+      "outgoing_edge": "h3_sh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          1.85
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_G3__G3_h3",
+      "incoming_edge": "h3_G3",
+      "outgoing_edge": "G3_h3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          1.85
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_wh__wh_h0",
+      "incoming_edge": "h0_wh",
+      "outgoing_edge": "wh_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_wh__wh_h1",
+      "incoming_edge": "h0_wh",
+      "outgoing_edge": "wh_h1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_wh__wh_w0",
+      "incoming_edge": "h0_wh",
+      "outgoing_edge": "wh_w0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.65,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_wh__wh_w1",
+      "incoming_edge": "h0_wh",
+      "outgoing_edge": "wh_w1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.95,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h0_wh__wh_w2",
+      "incoming_edge": "h0_wh",
+      "outgoing_edge": "wh_w2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.25,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h0__h0_h1",
+      "incoming_edge": "wh_h0",
+      "outgoing_edge": "h0_h1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h0__h0_h3",
+      "incoming_edge": "wh_h0",
+      "outgoing_edge": "h0_h3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h0__h0_G0",
+      "incoming_edge": "wh_h0",
+      "outgoing_edge": "h0_G0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.15,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h0__h0_wh",
+      "incoming_edge": "wh_h0",
+      "outgoing_edge": "h0_wh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_wh__wh_h0",
+      "incoming_edge": "h1_wh",
+      "outgoing_edge": "wh_h0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_wh__wh_h1",
+      "incoming_edge": "h1_wh",
+      "outgoing_edge": "wh_h1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_wh__wh_w0",
+      "incoming_edge": "h1_wh",
+      "outgoing_edge": "wh_w0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.65,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_wh__wh_w1",
+      "incoming_edge": "h1_wh",
+      "outgoing_edge": "wh_w1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.95,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h1_wh__wh_w2",
+      "incoming_edge": "h1_wh",
+      "outgoing_edge": "wh_w2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.25,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h1__h1_h0",
+      "incoming_edge": "wh_h1",
+      "outgoing_edge": "h1_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h1__h1_h2",
+      "incoming_edge": "wh_h1",
+      "outgoing_edge": "h1_h2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h1__h1_G1",
+      "incoming_edge": "wh_h1",
+      "outgoing_edge": "h1_G1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          1.6,
+          0.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_h1__h1_wh",
+      "incoming_edge": "wh_h1",
+      "outgoing_edge": "h1_wh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_sh__sh_h2",
+      "incoming_edge": "h2_sh",
+      "outgoing_edge": "sh_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_sh__sh_h3",
+      "incoming_edge": "h2_sh",
+      "outgoing_edge": "sh_h3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_sh__sh_s0",
+      "incoming_edge": "h2_sh",
+      "outgoing_edge": "sh_s0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.65,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_sh__sh_s1",
+      "incoming_edge": "h2_sh",
+      "outgoing_edge": "sh_s1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.95,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h2_sh__sh_s2",
+      "incoming_edge": "h2_sh",
+      "outgoing_edge": "sh_s2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.25,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h2__h2_h1",
+      "incoming_edge": "sh_h2",
+      "outgoing_edge": "h2_h1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h2__h2_h3",
+      "incoming_edge": "sh_h2",
+      "outgoing_edge": "h2_h3",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h2__h2_G2",
+      "incoming_edge": "sh_h2",
+      "outgoing_edge": "h2_G2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          1.85,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h2__h2_sh",
+      "incoming_edge": "sh_h2",
+      "outgoing_edge": "h2_sh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_sh__sh_h2",
+      "incoming_edge": "h3_sh",
+      "outgoing_edge": "sh_h2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_sh__sh_h3",
+      "incoming_edge": "h3_sh",
+      "outgoing_edge": "sh_h3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_sh__sh_s0",
+      "incoming_edge": "h3_sh",
+      "outgoing_edge": "sh_s0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.65,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_sh__sh_s1",
+      "incoming_edge": "h3_sh",
+      "outgoing_edge": "sh_s1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.95,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "h3_sh__sh_s2",
+      "incoming_edge": "h3_sh",
+      "outgoing_edge": "sh_s2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.25,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h3__h3_h2",
+      "incoming_edge": "sh_h3",
+      "outgoing_edge": "h3_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h3__h3_h0",
+      "incoming_edge": "sh_h3",
+      "outgoing_edge": "h3_h0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h3__h3_G3",
+      "incoming_edge": "sh_h3",
+      "outgoing_edge": "h3_G3",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.4,
+          1.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_h3__h3_sh",
+      "incoming_edge": "sh_h3",
+      "outgoing_edge": "h3_sh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_w0__w0_wh",
+      "incoming_edge": "wh_w0",
+      "outgoing_edge": "w0_wh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.65,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w0_wh__wh_h0",
+      "incoming_edge": "w0_wh",
+      "outgoing_edge": "wh_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.65,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w0_wh__wh_h1",
+      "incoming_edge": "w0_wh",
+      "outgoing_edge": "wh_h1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.65,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w0_wh__wh_w0",
+      "incoming_edge": "w0_wh",
+      "outgoing_edge": "wh_w0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.65,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.65,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w0_wh__wh_w1",
+      "incoming_edge": "w0_wh",
+      "outgoing_edge": "wh_w1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.65,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.95,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w0_wh__wh_w2",
+      "incoming_edge": "w0_wh",
+      "outgoing_edge": "wh_w2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.65,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.25,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_w1__w1_wh",
+      "incoming_edge": "wh_w1",
+      "outgoing_edge": "w1_wh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.95,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w1_wh__wh_h0",
+      "incoming_edge": "w1_wh",
+      "outgoing_edge": "wh_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w1_wh__wh_h1",
+      "incoming_edge": "w1_wh",
+      "outgoing_edge": "wh_h1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w1_wh__wh_w0",
+      "incoming_edge": "w1_wh",
+      "outgoing_edge": "wh_w0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.65,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w1_wh__wh_w1",
+      "incoming_edge": "w1_wh",
+      "outgoing_edge": "wh_w1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.95,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w1_wh__wh_w2",
+      "incoming_edge": "w1_wh",
+      "outgoing_edge": "wh_w2",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.25,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "wh_w2__w2_wh",
+      "incoming_edge": "wh_w2",
+      "outgoing_edge": "w2_wh",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.25,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w2_wh__wh_h0",
+      "incoming_edge": "w2_wh",
+      "outgoing_edge": "wh_h0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.25,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w2_wh__wh_h1",
+      "incoming_edge": "w2_wh",
+      "outgoing_edge": "wh_h1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.25,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.6,
+          0.4
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w2_wh__wh_w0",
+      "incoming_edge": "w2_wh",
+      "outgoing_edge": "wh_w0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.25,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.65,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w2_wh__wh_w1",
+      "incoming_edge": "w2_wh",
+      "outgoing_edge": "wh_w1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.25,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          0.95,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "w2_wh__wh_w2",
+      "incoming_edge": "w2_wh",
+      "outgoing_edge": "wh_w2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.25,
+          0.85
+        ],
+        [
+          0.95,
+          0.55
+        ],
+        [
+          1.25,
+          0.85
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_s0__s0_sh",
+      "incoming_edge": "sh_s0",
+      "outgoing_edge": "s0_sh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.65,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s0_sh__sh_h2",
+      "incoming_edge": "s0_sh",
+      "outgoing_edge": "sh_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.65,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s0_sh__sh_h3",
+      "incoming_edge": "s0_sh",
+      "outgoing_edge": "sh_h3",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.65,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s0_sh__sh_s0",
+      "incoming_edge": "s0_sh",
+      "outgoing_edge": "sh_s0",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.65,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.65,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s0_sh__sh_s1",
+      "incoming_edge": "s0_sh",
+      "outgoing_edge": "sh_s1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.65,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.95,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s0_sh__sh_s2",
+      "incoming_edge": "s0_sh",
+      "outgoing_edge": "sh_s2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.65,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.25,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_s1__s1_sh",
+      "incoming_edge": "sh_s1",
+      "outgoing_edge": "s1_sh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.95,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s1_sh__sh_h2",
+      "incoming_edge": "s1_sh",
+      "outgoing_edge": "sh_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s1_sh__sh_h3",
+      "incoming_edge": "s1_sh",
+      "outgoing_edge": "sh_h3",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s1_sh__sh_s0",
+      "incoming_edge": "s1_sh",
+      "outgoing_edge": "sh_s0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          0.95,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.65,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s1_sh__sh_s1",
+      "incoming_edge": "s1_sh",
+      "outgoing_edge": "sh_s1",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.95,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s1_sh__sh_s2",
+      "incoming_edge": "s1_sh",
+      "outgoing_edge": "sh_s2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.25,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "sh_s2__s2_sh",
+      "incoming_edge": "sh_s2",
+      "outgoing_edge": "s2_sh",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.25,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s2_sh__sh_h2",
+      "incoming_edge": "s2_sh",
+      "outgoing_edge": "sh_h2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.25,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.6,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s2_sh__sh_h3",
+      "incoming_edge": "s2_sh",
+      "outgoing_edge": "sh_h3",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.25,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.4,
+          1.6
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s2_sh__sh_s0",
+      "incoming_edge": "s2_sh",
+      "outgoing_edge": "sh_s0",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.25,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.65,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s2_sh__sh_s1",
+      "incoming_edge": "s2_sh",
+      "outgoing_edge": "sh_s1",
+      "maneuver": "LEFT",
+      "reference_path": [
+        [
+          1.25,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          0.95,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    },
+    {
+      "movement_id": "s2_sh__sh_s2",
+      "incoming_edge": "s2_sh",
+      "outgoing_edge": "sh_s2",
+      "maneuver": "RIGHT",
+      "reference_path": [
+        [
+          1.25,
+          1.15
+        ],
+        [
+          0.95,
+          1.45
+        ],
+        [
+          1.25,
+          1.15
+        ]
+      ],
+      "conflict_zones": [],
+      "speed_limit": 0.2
+    }
+  ]
+}

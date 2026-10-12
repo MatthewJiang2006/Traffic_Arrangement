@@ -1,0 +1,81 @@
+{
+  "Car_2_0": {
+    "origin": "W2-loading",
+    "destination": "W6-unloading",
+    "route": {
+      "edge_ids": [
+        "access_010",
+        "access_011",
+        "road_j_3_2_j_2_2__service_2",
+        "road_j_3_2_j_2_2__service_3",
+        "turn_j_2_2_N_W_single_single",
+        "road_j_2_2_j_2_1__service_0",
+        "road_j_2_2_j_2_1__service_1",
+        "road_j_2_2_j_2_1__service_2",
+        "turn_j_2_1_E_S_single_single",
+        "road_j_2_1_j_1_1",
+        "turn_j_1_1_N_E_single_single",
+        "road_j_1_1_j_1_2__p0__service_0",
+        "road_j_1_1_j_1_2__p0__service_1",
+        "road_j_1_1_j_1_2__p1",
+        "road_j_1_1_j_1_2__p2",
+        "uturn_B",
+        "road_j_1_2_j_1_1__p0",
+        "road_j_1_2_j_1_1__p1",
+        "road_j_1_2_j_1_1__p2",
+        "road_j_1_2_j_1_1__p3",
+        "turn_j_1_1_E_N_single_single",
+        "road_j_1_1_j_2_1__service_0",
+        "road_j_1_1_j_2_1__service_1__internal_0",
+        "road_j_1_1_j_2_1__service_1__internal_1",
+        "road_j_1_1_j_2_1__service_2",
+        "road_j_1_1_j_2_1__service_3",
+        "road_j_1_1_j_2_1__service_4",
+        "road_j_1_1_j_2_1__service_5",
+        "access_046",
+        "access_047"
+      ]
+    },
+    "progress": 114.49644687488235,
+    "state": {
+      "x": -8.316239089630693,
+      "y": 199.620737509246,
+      "heading": -1.5674211695873848,
+      "speed": 0.0
+    }
+  },
+  "Car_5_1": {
+    "origin": "W6-loading",
+    "destination": "W4-unloading",
+    "route": {
+      "edge_ids": [
+        "access_049",
+        "access_050",
+        "access_051",
+        "road_j_1_1_j_2_1__service_6",
+        "road_j_1_1_j_2_1__service_7",
+        "turn_j_2_1_S_W_single_single",
+        "road_j_2_1_j_2_0",
+        "turn_j_2_0_E_N_single_left",
+        "road_j_2_0_j_3_0__p0",
+        "road_j_2_0_j_3_0__p1",
+        "change_road_j_2_0_j_3_0_L_R",
+        "road_j_2_0_j_3_0_right__p3",
+        "road_j_2_0_j_3_0_right__p4",
+        "turn_j_3_0_S_N_right_right__service_0",
+        "turn_j_3_0_S_N_right_right__service_1",
+        "road_j_3_0_gate_north_0_out_right__p0__service_0",
+        "road_j_3_0_gate_north_0_out_right__p0__service_1",
+        "access_160",
+        "access_161"
+      ]
+    },
+    "progress": 28.32907184805596,
+    "state": {
+      "x": -11.889906895097475,
+      "y": 189.66735012882162,
+      "heading": 1.5021421644215258,
+      "speed": 0.0
+    }
+  }
+}

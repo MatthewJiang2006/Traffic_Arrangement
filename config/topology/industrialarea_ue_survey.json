@@ -1,0 +1,390 @@
+{
+  "map_path": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）",
+  "world_origin_cm_at_capture": [
+    5681.0,
+    8814.0,
+    805.0
+  ],
+  "coordinate_frame": "UE absolute world XY, metres; adapter must subtract runtime origin and invert UE Z for AirSim NED",
+  "road_tile_count": 86,
+  "junction_count": 12,
+  "junctions": {
+    "j_0_0": {
+      "center_m": [
+        -92.1936,
+        89.2024
+      ],
+      "half_extent_m": [
+        12.0059,
+        8.0188
+      ],
+      "region": "lower",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.SM_Road_73"
+    },
+    "j_0_1": {
+      "center_m": [
+        -10.207,
+        89.1989
+      ],
+      "half_extent_m": [
+        8.0167,
+        8.0172
+      ],
+      "region": "lower",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.SM_Road_14"
+    },
+    "j_0_2": {
+      "center_m": [
+        42.9976,
+        89.2059
+      ],
+      "half_extent_m": [
+        8.0188,
+        8.0059
+      ],
+      "region": "lower",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.SM_Road_278"
+    },
+    "j_1_0": {
+      "center_m": [
+        -92.1936,
+        137.0024
+      ],
+      "half_extent_m": [
+        12.0059,
+        8.0188
+      ],
+      "region": "lower",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.SM_Road_77"
+    },
+    "j_1_1": {
+      "center_m": [
+        -10.2011,
+        137.007
+      ],
+      "half_extent_m": [
+        8.0172,
+        8.0167
+      ],
+      "region": "lower",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.SM_Road_41"
+    },
+    "j_1_2": {
+      "center_m": [
+        42.9989,
+        137.007
+      ],
+      "half_extent_m": [
+        8.0172,
+        8.0167
+      ],
+      "region": "lower",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.SM_Road_60"
+    },
+    "j_2_0": {
+      "center_m": [
+        -92.1937,
+        217.2264
+      ],
+      "half_extent_m": [
+        12.0059,
+        8.0188
+      ],
+      "region": "upper",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.SM_Road_73"
+    },
+    "j_2_1": {
+      "center_m": [
+        -10.2071,
+        217.2229
+      ],
+      "half_extent_m": [
+        8.0167,
+        8.0172
+      ],
+      "region": "upper",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.SM_Road_14"
+    },
+    "j_2_2": {
+      "center_m": [
+        42.9976,
+        217.2299
+      ],
+      "half_extent_m": [
+        8.0188,
+        8.0059
+      ],
+      "region": "upper",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.SM_Road_278"
+    },
+    "j_3_0": {
+      "center_m": [
+        -92.1937,
+        265.0264
+      ],
+      "half_extent_m": [
+        12.0059,
+        8.0188
+      ],
+      "region": "upper",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.SM_Road_77"
+    },
+    "j_3_1": {
+      "center_m": [
+        -10.2011,
+        265.031
+      ],
+      "half_extent_m": [
+        8.0172,
+        8.0167
+      ],
+      "region": "upper",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.SM_Road_41"
+    },
+    "j_3_2": {
+      "center_m": [
+        42.9989,
+        265.031
+      ],
+      "half_extent_m": [
+        8.0172,
+        8.0167
+      ],
+      "region": "upper",
+      "source_actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.SM_Road_60"
+    }
+  },
+  "corridors": [
+    {
+      "a": "j_0_0",
+      "b": "j_0_1",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_0_1",
+      "b": "j_0_2",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_1_0",
+      "b": "j_1_1",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_1_1",
+      "b": "j_1_2",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_2_0",
+      "b": "j_2_1",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_2_1",
+      "b": "j_2_2",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_3_0",
+      "b": "j_3_1",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_3_1",
+      "b": "j_3_2",
+      "orientation": "horizontal",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_0_0",
+      "b": "j_1_0",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_1_0",
+      "b": "j_2_0",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.621
+    },
+    {
+      "a": "j_2_0",
+      "b": "j_3_0",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_0_1",
+      "b": "j_1_1",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_1_1",
+      "b": "j_2_1",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.621
+    },
+    {
+      "a": "j_2_1",
+      "b": "j_3_1",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_0_2",
+      "b": "j_1_2",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.0
+    },
+    {
+      "a": "j_2_2",
+      "b": "j_3_2",
+      "orientation": "vertical",
+      "max_mesh_gap_m": 0.0
+    }
+  ],
+  "arrow_restrictions": [
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.Mat_RoadMarking_10",
+      "junction": "j_3_1",
+      "incoming_arm": "S",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "N"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.Mat_RoadMarking_177",
+      "junction": "j_3_1",
+      "incoming_arm": "W",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "E"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.Mat_RoadMarking_210",
+      "junction": "j_2_0",
+      "incoming_arm": "S",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "N"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.Mat_RoadMarking_4",
+      "junction": "j_2_1",
+      "incoming_arm": "W",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "E"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea_Copy.IndustrialArea_Copy:PersistentLevel.Mat_RoadMarking_8",
+      "junction": "j_2_0",
+      "incoming_arm": "E",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "W"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.Mat_RoadMarking_10",
+      "junction": "j_1_1",
+      "incoming_arm": "S",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "N"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.Mat_RoadMarking_177",
+      "junction": "j_1_1",
+      "incoming_arm": "W",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "E"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.Mat_RoadMarking_210",
+      "junction": "j_0_0",
+      "incoming_arm": "S",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "N"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.Mat_RoadMarking_4",
+      "junction": "j_0_1",
+      "incoming_arm": "W",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "E"
+    },
+    {
+      "actor": "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）:PersistentLevel.Mat_RoadMarking_8",
+      "junction": "j_0_0",
+      "incoming_arm": "E",
+      "allowed": [
+        "STRAIGHT",
+        "LEFT"
+      ],
+      "heading": "W"
+    }
+  ],
+  "outward_arrows": [],
+  "lane_offset_m": 1.9,
+  "modelled_lanes_per_direction": {
+    "west_vertical": 2,
+    "other_roads": 1
+  },
+  "lane_offsets_m": {
+    "LEFT": 1.9,
+    "RIGHT": 5.699999999999999
+  },
+  "lane_rules": {
+    "LEFT": [
+      "STRAIGHT",
+      "LEFT"
+    ],
+    "RIGHT": [
+      "STRAIGHT",
+      "RIGHT"
+    ]
+  },
+  "driving_side": "right; UE right vector=(-sin(yaw), cos(yaw))",
+  "road_arrow_forward": "negative decal_right_vector",
+  "road_speed_m_s_provisional": 5.0,
+  "turn_speed_m_s_provisional": 2.0,
+  "capacity_vehicle_length_m": 8.35,
+  "capacity_standstill_gap_m": 2.0,
+  "pie_vehicle_count_at_capture": 24,
+  "unverified": [
+    "truck turn clearance",
+    "UE surface collision across the two 0.6 m seams",
+    "speed limits and braking",
+    "warehouse/service/gate task semantics"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "application": "shared_transport",
+  "map": "config/topology/industrialarea_ue_shared_fixture_j1.json",
+  "max_runtime_s": 180,
+  "service_s": 2,
+  "body_prefix": "shared1",
+  "expected_shared_order": [
+    "Car_0_0",
+    "Car_0_1"
+  ],
+  "minimum_wait_s": 2,
+  "adapter": {
+    "vehicle_ids": [
+      "Car_0_0",
+      "Car_0_1"
+    ],
+    "origin_ue_m": [
+      56.81,
+      88.14,
+      8.05
+    ],
+    "throttle_rise_per_s": 0.24,
+    "speed_rise_m_s2": 0.8,
+    "max_throttle": 0.7,
+    "speed_error_gain": 0.6
+  },
+  "routes": {
+    "Car_0_0": {
+      "edges": [
+        "shared_east_approach",
+        "turn_j_1_1_W_E_single_single",
+        "shared_east_exit"
+      ],
+      "origin": "east_probe_start",
+      "stops": [
+        "east_probe_goal"
+      ]
+    },
+    "Car_0_1": {
+      "edges": [
+        "shared_west_approach",
+        "turn_j_1_1_E_W_single_single",
+        "shared_west_exit"
+      ],
+      "origin": "west_probe_start",
+      "stops": [
+        "west_probe_goal"
+      ]
+    }
+  },
+  "verified_ground_actors": [
+    "TrafficWaitingQ9Q10RoadToCurb",
+    "TrafficWaitingQ9Q10CurbToHardstand"
+  ]
+}

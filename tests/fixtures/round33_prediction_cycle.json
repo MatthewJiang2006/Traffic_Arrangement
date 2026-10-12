@@ -1,0 +1,302 @@
+{
+  "positions": {
+    "Car_0_1": [
+      44.82863420345986,
+      225.20473882612438,
+      -1.6536474014653162,
+      -0.0
+    ],
+    "Car_3_1": [
+      29.78489857986149,
+      218.85912049034482,
+      0.1442268677188742,
+      0.0
+    ]
+  },
+  "execution_details": {
+    "Car_0_1": {
+      "progress_m": 42.14320180073871,
+      "finished": false,
+      "checkpoint_index": 0,
+      "checkpoint": {
+        "event": "ARRIVAL",
+        "after_edge_count": 64,
+        "leg": 0,
+        "site": "W4-unloading",
+        "node": "W4-unloading",
+        "s": 255.29591494158555
+      },
+      "edge_id": "turn_j_2_2_N_W_single_single__test0",
+      "reverse": false,
+      "destination": "W4-unloading",
+      "route_edges": [
+        "access_010__test0",
+        "access_010__test1",
+        "access_010__test2",
+        "access_010__test3",
+        "access_011__test0",
+        "access_011__test1",
+        "road_j_3_2_j_2_2__service_2__test0",
+        "road_j_3_2_j_2_2__service_3__test0",
+        "road_j_3_2_j_2_2__service_3__test1",
+        "road_j_3_2_j_2_2__service_3__test2",
+        "turn_j_2_2_N_W_single_single__test0",
+        "turn_j_2_2_N_W_single_single__test1",
+        "turn_j_2_2_N_W_single_single__test2",
+        "turn_j_2_2_N_W_single_single__test3",
+        "road_j_2_2_j_2_1__service_0__test0",
+        "road_j_2_2_j_2_1__service_1__test0",
+        "road_j_2_2_j_2_1__service_1__test1",
+        "road_j_2_2_j_2_1__service_1__test2",
+        "road_j_2_2_j_2_1__service_2__test0",
+        "road_j_2_2_j_2_1__service_2__test1",
+        "road_j_2_2_j_2_1__service_2__test2",
+        "road_j_2_2_j_2_1__service_2__test3",
+        "road_j_2_2_j_2_1__service_2__test4",
+        "turn_j_2_1_E_W_single_single__test0",
+        "turn_j_2_1_E_W_single_single__test1",
+        "turn_j_2_1_E_W_single_single__test2",
+        "turn_j_2_1_E_W_single_single__test3",
+        "road_j_2_1_j_2_0__test0",
+        "road_j_2_1_j_2_0__test1",
+        "road_j_2_1_j_2_0__test2",
+        "road_j_2_1_j_2_0__test3",
+        "road_j_2_1_j_2_0__test4",
+        "road_j_2_1_j_2_0__test5",
+        "road_j_2_1_j_2_0__test6",
+        "road_j_2_1_j_2_0__test7",
+        "road_j_2_1_j_2_0__test8",
+        "road_j_2_1_j_2_0__test9",
+        "road_j_2_1_j_2_0__test10",
+        "road_j_2_1_j_2_0__test11",
+        "road_j_2_1_j_2_0__test12",
+        "turn_j_2_0_E_N_single_right__test0",
+        "turn_j_2_0_E_N_single_right__test1",
+        "turn_j_2_0_E_N_single_right__test2",
+        "turn_j_2_0_E_N_single_right__test3",
+        "turn_j_2_0_E_N_single_right__test4",
+        "road_j_2_0_j_3_0_right__p0__test0",
+        "road_j_2_0_j_3_0_right__p0__test1",
+        "road_j_2_0_j_3_0_right__p1__test0",
+        "road_j_2_0_j_3_0_right__p2__test0",
+        "road_j_2_0_j_3_0_right__p2__test1",
+        "road_j_2_0_j_3_0_right__p2__test2",
+        "road_j_2_0_j_3_0_right__p2__test3",
+        "road_j_2_0_j_3_0_right__p3__test0",
+        "road_j_2_0_j_3_0_right__p4__test0",
+        "road_j_2_0_j_3_0_right__p4__test1",
+        "turn_j_3_0_S_N_right_right__service_0__test0",
+        "turn_j_3_0_S_N_right_right__service_1__test0",
+        "turn_j_3_0_S_N_right_right__service_1__test1",
+        "turn_j_3_0_S_N_right_right__service_1__test2",
+        "road_j_3_0_gate_north_0_out_right__p0__service_0__test0",
+        "road_j_3_0_gate_north_0_out_right__p0__service_1__test0",
+        "access_160__test0",
+        "access_161__test0",
+        "access_161__test1"
+      ],
+      "service_until": null
+    },
+    "Car_3_1": {
+      "progress_m": 18.088402856707848,
+      "finished": false,
+      "checkpoint_index": 0,
+      "checkpoint": {
+        "event": "GEAR_CHANGE",
+        "after_edge_count": 75,
+        "direction": -1,
+        "s": 307.40107599947675
+      },
+      "edge_id": "Q27_exit__test3",
+      "reverse": false,
+      "destination": "W1-loading",
+      "route_edges": [
+        "Q27_exit__test0",
+        "Q27_exit__test1",
+        "Q27_exit__test2",
+        "Q27_exit__test3",
+        "Q27_exit__test4",
+        "road_j_2_1_j_2_2__internal_1__test0",
+        "turn_j_2_2_W_N_single_single__test0",
+        "turn_j_2_2_W_N_single_single__test1",
+        "turn_j_2_2_W_N_single_single__test2",
+        "road_j_2_2_j_3_2__test0",
+        "road_j_2_2_j_3_2__test1",
+        "road_j_2_2_j_3_2__test2",
+        "road_j_2_2_j_3_2__test3",
+        "road_j_2_2_j_3_2__test4",
+        "road_j_2_2_j_3_2__test5",
+        "road_j_2_2_j_3_2__test6",
+        "turn_j_3_2_S_W_single_single__test0",
+        "turn_j_3_2_S_W_single_single__test1",
+        "turn_j_3_2_S_W_single_single__test2",
+        "road_j_3_2_j_3_1__p0__test0",
+        "road_j_3_2_j_3_1__p0__test1",
+        "road_j_3_2_j_3_1__p1__test0",
+        "road_j_3_2_j_3_1__p2__test0",
+        "road_j_3_2_j_3_1__p2__test1",
+        "road_j_3_2_j_3_1__p2__test2",
+        "road_j_3_2_j_3_1__p3__test0",
+        "road_j_3_2_j_3_1__p3__test1",
+        "road_j_3_2_j_3_1__p3__test2",
+        "turn_j_3_1_E_S_single_single__test0",
+        "turn_j_3_1_E_S_single_single__test1",
+        "turn_j_3_1_E_S_single_single__test2",
+        "road_j_3_1_j_2_1__test0",
+        "road_j_3_1_j_2_1__test1",
+        "road_j_3_1_j_2_1__test2",
+        "road_j_3_1_j_2_1__test3",
+        "road_j_3_1_j_2_1__test4",
+        "road_j_3_1_j_2_1__test5",
+        "road_j_3_1_j_2_1__test6",
+        "turn_j_2_1_N_S_single_single__test0",
+        "turn_j_2_1_N_S_single_single__test1",
+        "turn_j_2_1_N_S_single_single__test2",
+        "turn_j_2_1_N_S_single_single__test3",
+        "road_j_2_1_j_1_1__test0",
+        "road_j_2_1_j_1_1__test1",
+        "road_j_2_1_j_1_1__test2",
+        "road_j_2_1_j_1_1__test3",
+        "road_j_2_1_j_1_1__test4",
+        "road_j_2_1_j_1_1__test5",
+        "road_j_2_1_j_1_1__test6",
+        "road_j_2_1_j_1_1__test7",
+        "road_j_2_1_j_1_1__test8",
+        "road_j_2_1_j_1_1__test9",
+        "road_j_2_1_j_1_1__test10",
+        "road_j_2_1_j_1_1__test11",
+        "road_j_2_1_j_1_1__test12",
+        "turn_j_1_1_N_E_single_single__test0",
+        "turn_j_1_1_N_E_single_single__test1",
+        "turn_j_1_1_N_E_single_single__test2",
+        "road_j_1_1_j_1_2__p0__service_0__test0",
+        "road_j_1_1_j_1_2__p0__service_0__test1",
+        "road_j_1_1_j_1_2__p0__service_0__test2",
+        "road_j_1_1_j_1_2__p0__service_0__test3",
+        "road_j_1_1_j_1_2__p0__service_1__test0",
+        "road_j_1_1_j_1_2__p0__service_1__test1",
+        "road_j_1_1_j_1_2__p1__test0",
+        "road_j_1_1_j_1_2__p1__test1",
+        "road_j_1_1_j_1_2__p2__test0",
+        "road_j_1_1_j_1_2__p2__test1",
+        "turn_j_1_2_W_S_single_single__test0",
+        "turn_j_1_2_W_S_single_single__test1",
+        "turn_j_1_2_W_S_single_single__test2",
+        "turn_j_1_2_W_S_single_single__test3",
+        "road_j_1_2_j_0_2__service_0__test0",
+        "road_j_1_2_j_0_2__service_0__test1",
+        "access_001__test0",
+        "access_002__test0",
+        "access_002__test1",
+        "access_002__test2",
+        "access_002__test3"
+      ],
+      "service_until": null
+    }
+  },
+  "control_trace": {
+    "Car_0_1": [
+      {
+        "stage": "route_speed",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "maneuver_clearance",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "local_passage_and_timing",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "destination_hold",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "shared_permissions",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "junction_permissions",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "following",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "stationary_body",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "checkpoint",
+        "target_m_s": 2.250518609309514
+      },
+      {
+        "stage": "final_local_regulation",
+        "target_m_s": 0.0
+      }
+    ],
+    "Car_3_1": [
+      {
+        "stage": "route_speed",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "maneuver_clearance",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "local_passage_and_timing",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "destination_hold",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "shared_permissions",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "junction_permissions",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "following",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "stationary_body",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "checkpoint",
+        "target_m_s": 1.0
+      },
+      {
+        "stage": "final_local_regulation",
+        "target_m_s": 0.0
+      }
+    ]
+  },
+  "local_permissions": [
+    {
+      "vehicle_id": "Car_0_1",
+      "start": 10,
+      "end_m": 57.22537874697822,
+      "progress_m": 42.14320180073871,
+      "distance_to_entry_m": -0.037717796480038146,
+      "age_s": 65.28657425899291
+    },
+    {
+      "vehicle_id": "Car_3_1",
+      "start": 0,
+      "end_m": 33.794733090814624,
+      "progress_m": 18.088402856707848,
+      "distance_to_entry_m": -18.088402856707848,
+      "age_s": 62.53786258598848
+    }
+  ],
+  "source": "round33 t=186.091367 s; actual stopped two-vehicle prediction cycle"
+}

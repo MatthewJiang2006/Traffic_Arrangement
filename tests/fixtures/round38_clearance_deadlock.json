@@ -1,0 +1,129 @@
+{
+  "scope": "round38 UE 16-truck clearance deadlock at Car_0_1 <-> Car_1_1",
+  "source": "runs/fleet16_reverse_precedence_round38/physical_control_diagnostics.jsonl",
+  "frame_t_s": 391.76455842499854,
+  "map_sha256": {
+    "IndustrialArea（复件）.umap": "1ec14ed6f76f61b88724a656fdac54c4e2997108e80c4e26acf64b372fbc2351",
+    "IndustrialArea_Copy.umap": "db5f86ed1f2f5682873362c1452696024b38f10427d6fe8e134a508e6c1123e9"
+  },
+  "vehicles": {
+    "Car_0_1": {
+      "destination": "Q30",
+      "progress_m": 163.27036663865354,
+      "checkpoint_index": 1,
+      "reverse": false,
+      "position": [
+        -86.48845739376465,
+        180.53591623486332,
+        -1.5682796395647718,
+        0.0
+      ],
+      "route_keys": [
+        "access_165",
+        "road_j_3_0_gate_north_0_out_right__p0__service_1",
+        "road_j_3_0_gate_north_0_out_right__p0__service_2",
+        "road_j_3_0_gate_north_0_out_right__p1",
+        "change_site_C",
+        "road_j_3_0_gate_north_0_out__p4",
+        "uturn_C",
+        "road_gate_north_0_in_j_3_0_right__p1",
+        "road_gate_north_0_in_j_3_0_right__p2",
+        "road_gate_north_0_in_j_3_0_right__p3",
+        "road_gate_north_0_in_j_3_0_right__p4",
+        "turn_j_3_0_N_S_right_right",
+        "road_j_3_0_j_2_0_right__p0__service_0",
+        "road_j_3_0_j_2_0_right__p0__service_1",
+        "road_j_3_0_j_2_0_right__p1",
+        "road_j_3_0_j_2_0_right__p2__service_0",
+        "road_j_3_0_j_2_0_right__p2__service_1",
+        "road_j_3_0_j_2_0_right__p2__service_2",
+        "road_j_3_0_j_2_0_right__p2__service_3",
+        "road_j_3_0_j_2_0_right__p2__service_4",
+        "road_j_3_0_j_2_0_right__p3",
+        "road_j_3_0_j_2_0_right__p4__service_0",
+        "road_j_3_0_j_2_0_right__p4__service_1",
+        "road_j_3_0_j_2_0_right__p4__service_2",
+        "turn_j_2_0_N_S_right_right__service_0",
+        "turn_j_2_0_N_S_right_right__service_1",
+        "road_j_2_0_j_1_0_right__p0__service_0",
+        "road_j_2_0_j_1_0_right__p0__service_1",
+        "road_j_2_0_j_1_0_right__p1",
+        "road_j_2_0_j_1_0_right__p2",
+        "road_j_2_0_j_1_0_right__p3",
+        "road_j_2_0_j_1_0_right__p4",
+        "road_j_2_0_j_1_0_right__p5__service_0",
+        "road_j_2_0_j_1_0_right__p5__service_1",
+        "turn_j_1_0_N_E_right_single",
+        "road_j_1_0_j_1_1",
+        "turn_j_1_1_W_S_single_single",
+        "road_j_1_1_j_0_1",
+        "turn_j_0_1_N_E_single_single",
+        "road_j_0_1_j_0_2__internal_0",
+        "road_j_0_1_j_0_2__internal_1",
+        "turn_j_0_2_W_N_single_single",
+        "road_j_0_2_j_1_2",
+        "turn_j_1_2_S_W_single_single",
+        "road_j_1_2_j_1_1__p0",
+        "road_j_1_2_j_1_1__p1",
+        "road_j_1_2_j_1_1__p2",
+        "road_j_1_2_j_1_1__p3",
+        "turn_j_1_1_E_N_single_single",
+        "road_j_1_1_j_2_1__service_0",
+        "road_j_1_1_j_2_1__service_1__internal_0",
+        "Q30_entry"
+      ],
+      "leases": []
+    },
+    "Car_1_1": {
+      "destination": "Q34",
+      "progress_m": 163.42298987998268,
+      "checkpoint_index": 1,
+      "reverse": true,
+      "position": [
+        -80.04796970594153,
+        172.9372758491589,
+        2.6170894684853034,
+        0.0
+      ],
+      "route_keys": [
+        "access_156",
+        "access_157",
+        "road_gate_south_0_in_j_0_0_right__p3__service_1",
+        "road_gate_south_0_in_j_0_0_right__p4__service_0",
+        "road_gate_south_0_in_j_0_0_right__p4__service_1",
+        "turn_j_0_0_S_N_right_right__service_0",
+        "turn_j_0_0_S_N_right_right__service_1",
+        "road_j_0_0_j_1_0_right__p0",
+        "road_j_0_0_j_1_0_right__p1",
+        "road_j_0_0_j_1_0_right__p2",
+        "road_j_0_0_j_1_0_right__p3",
+        "road_j_0_0_j_1_0_right__p4",
+        "turn_j_1_0_S_N_right_right",
+        "road_j_1_0_j_2_0_right__p0",
+        "road_j_1_0_j_2_0_right__p1",
+        "road_j_1_0_j_2_0_right__p2",
+        "change_road_j_1_0_j_2_0_R_L",
+        "road_j_1_0_j_2_0__p3",
+        "road_j_1_0_j_2_0__p4__internal_0",
+        "Q34_entry"
+      ],
+      "leases": [
+        {
+          "start": 33,
+          "end_m": 172.32958770245395,
+          "age_s": 104.52601028200297
+        }
+      ]
+    }
+  },
+  "clearance_right": {
+    "owner": "Car_1_1",
+    "start": 33,
+    "vehicle": "Car_0_1",
+    "end_m": 175.0
+  },
+  "measured_gaps_m": {
+    "margin_0_35": 0.0303,
+    "margin_0_2": 0.3854
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "intersections": [
+    {
+      "intersection_id": "j_0_0",
+      "bounds": [
+        -104.1995,
+        81.1836,
+        -80.1877,
+        97.2211
+      ],
+      "connector_exits": {
+        "turn_j_0_0_E_N_single_left": "road_j_0_0_j_1_0",
+        "turn_j_0_0_E_N_single_right": "road_j_0_0_j_1_0_right",
+        "turn_j_0_0_N_S_left_left": "road_j_0_0_gate_south_0_out",
+        "turn_j_0_0_N_E_right_single": "road_j_0_0_j_0_1",
+        "turn_j_0_0_N_S_right_right": "road_j_0_0_gate_south_0_out_right",
+        "turn_j_0_0_S_E_left_single": "road_j_0_0_j_0_1",
+        "turn_j_0_0_S_N_left_left": "road_j_0_0_j_1_0",
+        "turn_j_0_0_S_N_right_right": "road_j_0_0_j_1_0_right"
+      }
+    },
+    {
+      "intersection_id": "j_0_1",
+      "bounds": [
+        -18.2237,
+        81.1817,
+        -2.1903,
+        97.2161
+      ],
+      "connector_exits": {
+        "turn_j_0_1_W_E_single_single": "road_j_0_1_j_0_2",
+        "turn_j_0_1_W_S_single_single": "road_j_0_1_gate_south_1_out",
+        "turn_j_0_1_E_W_single_single": "road_j_0_1_j_0_0",
+        "turn_j_0_1_E_N_single_single": "road_j_0_1_j_1_1",
+        "turn_j_0_1_E_S_single_single": "road_j_0_1_gate_south_1_out",
+        "turn_j_0_1_N_W_single_single": "road_j_0_1_j_0_0",
+        "turn_j_0_1_N_E_single_single": "road_j_0_1_j_0_2",
+        "turn_j_0_1_N_S_single_single": "road_j_0_1_gate_south_1_out",
+        "turn_j_0_1_S_W_single_single": "road_j_0_1_j_0_0",
+        "turn_j_0_1_S_E_single_single": "road_j_0_1_j_0_2",
+        "turn_j_0_1_S_N_single_single": "road_j_0_1_j_1_1"
+      }
+    },
+    {
+      "intersection_id": "j_0_2",
+      "bounds": [
+        34.9788,
+        81.2,
+        51.0164,
+        97.2118
+      ],
+      "connector_exits": {
+        "turn_j_0_2_W_N_single_single": "road_j_0_2_j_1_2",
+        "turn_j_0_2_N_W_single_single": "road_j_0_2_j_0_1"
+      }
+    },
+    {
+      "intersection_id": "j_1_0",
+      "bounds": [
+        -104.1995,
+        128.9836,
+        -80.1877,
+        145.0211
+      ],
+      "connector_exits": {
+        "turn_j_1_0_E_S_single_left": "road_j_1_0_j_0_0",
+        "turn_j_1_0_E_S_single_right": "road_j_1_0_j_0_0_right",
+        "turn_j_1_0_E_N_single_left": "road_j_1_0_j_2_0",
+        "turn_j_1_0_E_N_single_right": "road_j_1_0_j_2_0_right",
+        "turn_j_1_0_S_E_left_single": "road_j_1_0_j_1_1",
+        "turn_j_1_0_S_N_left_left": "road_j_1_0_j_2_0",
+        "turn_j_1_0_S_N_right_right": "road_j_1_0_j_2_0_right",
+        "turn_j_1_0_N_S_left_left": "road_j_1_0_j_0_0",
+        "turn_j_1_0_N_E_right_single": "road_j_1_0_j_1_1",
+        "turn_j_1_0_N_S_right_right": "road_j_1_0_j_0_0_right"
+      }
+    },
+    {
+      "intersection_id": "j_1_1",
+      "bounds": [
+        -18.2183,
+        128.9903,
+        -2.1839,
+        145.0237
+      ],
+      "connector_exits": {
+        "turn_j_1_1_W_E_single_single": "road_j_1_1_j_1_2",
+        "turn_j_1_1_W_S_single_single": "road_j_1_1_j_0_1",
+        "turn_j_1_1_E_W_single_single": "road_j_1_1_j_1_0",
+        "turn_j_1_1_E_S_single_single": "road_j_1_1_j_0_1",
+        "turn_j_1_1_E_N_single_single": "road_j_1_1_j_2_1",
+        "turn_j_1_1_S_E_single_single": "road_j_1_1_j_1_2",
+        "turn_j_1_1_S_N_single_single": "road_j_1_1_j_2_1",
+        "turn_j_1_1_N_W_single_single": "road_j_1_1_j_1_0",
+        "turn_j_1_1_N_E_single_single": "road_j_1_1_j_1_2",
+        "turn_j_1_1_N_S_single_single": "road_j_1_1_j_0_1"
+      }
+    },
+    {
+      "intersection_id": "j_1_2",
+      "bounds": [
+        34.9817,
+        128.9903,
+        51.0161,
+        145.0237
+      ],
+      "connector_exits": {
+        "turn_j_1_2_W_S_single_single": "road_j_1_2_j_0_2",
+        "turn_j_1_2_S_W_single_single": "road_j_1_2_j_1_1"
+      }
+    },
+    {
+      "intersection_id": "j_2_0",
+      "bounds": [
+        -104.1996,
+        209.2076,
+        -80.1878,
+        225.2451
+      ],
+      "connector_exits": {
+        "turn_j_2_0_E_N_single_left": "road_j_2_0_j_3_0",
+        "turn_j_2_0_E_N_single_right": "road_j_2_0_j_3_0_right",
+        "turn_j_2_0_S_E_left_single": "road_j_2_0_j_2_1",
+        "turn_j_2_0_S_N_left_left": "road_j_2_0_j_3_0",
+        "turn_j_2_0_S_N_right_right": "road_j_2_0_j_3_0_right",
+        "turn_j_2_0_N_S_left_left": "road_j_2_0_j_1_0",
+        "turn_j_2_0_N_E_right_single": "road_j_2_0_j_2_1",
+        "turn_j_2_0_N_S_right_right": "road_j_2_0_j_1_0_right"
+      }
+    },
+    {
+      "intersection_id": "j_2_1",
+      "bounds": [
+        -18.2238,
+        209.2057,
+        -2.1904,
+        225.2401
+      ],
+      "connector_exits": {
+        "turn_j_2_1_W_E_single_single": "road_j_2_1_j_2_2",
+        "turn_j_2_1_W_S_single_single": "road_j_2_1_j_1_1",
+        "turn_j_2_1_E_W_single_single": "road_j_2_1_j_2_0",
+        "turn_j_2_1_E_S_single_single": "road_j_2_1_j_1_1",
+        "turn_j_2_1_E_N_single_single": "road_j_2_1_j_3_1",
+        "turn_j_2_1_S_W_single_single": "road_j_2_1_j_2_0",
+        "turn_j_2_1_S_E_single_single": "road_j_2_1_j_2_2",
+        "turn_j_2_1_S_N_single_single": "road_j_2_1_j_3_1",
+        "turn_j_2_1_N_W_single_single": "road_j_2_1_j_2_0",
+        "turn_j_2_1_N_E_single_single": "road_j_2_1_j_2_2",
+        "turn_j_2_1_N_S_single_single": "road_j_2_1_j_1_1"
+      }
+    },
+    {
+      "intersection_id": "j_2_2",
+      "bounds": [
+        34.9788,
+        209.224,
+        51.0163,
+        225.2358
+      ],
+      "connector_exits": {
+        "turn_j_2_2_W_N_single_single": "road_j_2_2_j_3_2",
+        "turn_j_2_2_N_W_single_single": "road_j_2_2_j_2_1"
+      }
+    },
+    {
+      "intersection_id": "j_3_0",
+      "bounds": [
+        -104.1996,
+        257.0076,
+        -80.1878,
+        273.0451
+      ],
+      "connector_exits": {
+        "turn_j_3_0_E_S_single_left": "road_j_3_0_j_2_0",
+        "turn_j_3_0_E_S_single_right": "road_j_3_0_j_2_0_right",
+        "turn_j_3_0_E_N_single_left": "road_j_3_0_gate_north_0_out",
+        "turn_j_3_0_E_N_single_right": "road_j_3_0_gate_north_0_out_right",
+        "turn_j_3_0_S_E_left_single": "road_j_3_0_j_3_1",
+        "turn_j_3_0_S_N_left_left": "road_j_3_0_gate_north_0_out",
+        "turn_j_3_0_S_N_right_right": "road_j_3_0_gate_north_0_out_right",
+        "turn_j_3_0_N_S_left_left": "road_j_3_0_j_2_0",
+        "turn_j_3_0_N_E_right_single": "road_j_3_0_j_3_1",
+        "turn_j_3_0_N_S_right_right": "road_j_3_0_j_2_0_right"
+      }
+    },
+    {
+      "intersection_id": "j_3_1",
+      "bounds": [
+        -18.2183,
+        257.0143,
+        -2.1839,
+        273.0477
+      ],
+      "connector_exits": {
+        "turn_j_3_1_W_E_single_single": "road_j_3_1_j_3_2",
+        "turn_j_3_1_W_S_single_single": "road_j_3_1_j_2_1",
+        "turn_j_3_1_E_W_single_single": "road_j_3_1_j_3_0",
+        "turn_j_3_1_E_S_single_single": "road_j_3_1_j_2_1",
+        "turn_j_3_1_E_N_single_single": "road_j_3_1_gate_north_1_out",
+        "turn_j_3_1_S_E_single_single": "road_j_3_1_j_3_2",
+        "turn_j_3_1_S_N_single_single": "road_j_3_1_gate_north_1_out",
+        "turn_j_3_1_N_W_single_single": "road_j_3_1_j_3_0",
+        "turn_j_3_1_N_E_single_single": "road_j_3_1_j_3_2",
+        "turn_j_3_1_N_S_single_single": "road_j_3_1_j_2_1"
+      }
+    },
+    {
+      "intersection_id": "j_3_2",
+      "bounds": [
+        34.9817,
+        257.0143,
+        51.0161,
+        273.0477
+      ],
+      "connector_exits": {
+        "turn_j_3_2_W_S_single_single": "road_j_3_2_j_2_2",
+        "turn_j_3_2_S_W_single_single": "road_j_3_2_j_3_1"
+      }
+    }
+  ]
+}

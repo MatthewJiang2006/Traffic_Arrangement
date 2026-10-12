@@ -1,0 +1,764 @@
+{
+  "map": "config/topology/industrialarea_ue_parking_expansion_scan.json",
+  "jobs": [
+    {
+      "pair_id": "Q13__local_access",
+      "origin": "Q13-road-start",
+      "destination": "Q13-road",
+      "waiting_node": "Q13",
+      "stops": [
+        "Q13",
+        "Q13-road"
+      ],
+      "edges": [
+        "Q13__0_0",
+        "Q13__0_1",
+        "Q13__0_2",
+        "Q13__0_3",
+        "Q13__0_4",
+        "Q13__0_5",
+        "Q13__0_6",
+        "Q13__0_7",
+        "Q13__0_8",
+        "Q13__0_9",
+        "Q13__0_10",
+        "Q13__0_11",
+        "Q13__0_12",
+        "Q13__0_13",
+        "Q13__0_14",
+        "Q13__1_0",
+        "Q13__1_1",
+        "Q13__1_2",
+        "Q13__1_3",
+        "Q13__1_4",
+        "Q13__1_5",
+        "Q13__1_6"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 15,
+          "leg": 0,
+          "site": "Q13",
+          "node": "Q13"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 22,
+          "leg": 1,
+          "site": "Q13-road",
+          "node": "Q13__point22"
+        }
+      ],
+      "distance_m": 107.5376180074623
+    },
+    {
+      "pair_id": "Q14__local_access",
+      "origin": "Q14-road-start",
+      "destination": "Q14-road",
+      "waiting_node": "Q14",
+      "stops": [
+        "Q14",
+        "Q14-road"
+      ],
+      "edges": [
+        "Q14__0_0",
+        "Q14__0_1",
+        "Q14__0_2",
+        "Q14__0_3",
+        "Q14__0_4",
+        "Q14__0_5",
+        "Q14__0_6",
+        "Q14__0_7",
+        "Q14__0_8",
+        "Q14__0_9",
+        "Q14__0_10",
+        "Q14__0_11",
+        "Q14__0_12",
+        "Q14__0_13",
+        "Q14__0_14",
+        "Q14__0_15",
+        "Q14__1_0",
+        "Q14__1_1",
+        "Q14__1_2",
+        "Q14__1_3",
+        "Q14__1_4",
+        "Q14__1_5",
+        "Q14__1_6",
+        "Q14__1_7"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 16,
+          "leg": 0,
+          "site": "Q14",
+          "node": "Q14"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 24,
+          "leg": 1,
+          "site": "Q14-road",
+          "node": "Q14__point24"
+        }
+      ],
+      "distance_m": 115.53761800746207
+    },
+    {
+      "pair_id": "Q15__local_access",
+      "origin": "Q15-road-start",
+      "destination": "Q15-road",
+      "waiting_node": "Q15",
+      "stops": [
+        "Q15",
+        "Q15-road"
+      ],
+      "edges": [
+        "Q15__0_0",
+        "Q15__0_1",
+        "Q15__0_2",
+        "Q15__0_3",
+        "Q15__0_4",
+        "Q15__0_5",
+        "Q15__0_6",
+        "Q15__0_7",
+        "Q15__0_8",
+        "Q15__0_9",
+        "Q15__0_10",
+        "Q15__0_11",
+        "Q15__0_12",
+        "Q15__0_13",
+        "Q15__0_14",
+        "Q15__0_15",
+        "Q15__0_16",
+        "Q15__1_0",
+        "Q15__1_1",
+        "Q15__1_2",
+        "Q15__1_3",
+        "Q15__1_4",
+        "Q15__1_5",
+        "Q15__1_6",
+        "Q15__1_7",
+        "Q15__1_8"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 17,
+          "leg": 0,
+          "site": "Q15",
+          "node": "Q15"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 26,
+          "leg": 1,
+          "site": "Q15-road",
+          "node": "Q15__point26"
+        }
+      ],
+      "distance_m": 123.53761800746202
+    },
+    {
+      "pair_id": "Q16__local_access",
+      "origin": "Q16-road-start",
+      "destination": "Q16-road",
+      "waiting_node": "Q16",
+      "stops": [
+        "Q16",
+        "Q16-road"
+      ],
+      "edges": [
+        "Q16__0_0",
+        "Q16__0_1",
+        "Q16__0_2",
+        "Q16__0_3",
+        "Q16__0_4",
+        "Q16__0_5",
+        "Q16__0_6",
+        "Q16__0_7",
+        "Q16__0_8",
+        "Q16__0_9",
+        "Q16__0_10",
+        "Q16__0_11",
+        "Q16__0_12",
+        "Q16__0_13",
+        "Q16__0_14",
+        "Q16__0_15",
+        "Q16__0_16",
+        "Q16__0_17",
+        "Q16__1_0",
+        "Q16__1_1",
+        "Q16__1_2",
+        "Q16__1_3",
+        "Q16__1_4",
+        "Q16__1_5",
+        "Q16__1_6",
+        "Q16__1_7",
+        "Q16__1_8",
+        "Q16__1_9"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 18,
+          "leg": 0,
+          "site": "Q16",
+          "node": "Q16"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 28,
+          "leg": 1,
+          "site": "Q16-road",
+          "node": "Q16__point28"
+        }
+      ],
+      "distance_m": 131.5376180074621
+    },
+    {
+      "pair_id": "Q17__local_access",
+      "origin": "Q17-road-start",
+      "destination": "Q17-road",
+      "waiting_node": "Q17",
+      "stops": [
+        "Q17",
+        "Q17-road"
+      ],
+      "edges": [
+        "Q17__0_0",
+        "Q17__0_1",
+        "Q17__0_2",
+        "Q17__0_3",
+        "Q17__0_4",
+        "Q17__0_5",
+        "Q17__0_6",
+        "Q17__0_7",
+        "Q17__0_8",
+        "Q17__0_9",
+        "Q17__0_10",
+        "Q17__0_11",
+        "Q17__0_12",
+        "Q17__0_13",
+        "Q17__0_14",
+        "Q17__0_15",
+        "Q17__0_16",
+        "Q17__0_17",
+        "Q17__0_18",
+        "Q17__1_0",
+        "Q17__1_1",
+        "Q17__1_2",
+        "Q17__1_3",
+        "Q17__1_4",
+        "Q17__1_5",
+        "Q17__1_6",
+        "Q17__1_7",
+        "Q17__1_8",
+        "Q17__1_9"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 19,
+          "leg": 0,
+          "site": "Q17",
+          "node": "Q17"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 29,
+          "leg": 1,
+          "site": "Q17-road",
+          "node": "Q17__point29"
+        }
+      ],
+      "distance_m": 139.53761800746227
+    },
+    {
+      "pair_id": "Q18__local_access",
+      "origin": "Q18-road-start",
+      "destination": "Q18-road",
+      "waiting_node": "Q18",
+      "stops": [
+        "Q18",
+        "Q18-road"
+      ],
+      "edges": [
+        "Q18__0_0",
+        "Q18__0_1",
+        "Q18__0_2",
+        "Q18__0_3",
+        "Q18__0_4",
+        "Q18__0_5",
+        "Q18__0_6",
+        "Q18__0_7",
+        "Q18__0_8",
+        "Q18__0_9",
+        "Q18__0_10",
+        "Q18__0_11",
+        "Q18__0_12",
+        "Q18__0_13",
+        "Q18__0_14",
+        "Q18__0_15",
+        "Q18__0_16",
+        "Q18__0_17",
+        "Q18__0_18",
+        "Q18__1_0",
+        "Q18__1_1",
+        "Q18__1_2",
+        "Q18__1_3",
+        "Q18__1_4",
+        "Q18__1_5",
+        "Q18__1_6",
+        "Q18__1_7",
+        "Q18__1_8",
+        "Q18__1_9",
+        "Q18__1_10"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 19,
+          "leg": 0,
+          "site": "Q18",
+          "node": "Q18"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 30,
+          "leg": 1,
+          "site": "Q18-road",
+          "node": "Q18__point30"
+        }
+      ],
+      "distance_m": 147.53761800746244
+    },
+    {
+      "pair_id": "Q19__local_access",
+      "origin": "Q19-road-start",
+      "destination": "Q19-road",
+      "waiting_node": "Q19",
+      "stops": [
+        "Q19",
+        "Q19-road"
+      ],
+      "edges": [
+        "Q19__0_0",
+        "Q19__0_1",
+        "Q19__0_2",
+        "Q19__0_3",
+        "Q19__0_4",
+        "Q19__0_5",
+        "Q19__0_6",
+        "Q19__0_7",
+        "Q19__0_8",
+        "Q19__0_9",
+        "Q19__0_10",
+        "Q19__0_11",
+        "Q19__0_12",
+        "Q19__0_13",
+        "Q19__0_14",
+        "Q19__0_15",
+        "Q19__0_16",
+        "Q19__0_17",
+        "Q19__0_18",
+        "Q19__0_19",
+        "Q19__1_0",
+        "Q19__1_1",
+        "Q19__1_2",
+        "Q19__1_3",
+        "Q19__1_4",
+        "Q19__1_5",
+        "Q19__1_6",
+        "Q19__1_7",
+        "Q19__1_8",
+        "Q19__1_9",
+        "Q19__1_10",
+        "Q19__1_11"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 20,
+          "leg": 0,
+          "site": "Q19",
+          "node": "Q19"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 32,
+          "leg": 1,
+          "site": "Q19-road",
+          "node": "Q19__point32"
+        }
+      ],
+      "distance_m": 155.53761800746247
+    },
+    {
+      "pair_id": "Q20__local_access",
+      "origin": "Q20-road-start",
+      "destination": "Q20-road",
+      "waiting_node": "Q20",
+      "stops": [
+        "Q20",
+        "Q20-road"
+      ],
+      "edges": [
+        "Q20__0_0",
+        "Q20__0_1",
+        "Q20__0_2",
+        "Q20__0_3",
+        "Q20__0_4",
+        "Q20__0_5",
+        "Q20__0_6",
+        "Q20__0_7",
+        "Q20__0_8",
+        "Q20__0_9",
+        "Q20__0_10",
+        "Q20__0_11",
+        "Q20__0_12",
+        "Q20__0_13",
+        "Q20__1_0",
+        "Q20__1_1",
+        "Q20__1_2",
+        "Q20__1_3",
+        "Q20__1_4",
+        "Q20__1_5",
+        "Q20__1_6",
+        "Q20__1_7",
+        "Q20__1_8"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 14,
+          "leg": 0,
+          "site": "Q20",
+          "node": "Q20"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 23,
+          "leg": 1,
+          "site": "Q20-road",
+          "node": "Q20__point23"
+        }
+      ],
+      "distance_m": 111.33741800746206
+    },
+    {
+      "pair_id": "Q21__local_access",
+      "origin": "Q21-road-start",
+      "destination": "Q21-road",
+      "waiting_node": "Q21",
+      "stops": [
+        "Q21",
+        "Q21-road"
+      ],
+      "edges": [
+        "Q21__0_0",
+        "Q21__0_1",
+        "Q21__0_2",
+        "Q21__0_3",
+        "Q21__0_4",
+        "Q21__0_5",
+        "Q21__0_6",
+        "Q21__0_7",
+        "Q21__0_8",
+        "Q21__0_9",
+        "Q21__0_10",
+        "Q21__0_11",
+        "Q21__0_12",
+        "Q21__0_13",
+        "Q21__0_14",
+        "Q21__1_0",
+        "Q21__1_1",
+        "Q21__1_2",
+        "Q21__1_3",
+        "Q21__1_4",
+        "Q21__1_5",
+        "Q21__1_6",
+        "Q21__1_7",
+        "Q21__1_8",
+        "Q21__1_9"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 15,
+          "leg": 0,
+          "site": "Q21",
+          "node": "Q21"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 25,
+          "leg": 1,
+          "site": "Q21-road",
+          "node": "Q21__point25"
+        }
+      ],
+      "distance_m": 119.33741800746206
+    },
+    {
+      "pair_id": "Q22__local_access",
+      "origin": "Q22-road-start",
+      "destination": "Q22-road",
+      "waiting_node": "Q22",
+      "stops": [
+        "Q22",
+        "Q22-road"
+      ],
+      "edges": [
+        "Q22__0_0",
+        "Q22__0_1",
+        "Q22__0_2",
+        "Q22__0_3",
+        "Q22__0_4",
+        "Q22__0_5",
+        "Q22__0_6",
+        "Q22__0_7",
+        "Q22__0_8",
+        "Q22__0_9",
+        "Q22__0_10",
+        "Q22__0_11",
+        "Q22__0_12",
+        "Q22__0_13",
+        "Q22__0_14",
+        "Q22__1_0",
+        "Q22__1_1",
+        "Q22__1_2",
+        "Q22__1_3",
+        "Q22__1_4",
+        "Q22__1_5",
+        "Q22__1_6",
+        "Q22__1_7",
+        "Q22__1_8",
+        "Q22__1_9",
+        "Q22__1_10"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 15,
+          "leg": 0,
+          "site": "Q22",
+          "node": "Q22"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 26,
+          "leg": 1,
+          "site": "Q22-road",
+          "node": "Q22__point26"
+        }
+      ],
+      "distance_m": 127.33741800746206
+    },
+    {
+      "pair_id": "Q23__local_access",
+      "origin": "Q23-road-start",
+      "destination": "Q23-road",
+      "waiting_node": "Q23",
+      "stops": [
+        "Q23",
+        "Q23-road"
+      ],
+      "edges": [
+        "Q23__0_0",
+        "Q23__0_1",
+        "Q23__0_2",
+        "Q23__0_3",
+        "Q23__0_4",
+        "Q23__0_5",
+        "Q23__0_6",
+        "Q23__0_7",
+        "Q23__0_8",
+        "Q23__0_9",
+        "Q23__0_10",
+        "Q23__0_11",
+        "Q23__0_12",
+        "Q23__0_13",
+        "Q23__0_14",
+        "Q23__0_15",
+        "Q23__1_0",
+        "Q23__1_1",
+        "Q23__1_2",
+        "Q23__1_3",
+        "Q23__1_4",
+        "Q23__1_5",
+        "Q23__1_6",
+        "Q23__1_7",
+        "Q23__1_8",
+        "Q23__1_9",
+        "Q23__1_10",
+        "Q23__1_11"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 16,
+          "leg": 0,
+          "site": "Q23",
+          "node": "Q23"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 28,
+          "leg": 1,
+          "site": "Q23-road",
+          "node": "Q23__point28"
+        }
+      ],
+      "distance_m": 135.3374180074621
+    },
+    {
+      "pair_id": "Q24__local_access",
+      "origin": "Q24-road-start",
+      "destination": "Q24-road",
+      "waiting_node": "Q24",
+      "stops": [
+        "Q24",
+        "Q24-road"
+      ],
+      "edges": [
+        "Q24__0_0",
+        "Q24__0_1",
+        "Q24__0_2",
+        "Q24__0_3",
+        "Q24__0_4",
+        "Q24__0_5",
+        "Q24__0_6",
+        "Q24__0_7",
+        "Q24__0_8",
+        "Q24__0_9",
+        "Q24__0_10",
+        "Q24__0_11",
+        "Q24__0_12",
+        "Q24__0_13",
+        "Q24__0_14",
+        "Q24__0_15",
+        "Q24__0_16",
+        "Q24__1_0",
+        "Q24__1_1",
+        "Q24__1_2",
+        "Q24__1_3",
+        "Q24__1_4",
+        "Q24__1_5",
+        "Q24__1_6",
+        "Q24__1_7",
+        "Q24__1_8",
+        "Q24__1_9",
+        "Q24__1_10",
+        "Q24__1_11",
+        "Q24__1_12"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 17,
+          "leg": 0,
+          "site": "Q24",
+          "node": "Q24"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 30,
+          "leg": 1,
+          "site": "Q24-road",
+          "node": "Q24__point30"
+        }
+      ],
+      "distance_m": 143.33741800746225
+    },
+    {
+      "pair_id": "Q25__local_access",
+      "origin": "Q25-road-start",
+      "destination": "Q25-road",
+      "waiting_node": "Q25",
+      "stops": [
+        "Q25",
+        "Q25-road"
+      ],
+      "edges": [
+        "Q25__0_0",
+        "Q25__0_1",
+        "Q25__0_2",
+        "Q25__0_3",
+        "Q25__0_4",
+        "Q25__0_5",
+        "Q25__0_6",
+        "Q25__0_7",
+        "Q25__0_8",
+        "Q25__0_9",
+        "Q25__0_10",
+        "Q25__0_11",
+        "Q25__0_12",
+        "Q25__0_13",
+        "Q25__0_14",
+        "Q25__0_15",
+        "Q25__0_16",
+        "Q25__0_17",
+        "Q25__1_0",
+        "Q25__1_1",
+        "Q25__1_2",
+        "Q25__1_3",
+        "Q25__1_4",
+        "Q25__1_5",
+        "Q25__1_6",
+        "Q25__1_7",
+        "Q25__1_8",
+        "Q25__1_9",
+        "Q25__1_10",
+        "Q25__1_11",
+        "Q25__1_12"
+      ],
+      "checkpoints": [
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 18,
+          "leg": 0,
+          "site": "Q25",
+          "node": "Q25"
+        },
+        {
+          "event": "ARRIVAL",
+          "after_edge_count": 31,
+          "leg": 1,
+          "site": "Q25-road",
+          "node": "Q25__point31"
+        }
+      ],
+      "distance_m": 151.33741800746208
+    }
+  ],
+  "service_s": 1,
+  "expected_waiting_nodes": [
+    "Q13",
+    "Q14",
+    "Q15",
+    "Q16",
+    "Q17",
+    "Q18",
+    "Q19",
+    "Q20",
+    "Q21",
+    "Q22",
+    "Q23",
+    "Q24",
+    "Q25"
+  ],
+  "service_network": "config/topology/industrialarea_ue_parking24_network.json",
+  "service_network_sha256": "589880bbcf7d3de3e7fac75f561f1cb38e60c84d7df578e7303ebce2477bc3fe",
+  "map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "f89729c418ccea2fea140b778c05c4686440b4f6301ecd0300a1f7ddd9afe1a7",
+    "IndustrialArea_Copy.umap": "6b4d7695d23f6f774285f23945b790530dd97554e7bb1f7ec84db4bbf906cfe8"
+  },
+  "original_access_map_sha256": {
+    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "f89729c418ccea2fea140b778c05c4686440b4f6301ecd0300a1f7ddd9afe1a7",
+    "IndustrialArea_Copy.umap": "6b4d7695d23f6f774285f23945b790530dd97554e7bb1f7ec84db4bbf906cfe8"
+  },
+  "scope": "Local waiting ingress/stop/egress loops; no all-pairs sweep",
+  "parking_static_probe_sha256": "5dbf3dd7c647d1e6c9216fc171df963bee61ccdad1019df89099c90180c59325"
+}

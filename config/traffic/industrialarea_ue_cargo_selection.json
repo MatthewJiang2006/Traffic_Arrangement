@@ -1,0 +1,23 @@
+{
+  "asset": "/Game/IndustrialArea/Meshes/SM_Truck_Trailer_1.SM_Truck_Trailer_1",
+  "native_body_size_m": [
+    4.314,
+    2.086,
+    2.487
+  ],
+  "tractor_blueprint": "/Game/TruckAndTrailers/Blueprints/BP_Truck.BP_Truck",
+  "mount": "fixed to tractor visual actor; no articulated trailer",
+  "opening_direction": "toward cab",
+  "relative_yaw_deg": 180,
+  "cab_gap_cm": 20,
+  "vehicle_count": 24,
+  "status": "mounted persistently; placement and tire contact passed",
+  "physics": "existing AirSim chassis retained; cargo is visual-only and has no physical collision",
+  "dynamic_turn_acceptance": "PASS: west road LEFT lane left turn and RIGHT lane right turn, native UE heading changes -90/+90; normal short-cargo paths",
+  "placement_report": "runs/ue_scene/short_cargo_validation.json",
+  "native_mesh_open_end": "negative X, checked from exported mesh end-face coverage",
+  "height_reference": "TruckAtt socket; cargo lower supports aligned to hitch height",
+  "hitch_gap_cm": 0,
+  "lowered_from_previous_mount_cm": 68.96,
+  "driving_acceptance_report": "docs/ue_short_cargo_driving_acceptance.json"
+}
