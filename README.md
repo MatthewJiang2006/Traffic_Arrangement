@@ -81,13 +81,15 @@ PYTHONPATH=src python scripts/check.py
 
 需要单独配置 UE4.27 场景、AirSim 插件及匹配的 Python 客户端、RPC 连接和 UE Python 远程执行。本仓库提供算法和验证脚本，UE 工程需另行准备。运行前应按本机环境设置脚本中的 UE 工程与插件路径，并确认配置中的地图指纹与当前地图一致。
 
-完成对应轻量预检，并让 UE 场景进入可连接的运行状态后，使用：
+让 UE 场景进入可连接的运行状态后，复现完整实验演示只需执行：
 
 ```bash
-python scripts/validate_ue_continuous_tasks.py \
-  --scenario config/runtime/industrialarea_ue_full_verified_20261007.json \
-  --time-scale 1
+./run.sh
 ```
+
+启动脚本优先使用项目 `.venv` 中的 Python，否则使用当前环境的 `python3`。也可以直接执行 `python scripts/run.py`。
+
+该入口固定使用 `config/runtime/industrialarea_ue_full_verified_20261007.json`：16 辆车、32 个运输任务、时间倍率 1，关闭诊断模式，结果写入 `runs/ue_full_verified_20261007/`。脚本先执行完整轻量预检，通过后自动执行真实 UE 验收；任一阶段失败即停止。入口不接受参数，使用当前 Python 环境，从任意工作目录调用均可正确定位项目文件。正常倍率下真实 UE 实验约需 29 分钟。
 
 UE 远程执行工具为 `scripts/ue_remote.py`，真实连续任务入口为 `scripts/validate_ue_continuous_tasks.py`。结果复核工具为 `scripts/audit_ue_run.py` 与 `scripts/audit_ue_road_envelope.py`。
 
