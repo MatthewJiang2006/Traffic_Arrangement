@@ -19,10 +19,11 @@ def test_repaired_corner_preserves_endpoints_and_matches_service_network():
  assert p.model.physical_paths[KEY].points==tuple(map(tuple,e['centerline']))
  assert all(math.dist(p.model.edges[a]['centerline'][-1],p.model.edges[b]['centerline'][0])<1e-8 for a,b in zip(p.edges,p.edges[1:]))
 
-def test_delayed_turn_still_corrects_approach_error_without_early_yaw_on_path():
- p=plan();s=.5;point=p.point(s);h=p.heading(s)
- assert abs(p.steering(point,h,s))<1e-8
- assert p.steering((point[0]-.2,point[1]),h,s)>0
+def test_calibrated_turn_keeps_entry_preview_small_and_corrects_approach_error():
+ p=plan();s=0.;point=p.point(s);h=p.heading(s)
+ nominal=p.steering(point,h,s)
+ assert abs(nominal)<math.radians(1)
+ assert p.steering((point[0]-.2,point[1]),h,s)>nominal
 
 
 @pytest.mark.parametrize('key',[KEY,'turn_j_1_0_N_E_right_single','turn_j_0_0_N_E_right_single'])
@@ -90,3 +91,8 @@ def test_recorded_j_0_0_deviation_route_uses_calibrated_continuous_geometry():
         destination=fixture['destination'],route=route))
  slices=[e for e in joined.edges if joined.model.aliases[e]==key]
  assert len(slices)==3 and all(joined.model.edges[e]['right_turn_tracking_gain']==1.2 for e in slices)
+
+
+def test_native_actuator_preview_builds_bounded_steering_before_arc_start():
+ p=plan();s=.5;point=p.point(s);h=p.heading(s)
+ assert 0<p.steering(point,h,s,speed=2.2)<math.radians(10)

@@ -24,7 +24,7 @@ def rear(state):
     return VehicleState(state.vehicle_id,state.x-1.16425*math.cos(state.heading),state.y-1.16425*math.sin(state.heading),state.heading,speed=state.speed,timestamp=state.timestamp)
 
 
-OUT=ROOT/'runs/ue_node_pairs';OUT.mkdir(parents=True,exist_ok=True)
+OUT=ROOT/'runs/ue_node_pairs'
 
 
 def route_fingerprint(plan):
@@ -35,6 +35,7 @@ def route_fingerprint(plan):
 
 def main():
     global OUT
+    OUT.mkdir(parents=True,exist_ok=True)
     parser=argparse.ArgumentParser();parser.add_argument('--resume',action='store_true')
     modes=parser.add_mutually_exclusive_group()
     modes.add_argument('--smoke',action='store_true')

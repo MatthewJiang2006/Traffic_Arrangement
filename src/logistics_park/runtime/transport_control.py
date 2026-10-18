@@ -9,12 +9,16 @@ from logistics_park.scheduling.shared_resource import SharedResourceReservations
 from logistics_park.scheduling.local_traffic import TAIL_CLEAR_M
 from logistics_park.scheduling.conflict_timing import maneuver_groups
 from .traffic_policy import stop_line_speed,following_speed,needs_maneuver_room
+from .safety_timing import braking_distance
+from .transport_routes import SteeringFeedback
 from logistics_park.tasks.service_station import ServiceStation,StationConfig
 
 BODY_LENGTH=8.344
 BODY_WIDTH=2.60
 BODY_OFFSET=.75  # conservative visible envelope centre ahead of rear axle
 GAP=3.
+MANEUVER_ROOM_HORIZON_M=40.
+MANEUVER_ROOM_REACH_M=60.
 ARRIVAL_POSITION_TOLERANCE_M=.35
 ARRIVAL_HEADING_TOLERANCE_RAD=math.radians(5)
 
@@ -60,6 +64,41 @@ class Execution:
     last_progress_s: float=0.
     local_passages: set=field(default_factory=set)
     initial_station: float=0.
+    steering_feedback: SteeringFeedback=field(default_factory=SteeringFeedback)
+
+
+def maneuver_block_station(ego_plan,progress,leader_plan,leader_progress,*,margin=.35):
+    """First ego nose station whose body enters the leader's pending sweep.
+
+    A stopped follower inside a U-turn or reverse sweep is a geometric
+    deadlock: the leader cannot take its permission while the follower's body
+    is in the swept area, and the follower cannot advance because the leader
+    is stationary. Its 3 m special-following gap is not the sweep boundary.
+    Return the station where the ego's own body first touches the sweep, so
+    the speed cap can hold the follower outside it before any body moves.
+    Only pending maneuvers count; an entered one is covered by the live
+    maneuver-space holds and the normal swept-body guards.
+    """
+    groups=[g for g in maneuver_groups(leader_plan)
+            if g[2]>leader_progress and g[2]-leader_progress<=MANEUVER_ROOM_HORIZON_M
+            and any(leader_plan.model.edges[leader_plan.edges[i]].get('reverse')
+                    or leader_plan.model.edges[leader_plan.edges[i]]['kind']=='uturn'
+                    for i in range(g[0],min(g[1]+1,len(leader_plan.edges))))]
+    if not groups:return None
+    entry,exit_s=groups[0][2],groups[0][3]
+    count=max(1,math.ceil((exit_s-entry)/.5))
+    origin=ego_plan.point(progress)
+    sweep=[box for box in (envelope(VehicleState('leader-maneuver',*leader_plan.point(entry+(exit_s-entry)*i/count),
+                       leader_plan.heading(entry+(exit_s-entry)*i/count))) for i in range(count+1))
+           if math.dist(origin,(box.x,box.y))<=MANEUVER_ROOM_REACH_M+BODY_LENGTH]
+    if not sweep:return None
+    limit=min(ego_plan.length,progress+MANEUVER_ROOM_REACH_M)
+    steps=max(1,math.ceil((limit-progress)/.5))
+    for i in range(steps+1):
+        station=progress+(limit-progress)*i/steps
+        body=envelope(VehicleState('ego',*ego_plan.point(station),ego_plan.heading(station)))
+        if any(overlaps(body,box,margin) for box in sweep):return station
+    return None
 
 
 class TransportController:
@@ -158,7 +197,7 @@ class TransportController:
             raise ValueError('Diversion must start on an ordinary road')
         # Preserve all traversed geometry and the complete nose of the actual
         # stopped body. An unentered turn beyond its stop line may change.
-        limit=ex.progress+max(6.,abs(state.speed)**2/1.2+abs(state.speed)*.2+.5)
+        limit=ex.progress+max(6.,braking_distance(state.speed))
         # A nearby new access can merge with a junction already traversed.
         # Identical prefix points alone do not preserve the admission contract:
         # the merged action would require a lease whose entry is behind us.
@@ -169,7 +208,7 @@ class TransportController:
                 for _,_,entry,exit_s in maneuver_groups(plan)):
             raise ValueError('Diversion retroactively requires a traversed maneuver passage')
         if moving:
-            braking_end=ex.progress+abs(state.speed)**2/1.2+abs(state.speed)*.2+.5
+            braking_end=ex.progress+braking_distance(state.speed)
             if hasattr(plan,"edge_starts") and any(g[3]>ex.progress and g[2]-7.8<braking_end for g in maneuver_groups(plan)):
                 raise ValueError('Diversion cannot brake before a newly required action stop line')
         tolerance=.001 if getattr(self.model,'raw',{}).get('point_conflicts',False) else 1e-6
@@ -181,11 +220,43 @@ class TransportController:
                 raise ValueError('Diversion changes the traversed or committed prefix')
         if math.dist((state.x,state.y),plan.point(ex.progress))>.5:
             raise ValueError('Diversion must preserve the actual stopped pose')
+        if getattr(self.local_traffic,'check_diversion_room',False):
+            self._check_diversion_reverse_room(name,plan,ex.progress,state)
         ex.plan=plan;self.plans[name]=plan
         # No live maneuver remains. Cancel only unentered future capacity;
         # actual road occupancy is retained and remeasured every tick.
         for alias in self.capacity.committed:self.capacity.release_commitment(name,alias)
         self.events.append(dict(time=now,event='PROACTIVE_ROAD_DIVERSION' if moving else 'STOPPED_ROAD_DIVERSION',vehicle_id=name,destination=plan.stops[0],progress_m=ex.progress,retained_prefix_end_m=limit))
+
+    def _check_diversion_reverse_room(self,name,plan,progress,state):
+        """Do not divert a lane leader into its stopped follower's body.
+
+        A follower cannot clear a reverse entrance by driving through its
+        leader. Reject the proposed route before replacing the old plan or
+        releasing capacity, so queue clearance can try another waiting site.
+        Only nearby new reverse maneuvers need this check; distant traffic
+        remains governed by the normal passage admission checks.
+        """
+        if not hasattr(plan,'edge_starts'):return
+        followers=[]
+        for other,pose in getattr(self,'states',{}).items():
+            if other==name or abs(pose.speed)>.08:continue
+            dx,dy=pose.x-state.x,pose.y-state.y
+            along=dx*math.cos(state.heading)+dy*math.sin(state.heading)
+            across=-dx*math.sin(state.heading)+dy*math.cos(state.heading)
+            aligned=math.cos(pose.heading-state.heading)>.95
+            if aligned and -25.<along<0. and abs(across)<BODY_WIDTH:
+                followers.extend(getattr(self,'boxes',{}).get(other,[envelope(pose)]))
+        if not followers:return
+        for start,end,entry,exit_s in maneuver_groups(plan):
+            if not (progress<exit_s and entry<=progress+25.):continue
+            if not any(plan.model.edges[plan.edges[i]].get('reverse') for i in range(start,end+1)):continue
+            lo=max(progress,entry);count=max(1,math.ceil((exit_s-lo)/.25))
+            for i in range(count+1):
+                s=lo+(exit_s-lo)*i/count
+                body=envelope(VehicleState(name,*plan.point(s),plan.heading(s)))
+                if any(overlaps(body,other,self.local_traffic.margin_m) for other in followers):
+                    raise ValueError('Diversion reverse entrance is occupied by a stopped lane follower')
 
     def _outlet_clear(self,edge,name):
         ex=self.executions[name]
@@ -238,7 +309,7 @@ class TransportController:
         if not hasattr(self,'control_denials'):self.control_denials={}
         # A turning truck's nose can hit a stopped leader even when that
         # leader's axle is no longer close to the turning centerline.
-        ahead=max(12.,abs(state.speed)**2/1.2+3.)
+        ahead=max(12.,braking_distance(state.speed,3.))
         origin=ex.plan.point(ex.progress)
         obstacles=[(other,b) for other,boxes in self.boxes.items() if other!=name
                    and abs(self.states[other].speed)<.1
@@ -276,6 +347,72 @@ class TransportController:
                 aliases.add(alias)
         return aliases
 
+    def _parking_capacity_predecessor(self,name,ex,start,outlet_s):
+        # Defer NEW bookings in mixed transport/parking queues too.
+        # Every entered/held lease remains protected by the caller.
+        parking_enabled=getattr(self,'parking_entry_priority',False)
+        transport_enabled=getattr(self,'transport_entry_priority',False)
+        if not (parking_enabled or transport_enabled):return None
+        parking=getattr(self,'parking_moves',())
+        aliases={}
+        for i in range(start,min(len(ex.plan.edges),ex.plan.edge_index(outlet_s)+1)):
+            key=ex.plan.edges[i];alias=self.model.aliases[key]
+            if (self.model.edges[key]['kind']=='junction' and self.capacity.capacities[alias]==1
+                    and ex.plan.edge_starts[i]>=ex.plan.edge_starts[start]+12.):
+                aliases.setdefault(alias,ex.plan.edge_starts[i])
+        if not aliases:return None
+        from logistics_park.scheduling.conflict_timing import arrival_profile
+        cache=getattr(self,'parking_profile_cache',None)
+        if cache is None or cache[0]!=self.now:
+            cache=(self.now,{});self.parking_profile_cache=cache
+        def profile(vehicle,execution):
+            if vehicle not in cache[1]:
+                cache[1][vehicle]=arrival_profile(execution,self.states[vehicle],self.now,
+                    hold=self.destination_holds.get(vehicle),dt=.5,limit_s=120.)
+            return cache[1][vehicle]
+        own=None
+        for other in sorted(self.executions):
+            if other==name or other not in self.states:continue
+            if name in parking or other in parking:
+                if not parking_enabled:continue
+            else:
+                if not transport_enabled:continue
+                # A physically forward truck on this or an adjacent parallel
+                # lane must clear the common junction before a later merge
+                # books it. Crossing/opposing traffic retains normal timing.
+                state=self.states[name];front=self.states[other]
+                dx,dy=front.x-state.x,front.y-state.y
+                co,si=math.cos(state.heading),math.sin(state.heading)
+                forward=dx*co+dy*si;lateral=abs(-dx*si+dy*co)
+                angle=abs((front.heading-state.heading+math.pi)%(2*math.pi)-math.pi)
+                if not (.1<forward<80. and lateral<4.2 and angle<math.pi/3):continue
+            leader=self.executions[other]
+            if leader.finished:continue
+            # A downstream ETA preference cannot make a physical lane leader
+            # wait for its own follower. The follower cannot reach that exit
+            # until this truck clears; ordinary passage/body guards still apply.
+            if name in parking or other in parking:
+                state=self.states[name]
+                error,station=leader.plan.project((state.x,state.y),leader.progress,
+                    behind=0.,ahead=80.)
+                angle=abs((state.heading-leader.plan.heading(station)+math.pi)%(2*math.pi)-math.pi)
+                if error<1.4 and angle<math.pi/3 and station>leader.progress+.1:
+                    continue
+            shared={}
+            for i,key in enumerate(leader.plan.edges):
+                alias=self.model.aliases[key]
+                if alias in aliases and leader.plan.edge_ends[i]+TAIL_CLEAR_M>=leader.progress:
+                    shared.setdefault(alias,leader.plan.edge_starts[i])
+            if not shared:continue
+            alias=min(shared,key=lambda a:aliases[a])
+            # Do not impose pair priorities with opposite resource orders.
+            if alias!=min(shared,key=lambda a:shared[a]):continue
+            if own is None:own=profile(name,ex)
+            eta=profile(other,leader).eta(shared[alias])
+            if math.isfinite(eta) and eta<=60. and eta+2.<own.eta(aliases[alias]):
+                return other,alias
+        return None
+
     def _release_unused_local_bookings(self):
         for (name,_),lease in self.local_traffic.released:
             outlet=lease.get('outlet',min(lease['plan'].length,lease['end']+BODY_LENGTH+GAP))
@@ -306,7 +443,15 @@ class TransportController:
             cp=ex.plan.checkpoints[ex.checkpoint] if ex.checkpoint<len(ex.plan.checkpoints) else None
             stop_s=cp['s'] if cp and cp['event'] in ('ARRIVAL','GEAR_CHANGE') else None
             ahead=max(3.,abs(state.speed)*dt+2.) if self.model.raw.get('point_conflicts',False) else 3.
-            error,s=ex.plan.project((state.x,state.y),ex.progress,stop_s=stop_s,ahead=ahead)
+            projection_options=dict(stop_s=stop_s,ahead=ahead)
+            gear_changes=[c['s'] for c in ex.plan.checkpoints[:ex.checkpoint] if c['event']=='GEAR_CHANGE']
+            if gear_changes:projection_options['start_s']=gear_changes[-1]
+            error,s=ex.plan.project((state.x,state.y),ex.progress,**projection_options)
+            if cp and cp['event']=='GEAR_CHANGE':
+                # At the boundary edge_index selects the next gear. Keep the
+                # incoming steering/direction while braking; the stopped
+                # checkpoint below is the only operation that commits a gear.
+                s=min(s,max(0.,cp['s']-1e-6))
             ex.progress=max(ex.progress,s);ex.maximum_error=max(ex.maximum_error,error);self.maximum_error=max(self.maximum_error,error)
             active_edge=ex.plan.edges[ex.plan.edge_index(ex.progress)]
             tolerance=self.model.edges[active_edge].get('maximum_path_error_m',.7)
@@ -452,6 +597,10 @@ class TransportController:
             def record(stage):
                 trace.append(dict(stage=stage,target_m_s=target))
             record('route_speed')
+            alignment_cap=getattr(ex.plan,'curve_exit_alignment_speed_cap',None)
+            if alignment_cap:
+                target=min(target,alignment_cap((state.x,state.y),state.heading,s))
+                record('curve_exit_alignment')
             clearance=self.local_traffic.maneuver_holds.get(n) if self.local_traffic else None
             if clearance:
                 distance=max(0.,clearance['stop_s']-s)
@@ -477,7 +626,8 @@ class TransportController:
                     outgoing=self._passage_capacity_aliases(ex.plan,start,outlet_s)
                     saturated=[a for a in outgoing if n not in self.capacity.occupants[a]
                         and n not in self.capacity.committed[a] and self.capacity.road_state(a).is_saturated]
-                    room=not saturated
+                    predecessor=self._parking_capacity_predecessor(n,ex,start,outlet_s)
+                    room=not saturated and predecessor is None
                     if (room and self.destination_holds.get(n,ex.plan.length)>=outlet_s
                             and self.local_traffic.claim_passage(n,ex,start,index-1,self.states,self.boxes,envelope)):
                         self._release_unused_local_bookings()
@@ -487,6 +637,9 @@ class TransportController:
                         ex.local_passages.add(start)
                     else:
                         distance=max(0.,entry-s-7.8)
+                        if predecessor:
+                            self.control_denials.setdefault(n,[]).append(dict(blocked_by=predecessor[0],
+                                reason='parking_future_entry_priority',resource=predecessor[1],start=start,distance_m=distance))
                         for alias in sorted(saturated):
                             for other in sorted(self.capacity.occupants[alias]|self.capacity.committed[alias]):
                                 self.control_denials.setdefault(n,[]).append(dict(blocked_by=other,
@@ -545,6 +698,8 @@ class TransportController:
                 error,leader=ex.plan.project((other.x,other.y),s,behind=0,ahead=follow_ahead)
                 heading_error=abs((other.heading-ex.plan.heading(leader)+math.pi)%(2*math.pi)-math.pi)
                 if error<1.4 and heading_error<math.pi/3 and leader>s+.1:
+                    blocked=maneuver_block_station(ex.plan,s,self.executions[m].plan,self.executions[m].progress)
+                    if blocked is not None:leader=min(leader,blocked+BODY_LENGTH+GAP)
                     if self.model.raw.get('compact_following',False):
                         cap=following_speed(leader-s,other.speed,special=needs_maneuver_room(self.executions[m]))
                         target=min(target,cap);waiting=waiting or cap<ex.plan.speed_cap(s)
@@ -640,12 +795,26 @@ class TransportController:
             if (not ex.finished and not waiting and ex.unblocked_since is not None
                     and now-max(ex.last_progress_time,ex.unblocked_since)>35):
                 raise RuntimeError(n+' stalled without a traffic or service wait')
-            delta=ex.plan.steering((state.x,state.y),state.heading,s,speed=state.speed)
+            delta=ex.plan.steering((state.x,state.y),state.heading,s,speed=state.speed,
+                                   feedback=ex.steering_feedback)
             commands[n]=(-target if ex.plan.reverse(ex.progress) else target,delta)
         self.maximum_active=max(self.maximum_active,len(self.states))
         self.maximum_moving=max(self.maximum_moving,sum(abs(s.speed)>.1 for s in self.states.values()))
         self.maximum_queue=max(self.maximum_queue,max((len(q) for q in self.scheduler.queues.values()),default=0))
-        if self.local_traffic:
+        if getattr(self,'road_guard',None):
+            def on_road(proposed):
+                return {n:self.road_guard.command(self.states[n],*command,self.ground_heights[n],now)
+                        for n,command in proposed.items()}
+            for _ in range(3):
+                commands=on_road(commands)
+                if not self.local_traffic:break
+                regulated=self.local_traffic.regulate(self.states,self.executions,commands,self.destination_holds,now,envelope)
+                checked=on_road(regulated)
+                if checked==regulated:
+                    commands=checked;break
+                commands=checked
+            else:raise RuntimeError('Road and collision command guards did not converge')
+        elif self.local_traffic:
             commands=self.local_traffic.regulate(self.states,self.executions,commands,self.destination_holds,now,envelope)
         for n,(target,_) in commands.items():
             self.control_trace.setdefault(n,[]).append(dict(stage='final_local_regulation',target_m_s=target))

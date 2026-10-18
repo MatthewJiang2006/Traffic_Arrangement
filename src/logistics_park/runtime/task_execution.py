@@ -155,17 +155,43 @@ class ContinuousTaskExecutor:
         self.moves={};self.sources={};self.completed_moves=[];self.safe_landing_states={};self.landing_rejections={}
         from logistics_park.scheduling.travel_time import TravelTimeEstimator
         self.travel_time=TravelTimeEstimator();self.eta_log_at=-math.inf
+        from logistics_park.scheduling.eta_service import ETAService
+        self.eta_service=ETAService();self.eta_query_logged_at={}
+        self.dispatch.route_eta_predictor=self.travel_time.estimate_route
+        if self.dispatch.global_scheduler is not None:self.dispatch.global_scheduler.prepare(self.dispatch)
+        self.move_measurements={}
+        if controller.local_traffic:
+            controller.local_traffic.protect_connected_merges=dispatch.scheduling.connected_clearance
+            controller.local_traffic.check_diversion_room=dispatch.scheduling.connected_clearance
         if dispatch.efficiency_policy and controller.local_traffic:
             controller.local_traffic.compact_permissions=True
             controller.local_traffic.proactive_admission=dispatch.efficiency_policy.proactive_admission
             if dispatch.efficiency_policy.proactive_admission:
                 from .safe_landing import parking_exit_conflicts
                 dispatch.departure_guard=self._departure_guard
+                dispatch.parking_departure_guard=self._parking_departure_guard
+                dispatch.parking_wait_guard=self._parking_wait_guard
                 dispatch.berth_exit_blockers=self._berth_exit_blockers
                 # Compile static parking/exit conflicts before the first
                 # measured control tick, not while moving vehicles await it.
                 for node,site in dispatch.network.services.items():
                     if site['kind'] in ('loading','unloading','waiting'):parking_exit_conflicts(self,node)
+
+    def prepare_schedule(self,states):
+        """Warm advisory profiles and route caches while the fleet is stopped."""
+        planner=getattr(self.dispatch,'global_scheduler',None)
+        if planner is None:return
+        import time
+        started=time.monotonic();self.latest_states=states
+        if self.dispatch.traffic_routing:
+            self.dispatch.traffic_routing.observe(states,self.controller,self.dispatch.positions,0.,moves={})
+        budget=planner.budget_s
+        try:
+            planner.budget_s=max(1.,budget)
+            planner.plan(self.dispatch,list(self.dispatch.tasks.values()))
+        finally:planner.budget_s=budget
+        self.dispatch._event('ROLLING_CACHE_PREPARED',elapsed_s=time.monotonic()-started,
+                             physical_leases_changed=False,movement_commands_issued=False)
 
     def attach(self,vehicle,node,state,now,*,body_boxes=None):
         from .transport_control import Execution,envelope
@@ -207,6 +233,10 @@ class ContinuousTaskExecutor:
         boxes=body_boxes or {n:[envelope(s)] for n,s in states.items()}
         for vehicle,move in list(self.moves.items()):
             state=states[vehicle]
+            measure=self.move_measurements.get(move.command_id)
+            if measure:
+                if abs(state.speed)<.08:measure['stopped_s']+=max(0.,now-measure['last_at'])
+                measure['last_at']=now
             if move.command_id not in self.dispatch.departures and not any(overlaps(b,self.sources[vehicle],.1) for b in boxes[vehicle]):
                 self.dispatch.departed(move.command_id,vehicle,move.visit_id,now,tail_clear=True)
             ex=self.controller.executions[vehicle]
@@ -217,6 +247,14 @@ class ContinuousTaskExecutor:
                 # stopped sample. Keep braking and both leases until a fresh
                 # stationary observation confirms arrival.
                 if abs(state.speed)>.1:continue
+                if measure:
+                    elapsed=now-measure['start']
+                    unchanged=(move.origin==measure['origin'] and move.destination==measure['target']
+                               and tuple(move.route['edge_ids'])==measure['edges'])
+                    self.travel_time.record_leg(move.destination,measure['nominal_s'],elapsed,measure['stopped_s'],unchanged_route=unchanged)
+                    self.dispatch._event('LEG_ETA_MEASURED',vehicle_id=vehicle,origin=move.origin,target=move.destination,
+                        elapsed_s=elapsed,predicted_s=measure['predicted_s'],stopped_s=measure['stopped_s'],unchanged_route=unchanged)
+                    del self.move_measurements[move.command_id]
                 self.dispatch.arrived(move.command_id,vehicle,move.visit_id,now,stopped=True)
                 self.completed_moves.append(move);del self.moves[vehicle]
         if self.dispatch.traffic_routing is not None:
@@ -247,15 +285,31 @@ class ContinuousTaskExecutor:
                         eta=profile.eta(station)
                         if math.isfinite(eta):self.dispatch.clearance_estimates[owner]=now+eta
                         break
+        if getattr(self.dispatch,'traffic_forecast',None) is not None:
+            local=self.controller.local_traffic
+            blocked=frozenset(name for name in states if local and (local.last_denials.get(name)
+                              or local.passage_denials.get(name) or local.paused_by.get(name)))
+            self.dispatch.traffic_forecast.update(states,self.controller.executions,now,
+                holds=self.controller.destination_holds,speed_scales=self.travel_time.scale,blocked_vehicles=blocked,
+                eta_service=self.eta_service)
         for move in self.dispatch.tick(now):
             vehicle=move.vehicle_id;plan=self.geometry.plan(move)
             self.controller.continue_route(vehicle,plan,now,state=states[vehicle])
             self.moves[vehicle]=move
             self.sources[vehicle]=envelope(states[vehicle])
+            if self.dispatch.scheduling.calibrated_eta:
+                estimate=self.travel_time.estimate_route(self.dispatch.network,move.route,move.origin,move.destination)
+                self.move_measurements[move.command_id]=dict(start=now,last_at=now,stopped_s=0.,
+                    origin=move.origin,target=move.destination,edges=tuple(move.route['edge_ids']),
+                    nominal_s=estimate['nominal_s'],predicted_s=estimate['total_s'])
         self.dispatch.promote_approaches(self._berth_priorities(states))
         self.controller.destination_holds={}
         for vehicle,move in self.moves.items():
-            if self.dispatch.holders.get(move.destination)==vehicle:continue
+            if self.dispatch.holders.get(move.destination)==vehicle:
+                if self.dispatch.scheduling.protect_granted_queues:
+                    hold=self._granted_queue_hold(vehicle,states)
+                    if hold is not None:self.controller.destination_holds[vehicle]=hold
+                continue
             plan=self.controller.executions[vehicle].plan
             index=len(plan.edges)-1
             while index>0 and self.geometry.model.edges[plan.edges[index-1]]['kind']=='service_access':index-=1
@@ -265,7 +319,7 @@ class ContinuousTaskExecutor:
                 from .safe_landing import safe_landing
                 desired=self.controller.destination_holds[vehicle]
                 ex=self.controller.executions[vehicle]
-                landing=safe_landing(self,vehicle,plan,desired,states,progress=ex.progress,speed=states[vehicle].speed,target=move.destination)
+                landing=safe_landing(self,vehicle,plan,desired,states,progress=ex.progress,speed=states[vehicle].speed,target=move.destination,protect_following=True)
                 saved=getattr(self,'safe_landing_states',{}).get((vehicle,plan.edges))
                 if landing is not None:
                     self.controller.destination_holds[vehicle]=landing
@@ -279,30 +333,91 @@ class ContinuousTaskExecutor:
         if self.dispatch.efficiency_policy and self.dispatch.efficiency_policy.proactive_admission:
             from logistics_park.scheduling.wait_dependencies import wait_snapshot
             self.controller.local_traffic.admission_dependencies=wait_snapshot(self,states)['dependencies']
+        self.controller.parking_entry_priority=getattr(getattr(self.dispatch,'scheduling',None),'parking_entry_priority',False)
+        self.controller.transport_entry_priority=getattr(getattr(self.dispatch,'scheduling',None),'transport_entry_priority',False)
+        self.controller.parking_moves={v for v,m in self.moves.items() if getattr(m,'purpose',None)=='REPOSITION'}
         commands=self.controller.tick(states,now,body_boxes=boxes)
         if self.dispatch.efficiency_policy:
             from .wait_cycle_recovery import recover_wait_cycles
             recover_wait_cycles(self,states,commands,now)
         return commands
 
+    def _granted_queue_hold(self,vehicle,states):
+        """A destination lease cannot authorize a queue across a dock exit."""
+        from .safe_landing import safe_landing
+        ex=self.controller.executions[vehicle];plan=ex.plan
+        if ex.finished:return None
+        # Avoid geometry work for free-flowing traffic. Only an actual stopped
+        # same-lane leader can force an admitted truck into a queue here.
+        for other,state in states.items():
+            if other==vehicle or abs(state.speed)>=.15:continue
+            error,station=plan.project((state.x,state.y),ex.progress,behind=0.,ahead=80.)
+            angle=abs((state.heading-plan.heading(station)+math.pi)%(2*math.pi)-math.pi)
+            if error>1.4 or angle>math.pi/3 or station<=ex.progress+.1:continue
+            landing=safe_landing(self,vehicle,plan,plan.length,states,
+                progress=ex.progress,speed=states[vehicle].speed,
+                target=self.moves[vehicle].destination,protect_following=True)
+            if landing is not None and landing<plan.length-.5:
+                return landing
+            break
+        return None
+
     def _berth_exit_blockers(self,target,vehicle):
         from .safe_landing import berth_exit_blockers
         return berth_exit_blockers(self,target,vehicle)
 
-    def _departure_guard(self,vehicle,origin,target,route,waiting):
+    def _parking_departure_guard(self,vehicle,origin,target,route,waiting):
         from types import SimpleNamespace
-        from .safe_landing import safe_landing
+        from .safe_landing import parking_departure_clear
         plan=self.geometry.plan(SimpleNamespace(origin=origin,destination=target,route=route))
-        desired=plan.length if waiting or self.dispatch.holders.get(target)==vehicle else self._berth_gate(plan)
-        landing=safe_landing(self,vehicle,plan,desired,self.latest_states,target=target)
-        goal=waiting or self.dispatch.holders.get(target)==vehicle
-        if landing is None or goal and landing<plan.length-.35:
+        if not parking_departure_clear(self,vehicle,plan,self.latest_states):
             key=(vehicle,target)
             if self.dispatch.now-self.landing_rejections.get(key,-math.inf)>=5.:
-                self.dispatch._event('DEPARTURE_ADMISSION_REJECTED',vehicle_id=vehicle,
-                    origin=origin,target=target,reason='unsafe_goal_pose' if landing is not None else 'no_safe_hold',desired_stop_s=desired)
+                self.dispatch._event('PARKING_EXIT_OCCUPIED',vehicle_id=vehicle,origin=origin,target=target)
                 self.landing_rejections[key]=self.dispatch.now
             return False
+        return self._departure_guard(vehicle,origin,target,route,waiting)
+
+    def _parking_wait_guard(self,vehicle,origin,target,route):
+        from types import SimpleNamespace
+        from .safe_landing import parking_departure_clear,terminal_parking_blockers_clear_soon
+        if not terminal_parking_blockers_clear_soon(self,vehicle,target):return False
+        plan=self.geometry.plan(SimpleNamespace(origin=origin,destination=target,route=route))
+        return parking_departure_clear(self,vehicle,plan,self.latest_states)
+
+    def _departure_guard(self,vehicle,origin,target,route,waiting):
+        from types import SimpleNamespace
+        from .safe_landing import safe_landing,source_exit_blockers
+        plan=self.geometry.plan(SimpleNamespace(origin=origin,destination=target,route=route))
+        desired=plan.length if waiting or self.dispatch.holders.get(target)==vehicle else self._berth_gate(plan)
+        blockers=[]
+        if getattr(getattr(self.dispatch,'scheduling',None),'rolling_scheduler',False):
+            blocked=source_exit_blockers(self,vehicle,plan,self.latest_states)
+            if blocked:
+                key=(vehicle,target)
+                self.departure_waits=getattr(self,'departure_waits',{})
+                self.departure_waits[key]=dict(time=self.dispatch.now,blockers=[
+                    dict(blocked_by=name,reason='occupied_source_exit',resource=origin) for name in blocked])
+                self.dispatch.actual_departure_blockers[key]=dict(time=self.dispatch.now,source=origin,blocked_by=blocked)
+                if self.dispatch.now-self.landing_rejections.get(key,-math.inf)>=5.:
+                    self.dispatch._event('DEPARTURE_ADMISSION_REJECTED',vehicle_id=vehicle,origin=origin,target=target,
+                        reason='occupied_source_exit',desired_stop_s=desired,blocked_by=blocked)
+                    self.landing_rejections[key]=self.dispatch.now
+                return False
+            self.dispatch.actual_departure_blockers.pop((vehicle,target),None)
+        landing=safe_landing(self,vehicle,plan,desired,self.latest_states,target=target,blocker_evidence=blockers)
+        if not hasattr(self,'departure_waits'):self.departure_waits={}
+        key=(vehicle,target)
+        goal=waiting or self.dispatch.holders.get(target)==vehicle
+        if landing is None or goal and landing<plan.length-.35:
+            self.departure_waits[key]=dict(time=self.dispatch.now,blockers=blockers)
+            if self.dispatch.now-self.landing_rejections.get(key,-math.inf)>=5.:
+                self.dispatch._event('DEPARTURE_ADMISSION_REJECTED',vehicle_id=vehicle,
+                    origin=origin,target=target,reason='unsafe_goal_pose' if landing is not None else 'no_safe_hold',desired_stop_s=desired,
+                    blocked_by=sorted({row['blocked_by'] for row in blockers}))
+                self.landing_rejections[key]=self.dispatch.now
+            return False
+        self.departure_waits.pop(key,None)
         self.dispatch._event('SAFE_LANDING_SELECTED',vehicle_id=vehicle,origin=origin,
             target=target,stop_s=landing,desired_stop_s=desired)
         if not hasattr(self,'safe_landing_states'):self.safe_landing_states={}
@@ -391,7 +506,8 @@ class ContinuousTaskExecutor:
         ex=self.controller.executions[vehicle]
         if previous and previous[0] is plan and previous[1]==hold:return hold
         available=hold-ex.progress
-        stopping=abs(state.speed)**2/1.2+abs(state.speed)*.2+.5
+        from .safety_timing import braking_distance
+        stopping=braking_distance(state.speed)
         if available<stopping and not (available>=-.35 and abs(state.speed)<.15):return gate
         self.queue_gate_states[vehicle]=(plan,hold)
         self.dispatch._event('DOCK_QUEUE_BEFORE_JUNCTION',vehicle_id=vehicle,node=target,
@@ -402,6 +518,23 @@ class ContinuousTaskExecutor:
         from types import SimpleNamespace
         from logistics_park.scheduling.conflict_timing import arrival_profile
         if execution is None:execution=SimpleNamespace(plan=plan,progress=0.,checkpoint=0,finished=False)
+        if getattr(getattr(self.dispatch,'scheduling',None),'rolling_scheduler',False):
+            if not hasattr(self,'eta_service'):
+                from logistics_park.scheduling.eta_service import ETAService
+                self.eta_service=ETAService();self.eta_query_logged_at={}
+            now=self.dispatch.now;estimator=getattr(self,'travel_time',None)
+            result=self.eta_service.query(vehicle,execution,state,now,plan.length if station is None else station,
+                hold=self.controller.destination_holds.get(vehicle),speed_scales=estimator.scale if estimator else None)
+            key=(vehicle,station)
+            if now-self.eta_query_logged_at.get(key,-math.inf)>=1.:
+                self.eta_query_logged_at[key]=now
+                self.dispatch._event('ETA_PROFILE_QUERY',vehicle_id=vehicle,station_m=plan.length if station is None else station,
+                    eta_s=result.eta_s if math.isfinite(result.eta_s) else None,freeflow_s=result.freeflow_s if math.isfinite(result.freeflow_s) else None,
+                    reachable=result.reachable,reason=result.reason,version=result.version)
+            # Ordering uses a free-flow lower bound; blocked reachability is
+            # explicit in the trace and never grants actual movement authority.
+            delay=estimator.blockage_delay(vehicle,self.controller.local_traffic,now,self.dispatch.efficiency_policy.blocked_delay_s) if estimator and self.dispatch.efficiency_policy else 0.
+            return result.freeflow_s+delay
         if not hasattr(self,'admission_eta_cache'):self.admission_eta_cache={}
         now=self.dispatch.now;cache_key=(vehicle,station);cached=self.admission_eta_cache.get(cache_key)
         if (cached is None or cached[0] is not plan or now-cached[1]>=.5
@@ -431,9 +564,72 @@ class ContinuousTaskExecutor:
                 index=len(plan.edges)-1
                 while index>0 and self.geometry.model.edges[plan.edges[index-1]]['kind']=='service_access':index-=1
                 entry_eta=self._admission_eta(vehicle,plan,states[vehicle],station=self._berth_gate(plan))
-                priorities[vehicle]=(estimate,False,frozenset(),entry_eta)
+                leaders=(self._admission_leaders(vehicle,target,plan,0.,states)
+                         if self.dispatch.scheduling.connected_clearance else frozenset())
+                priorities[vehicle]=(estimate,False,leaders,entry_eta)
             else:priorities[vehicle]=(estimate,False)
+        # A parked same-destination candidate can occupy an unstarted
+        # applicant's exit too. It has no live move, so lane-order detection
+        # alone cannot see it. Let that actual blocker leave first rather
+        # than promising the berth to the truck it physically prevents.
+        from .safe_landing import source_admission_leaders
+        for vehicle,priority in list(priorities.items()):
+            origin=self.dispatch.positions.get(vehicle)
+            if origin is None:continue
+            move=self.moves.get(vehicle)
+            if move:
+                execution=self.controller.executions[vehicle]
+                plan=execution.plan;progress=execution.progress;target=move.destination
+            else:
+                assignment=self.dispatch.assignments[vehicle];target=self.dispatch._target(assignment)
+                if origin==target:continue
+                route=self.dispatch._route(origin,target,vehicle,future=True)
+                if not route:continue
+                plan=self.geometry.plan(SimpleNamespace(origin=origin,destination=target,route=route));progress=0.
+            leaders=source_admission_leaders(self,vehicle,target,plan,progress,states)
+            if leaders:
+                existing=priority[2] if len(priority)>2 else frozenset()
+                priorities[vehicle]=(*priority[:2],existing|leaders,*priority[3:])
         return priorities
+
+    def _admission_leaders(self,vehicle,target,plan,progress,states):
+        """Observe shared-bay lane order before a parked truck gets a permit."""
+        site=self.dispatch.network.services[target]
+        resources=set(site.get('occupation_resources',[]))
+        leaders=set()
+        for other,move in self.moves.items():
+            if other==vehicle or other not in states:continue
+            other_site=self.dispatch.network.services[move.destination]
+            if not (resources.intersection(other_site.get('occupation_resources',[]))
+                    or site.get('warehouse') and site.get('warehouse')==other_site.get('warehouse')):continue
+            state=states[other]
+            other_ex=getattr(getattr(self,'controller',None),'executions',{}).get(other)
+            if other_ex is not None:
+                # A shared dock can require the same unique U-turn/connector
+                # from different approach lanes. Select its nearer approach
+                # before granting the rear truck the adjacent dock's promise.
+                # Projection alone misses the leader just before a lane merge.
+                def approaches(route,current):
+                    spans=getattr(route,'dock_exclusive_spans',None)
+                    if spans is None:
+                        spans={};capacities=route.model.raw.get('physical_capacities',{})
+                        for i,key in enumerate(route.edges):
+                            edge=route.model.edges[key];alias=route.model.aliases[key]
+                            if edge['kind'] not in ('uturn','junction') or capacities.get(alias)!=1:continue
+                            sections=spans.setdefault(alias,[])
+                            if sections and abs(sections[-1][1]-route.edge_starts[i])<1e-6:
+                                sections[-1]=(sections[-1][0],route.edge_ends[i])
+                            else:sections.append((route.edge_starts[i],route.edge_ends[i]))
+                        route.dock_exclusive_spans=spans
+                    return {alias:min(max(0.,a-current) for a,b in sections if b>current+.1)
+                            for alias,sections in spans.items() if any(b>current+.1 for a,b in sections)}
+                own=approaches(plan,progress);front=approaches(other_ex.plan,other_ex.progress)
+                if any(front[alias]<=20. and own[alias]>front[alias]+11.344 for alias in own.keys()&front.keys()):
+                    leaders.add(other);continue
+            error,station=plan.project((state.x,state.y),progress,behind=0.,ahead=80.)
+            angle=abs((state.heading-plan.heading(station)+math.pi)%(2*math.pi)-math.pi)
+            if error<1.4 and angle<math.pi/3 and station>progress+.1:leaders.add(other)
+        return frozenset(leaders)
 
     def _approach_priorities(self,states=None):
         priorities={}
@@ -470,6 +666,11 @@ class ContinuousTaskExecutor:
             if self.dispatch.efficiency_policy and states:
                 boundary=self._berth_gate(plan)
                 hold=self.controller.destination_holds.get(vehicle)
+                if hold is None:
+                    # A grant removes the active hold, not the exit-safe line
+                    # already reached by this route's queue head. Retain that
+                    # observed admission boundary across subsequent grant checks.
+                    hold=getattr(self,'safe_landing_states',{}).get((vehicle,plan.edges))
                 if (self.dispatch.efficiency_policy.proactive_admission
                         and self.dispatch.approach_intents.get(move.destination)==vehicle
                         and hold is not None and hold<boundary-.5 and ex.progress>=hold-.5):
@@ -490,6 +691,11 @@ class ContinuousTaskExecutor:
         if states:
             for vehicle,move in self.moves.items():
                 ex=self.controller.executions[vehicle]
+                if self.dispatch.scheduling.connected_clearance:
+                    leaders=self._admission_leaders(vehicle,move.destination,ex.plan,ex.progress,states)
+                    priority=priorities[vehicle]
+                    priorities[vehicle]=(priority[0],priority[1],leaders,*priority[3:])
+                    continue
                 resources=set(self.dispatch.network.services[move.destination].get('occupation_resources',[]))
                 leaders=set()
                 for other,other_move in self.moves.items():

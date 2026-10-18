@@ -107,7 +107,7 @@ class TrafficRouting:
         if direct.get('congestion_delay_s',0)<self.enter_wait_s:return None
         feasible=[]
         for _,node,approach in options:
-            cost=approach['estimated_travel_time_s']+self.min_wait_s+approach['waiting_onward_freeflow_s']
+            cost=approach.get('waiting_completion_eta_s',approach['estimated_travel_time_s']+self.min_wait_s+approach['waiting_onward_freeflow_s'])
             if cost+self.saving_s<direct['estimated_travel_time_s']:feasible.append((cost,node,approach))
         return min(feasible,key=lambda row:(row[0],row[1])) if feasible else None
 

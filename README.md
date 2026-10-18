@@ -2,6 +2,8 @@
 
 本模块包含园区物流运输的 Python 调度算法、道路与服务点拓扑、车辆控制、AirSim 接口、轻量仿真和 UE 验收脚本。车辆连续执行装货、运输、卸货和等待位停车任务，运行时检查通行许可、道路容量、跟车间距、车体接触和局部停滞。
 
+当前 `map` 地图（由原 `IndustrialArea（复件）` 复制并更名为 `map`）中，Q33 因进出路沿时存在物理卡车风险，已从已发布服务点移入不可用清单，并在源拓扑关闭 `Q33_entry`、`Q33_exit`。固定的 32 个任务和 16 辆车保持不变，使用其余泊位。重新开放 Q33 需要单独完成物理通行修复与验收。此修正后的连续多轮实测及故障验证尚未完成；下文历史 PASS 不代表当前基线已通过。当前复测的工作副本、轨迹和报告均存放在 Demo 目录之外。
+
 ## 模块结构
 
 ```text
@@ -39,6 +41,12 @@ Factory_Traffic_Management_script/
 直线范围检查限于整车已进入直线路段的样本；转弯和接入口由运行中的车身扫描、碰撞和路线误差检查覆盖。停车控制、改道许可、出发准入和排队顺序的修复过程见 [完整复跑记录](docs/20261007_full_ue_repeat.md) 与 [停车姿态复核](docs/20261007_behavior_audit.md)。
 
 对应配置为 `config/runtime/industrialarea_ue_full_verified_20261007.json`。
+
+## 数据边界
+
+本仓库只保存代码、配置与测试，不保存实验产物。
+运行输出写入工作目录下的 `runs/`（已列入 `.gitignore`）。
+做验收实验时请把工作副本复制到本仓库之外再执行，避免把轨迹、日志和报告写进仓库。
 
 ## 实验数据与视频下载
 
@@ -89,7 +97,18 @@ PYTHONPATH=src python scripts/check.py
 
 启动脚本优先使用项目 `.venv` 中的 Python，否则使用当前环境的 `python3`。也可以直接执行 `python scripts/run.py`。
 
-该入口固定使用 `config/runtime/industrialarea_ue_full_verified_20261007.json`：16 辆车、32 个运输任务、时间倍率 1，关闭诊断模式，结果写入 `runs/ue_full_verified_20261007/`。脚本先执行完整轻量预检，通过后自动执行真实 UE 验收；任一阶段失败即停止。入口不接受参数，使用当前 Python 环境，从任意工作目录调用均可正确定位项目文件。正常倍率下真实 UE 实验约需 29 分钟。
+演示不启动录屏，进入 UE 验收时会关闭 AirSim 数据录制。UE 编辑器的运行视口左上角每秒刷新任务完成数及百分比、行驶车辆数、已停入等待位的车辆数和耗时；任务完成后显示回等待位阶段，结束时显示 PASS 或 FAIL。屏幕提示使用英文以兼容默认字体，详细日志仍写入运行目录。
+
+该入口固定使用 `config/runtime/industrialarea_ue_full_verified_20261007.json`：16 辆车、32 个运输任务、时间倍率 1，关闭诊断模式。**直接执行真实 UE 验收，不再先跑轻量预检**；任一阶段失败即停止。
+
+**结果目录默认在仓库之外**：`../Demo_runs/ue_full_<时间戳>/`。可用 `--output <目录>` 指定其他位置（含绝对路径），环境变量 `DEMO_OUTPUT_ROOT` 可改默认根目录。验收数据（轨迹、日志、报告、场景快照）全部写入该目录，`Demo` 工作树不产生任何运行产物。
+
+```bash
+./run.sh                                  # 默认输出到 ../Demo_runs/ue_full_<时间戳>
+./run.sh --output /data/acceptance/run01  # 指定外部目录
+```
+
+入口使用当前 Python 环境，从任意工作目录调用均可正确定位项目文件。1 倍速下真实 UE 实验约需 29 分钟。
 
 UE 远程执行工具为 `scripts/ue_remote.py`，真实连续任务入口为 `scripts/validate_ue_continuous_tasks.py`。结果复核工具为 `scripts/audit_ue_run.py` 与 `scripts/audit_ue_road_envelope.py`。
 

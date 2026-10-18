@@ -48,9 +48,11 @@ class ControlCommand:
     v_target: float
     omega_target: float
     ttl: float = 0.15
+    steering_rad: float | None = None
 
     def __post_init__(self) -> None:
         finite(self.timestamp, self.v_target, self.omega_target, self.ttl)
+        if self.steering_rad is not None:finite(self.steering_rad)
         if not self.vehicle_id or self.sequence_id < 0 or self.timestamp < 0 or self.ttl <= 0:
             raise ValueError("invalid command metadata")
 

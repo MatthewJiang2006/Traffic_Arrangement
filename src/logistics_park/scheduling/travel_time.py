@@ -10,6 +10,30 @@ def motion_class(plan,station):
 class TravelTimeEstimator:
     def __init__(self):
         self.scale={};self.samples={};self.previous={}
+        self.leg_factors={};self.leg_waits={};self.leg_samples={}
+
+    def estimate_route(self,network,route,origin,target):
+        """Measured travel and queue advisory, separate from entry authority."""
+        nominal=route.get('freeflow_travel_time_s',route['estimated_travel_time_s'])
+        edges=getattr(network,'edges',{})
+        keys=route.get('edge_ids',[])
+        if keys and all(k in edges for k in keys):
+            nominal=sum(edges[k]['estimated_travel_time_s']/max(.25,self.scale.get(
+                'reverse' if edges[k].get('reverse') else edges[k]['kind'],1.)) for k in keys)
+        factor=self.leg_factors.get(target,1.)
+        moving=nominal*factor
+        waiting=max(route.get('congestion_delay_s',0.),self.leg_waits.get(target,0.))
+        return dict(nominal_s=nominal,moving_s=moving,queue_s=waiting,total_s=moving+waiting)
+
+    def record_leg(self,target,predicted_moving_s,elapsed_s,stopped_s,*,unchanged_route):
+        # A detour changes the travelled distance: never treat its extra time
+        # as slower physics on the original itinerary.
+        if not unchanged_route or predicted_moving_s<=0 or elapsed_s<=0:return
+        ratio=max(.7,min(3.,max(0.,elapsed_s-stopped_s)/predicted_moving_s))
+        self.leg_factors[target]=.75*self.leg_factors.get(target,1.)+.25*ratio
+        wait=max(0.,min(120.,stopped_s))
+        self.leg_waits[target]=.75*self.leg_waits.get(target,0.)+.25*wait
+        self.leg_samples[target]=self.leg_samples.get(target,0)+1
 
     def observe(self,states,executions,targets,now):
         for name,state in states.items():

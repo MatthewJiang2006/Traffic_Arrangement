@@ -38,7 +38,16 @@ def wait_snapshot(executor,states):
         if a.state not in ('READY','WAITING') or vehicle not in d.positions:continue
         target=d._target(a)
         head=getattr(d,'approach_intents',{}).get(target)
-        if head not in (None,vehicle):add(vehicle,head,'destination_queue_intent',target)
+        rejection=getattr(d,'departure_rejected_at',{}).get((vehicle,target),-math.inf)
+        departure=getattr(executor,'departure_waits',{}).get((vehicle,target),{})
+        actual_wait=bool(departure.get('blockers') and departure.get('time')==rejection
+                         and 0<=getattr(d,'now',0.)-rejection<5.)
+        # A recently granted departure can fail its real landing check while
+        # another truck is still clearing an occupied exit. The fallback queue
+        # head is predictive evidence; that moving blocker is the current wait.
+        if head not in (None,vehicle):add(vehicle,head,'destination_queue_intent',target,active=not actual_wait)
+        if actual_wait:
+            for row in departure['blockers']:add(vehicle,row['blocked_by'],row['reason'],row['resource'])
         for other in d._blockers(target,vehicle):add(vehicle,other,'destination_or_access',target)
         origin=d.positions[vehicle]
         if origin==target:continue

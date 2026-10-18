@@ -16,7 +16,7 @@ from continuous_run_sources import algorithm_fingerprints
 from logistics_park.runtime.fleet_progress import FleetProgressWatch,task_progress,LocalProgressWatch,local_progress
 from logistics_park.runtime.run_lock import exclusive_run
 
-SCENARIO_PATH=ROOT/'config/runtime/industrialarea_ue_continuous_tasks.json'
+SCENARIO_PATH=ROOT/'config/runtime/industrialarea_ue_full_verified_20261007.json'
 SPEC=json.loads(SCENARIO_PATH.read_text())
 POSITIONS=SPEC['positions']
 TASKS=SPEC['tasks']
@@ -45,7 +45,7 @@ def setup(positions=None,tasks=None):
     model=TransportMap(ROOT/SPEC['map'])
     geometry=ServiceRouteGeometry(network,model);fleet=FleetRegistry()
     traffic=TrafficRouting(network,model,**SPEC.get('traffic_routing_options',{})) if SPEC.get('traffic_routing',False) else None
-    dispatch=TaskDispatcher(network,fleet,protect_committed_routes=SPEC.get('rolling_resources',False) or traffic is not None,traffic_routing=traffic,follow_to_busy_destination=SPEC.get('local_traffic',False),park_idle_vehicles=SPEC.get('park_idle_vehicles',False),offroad_busy_wait=SPEC.get('offroad_busy_wait',False),efficiency_policy=SPEC.get('efficiency_policy'))
+    dispatch=TaskDispatcher(network,fleet,protect_committed_routes=SPEC.get('rolling_resources',False) or traffic is not None,traffic_routing=traffic,follow_to_busy_destination=SPEC.get('local_traffic',False),park_idle_vehicles=SPEC.get('park_idle_vehicles',False),offroad_busy_wait=SPEC.get('offroad_busy_wait',False),efficiency_policy=SPEC.get('efficiency_policy'),scheduling_options=SPEC.get('scheduling_options'))
     controller=TransportController(model,{},service_s=0,shared_resources=True,collect_at_destination=True,retain_finished_vehicles=True,rolling_resources=SPEC.get('rolling_resources',False),pipeline_shared=SPEC.get('traffic_routing',False),local_traffic=SPEC.get('local_traffic',False))
     executor=ContinuousTaskExecutor(dispatch,geometry,controller);states={}
     for vehicle,node in positions.items():
@@ -54,6 +54,7 @@ def setup(positions=None,tasks=None):
         dispatch.place_vehicle(vehicle,v.visit_id,node,0,stopped=True)
         states[vehicle]=state;executor.attach(vehicle,node,state,0)
     for i,(a,b) in enumerate(tasks):dispatch.submit(TransportWork(f'transport-{i}',a,b))
+    executor.prepare_schedule(states)
     return executor,states
 
 

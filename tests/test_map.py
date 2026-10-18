@@ -51,3 +51,10 @@ def test_route_boundary_and_wrap(graph, config):
     state.route_index, state.x, state.y = 7, 0.47, 0.2
     assert update_route_match(graph,state,cyclic=True)
     assert state.edge_id == "e0" and state.s == pytest.approx(0.02)
+
+
+def test_polyline_cached_length_cannot_be_invalidated_by_mutating_input_lists():
+    source=[[0.,0.],[3.,4.]];line=Polyline(source)
+    assert line.length==5.
+    source[1][0]=300.
+    assert line.points==((0.,0.),(3.,4.)) and line.length==5.

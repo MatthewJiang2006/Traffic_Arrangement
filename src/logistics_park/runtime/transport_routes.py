@@ -31,6 +31,27 @@ class SharedVisit:
     last_index: int
 
 
+@dataclass
+class SteeringFeedback:
+    """Measured motion for one execution, independent of cached geometry."""
+    pose: tuple | None = None
+    yaw_curvature: float = 0.
+
+    def observe(self,p,heading,speed):
+        if self.pose is None:
+            self.yaw_curvature=0.
+            self.pose=(*p,heading)
+            return
+        distance=math.dist(p,self.pose[:2])
+        if distance>=.02:
+            change=(heading-self.pose[2]+math.pi)%(2*math.pi)-math.pi
+            self.yaw_curvature=max(-.5,min(.5,change/distance))
+            self.pose=(*p,heading)
+        elif abs(speed)<.1:
+            self.yaw_curvature=0.
+            self.pose=(*p,heading)
+
+
 class TransportMap:
     def __init__(self,path):
         self.raw=json.loads(Path(path).read_text(encoding='utf-8'))
@@ -136,37 +157,51 @@ class RouteGeometry:
     def heading(self,s):
         if not hasattr(self,'has_reverse'):
             self.has_reverse=any(self.model.edges[k].get('reverse') for k in self.edges)
-        if self.has_reverse:
-            index=self.edge_index(s);start,end=self.edge_starts[index],self.edge_ends[index]
-            if end-start<.05:
-                # Sub-centimetre attachment seams encode endpoint snapping,
-                # not an instantaneous change in a truck's orientation.
-                # Inherit a substantial adjacent segment in the same gear.
-                for neighbors in (range(index-1,-1,-1),range(index+1,len(self.edges))):
-                    for j in neighbors:
-                        if bool(self.model.edges[self.edges[j]].get('reverse'))!=self.reverse(s):break
-                        if self.edge_ends[j]-self.edge_starts[j]>=.05:
-                            station=self.edge_ends[j]-.02 if j<index else self.edge_starts[j]+.02
-                            return self.heading(station)
-            a=self.point(max(start,min(s-.02,end-.04)))
-            b=self.point(min(end,max(s+.02,start+.04)))
-            return math.atan2(b[1]-a[1],b[0]-a[0])+(math.pi if self.reverse(s) else 0)
-        a=self.point(max(0,s-.02));b=self.point(min(self.length,s+.02))
-        return math.atan2(b[1]-a[1],b[0]-a[0])
+        index=self.edge_index(s);start,end=self.edge_starts[index],self.edge_ends[index]
+        def substantial(j):
+            edge=self.model.edges[self.edges[j]]
+            minimum=.15 if edge.get('phase','').endswith('attachment') else .05
+            return self.edge_ends[j]-self.edge_starts[j]>=minimum
+        if not substantial(index):
+            # Attachment seams encode endpoint snapping, not a body rotation.
+            # This applies to forward-only routes as well as reverse routes.
+            for neighbors in (range(index-1,-1,-1),range(index+1,len(self.edges))):
+                for j in neighbors:
+                    if bool(self.model.edges[self.edges[j]].get('reverse'))!=self.reverse(s):break
+                    if substantial(j):
+                        station=self.edge_ends[j]-.02 if j<index else self.edge_starts[j]+.02
+                        return self.heading(station)
+        # A centered difference across a storage join can blend an attachment
+        # seam into the next straight's heading (for example 90 -> 135 degrees).
+        a=self.point(max(start,min(s-.02,end-.04)))
+        b=self.point(min(end,max(s+.02,start+.04)))
+        return math.atan2(b[1]-a[1],b[0]-a[0])+(math.pi if self.reverse(s) else 0)
 
     def reverse(self,s):
         return bool(self.model.edges[self.edges[self.edge_index(s)]].get('reverse'))
 
-    def project(self,p,previous,behind=.6,ahead=3.,stop_s=None):
+    def project(self,p,previous,behind=.6,ahead=3.,stop_s=None,start_s=None):
         lo=max(0,bisect.bisect_left(self.stations,max(0,previous-behind))-1)
+        if start_s is not None:lo=max(lo,bisect.bisect_left(self.stations,start_s)-1)
         hi=min(len(self.points)-1,bisect.bisect_right(self.stations,previous+ahead))
         if stop_s is not None:hi=min(hi,bisect.bisect_left(self.stations,stop_s))
+        if not hasattr(self,'_projection_segments'):
+            # Route geometry is fixed after construction. Reuse the same
+            # segment differences and denominators without changing search
+            # bounds, clamping, tie order or floating-point evaluation order.
+            self._projection_segments=tuple((a[0],a[1],b[0]-a[0],b[1]-a[1],
+                max(1e-12,(b[0]-a[0])*(b[0]-a[0])+(b[1]-a[1])*(b[1]-a[1])),
+                self.stations[i],self.stations[i+1]-self.stations[i])
+                for i,(a,b) in enumerate(zip(self.points,self.points[1:])))
         best=(float('inf'),previous)
+        px,py=p
         for i in range(lo,hi):
-            a,b=self.points[i:i+2];dx,dy=b[0]-a[0],b[1]-a[1];d=dx*dx+dy*dy
-            t=max(0,min(1,((p[0]-a[0])*dx+(p[1]-a[1])*dy)/max(1e-12,d)))
-            error=math.hypot(p[0]-a[0]-t*dx,p[1]-a[1]-t*dy)
-            if error<best[0]:best=(error,self.stations[i]+t*(self.stations[i+1]-self.stations[i]))
+            ax,ay,dx,dy,den,start,span=self._projection_segments[i]
+            if start_s is not None and start+span<start_s:continue
+            t=max(0,min(1,((px-ax)*dx+(py-ay)*dy)/den))
+            if start_s is not None:t=max(t,max(0.,(start_s-start)/span))
+            error=math.hypot(px-ax-t*dx,py-ay-t*dy)
+            if error<best[0]:best=(error,start+t*span)
         return best
 
     def speed_cap(self,s):
@@ -175,13 +210,120 @@ class RouteGeometry:
         fraction=(s-self.stations[i])/max(1e-9,self.stations[i+1]-self.stations[i])
         return math.sqrt(max(0,(1-fraction)*self.speed_caps[i]**2+fraction*self.speed_caps[i+1]**2))
 
-    def steering(self,p,heading,s,speed=0.):
+    def _steering_curve_bounds(self):
+        if not hasattr(self,'_steering_curve_starts'):
+            curves=[i for i,k in enumerate(self.edges)
+                if self.model.edges[k]['kind'] in ('uturn','lane_change','service_access')
+                or self.model.edges[k].get('maneuver') in ('LEFT','RIGHT')]
+            self._steering_curve_starts=[self.edge_starts[i] for i in curves]
+            self._steering_curve_ends=[self.edge_ends[i] for i in curves]
+
+    def _straight_curve_tail(self,s):
+        index=self.edge_index(s)
+        edge=self.model.edges[self.edges[index]]
+        if (index+1>=len(self.edges) or edge['kind']=='road' or self.reverse(s)
+                or self.edge_ends[index]-s>3.):return None
+        following=self.model.edges[self.edges[index+1]]
+        if following['kind']!='road' or following.get('reverse'):return None
+        self._steering_curve_bounds()
+        upcoming=bisect.bisect_right(self._steering_curve_starts,s)
+        if (upcoming<len(self._steering_curve_starts)
+                and self._steering_curve_starts[upcoming]-s<3.):return None
+        station=self.edge_ends[index]+.05
+        desired=self.heading(station)
+        difference=(self.heading(s)-desired+math.pi)%(2*math.pi)-math.pi
+        if abs(difference)>math.radians(.5):return None
+        return self.point(station),desired
+
+    def _exit_yaw_steering(self,p,heading,speed,point,desired,maximum_yaw_deg=2,lateral_gain=.2,damp_motion=False,yaw_curvature=0.):
+        lateral=-(p[0]-point[0])*math.sin(desired)+(p[1]-point[1])*math.cos(desired)
+        limit=math.radians(maximum_yaw_deg)
+        desired+=max(-limit,min(limit,-lateral_gain*lateral))
+        error=(heading-desired+math.pi)%(2*math.pi)-math.pi
+        gain=min(.6 if damp_motion else 1.8,4./max(2.,abs(speed)))
+        # Once the tail has cleared the outlet, a delayed steering response
+        # must not provoke alternating lock corrections on a narrow road.
+        # Use measured yaw per travelled metre to damp the actual motion.
+        # Apply the same feedback throughout the road outlet. Switching gain
+        # when lateral error crosses a threshold can amplify delayed steering.
+        damping=.3*yaw_curvature if damp_motion else 0.
+        delta=math.atan(2.3285*(-gain*error-damping))
+        return max(-math.radians(40),min(math.radians(40),delta))
+
+    def curve_exit_alignment_speed_cap(self,p,heading,s):
+        if not self.model.raw.get('speed_adaptive_steering',False):return math.inf
+        edge=self.model.edges[self.edges[self.edge_index(s)]]
+        if self.reverse(s):return math.inf
+        if edge['kind']=='road':
+            self._steering_curve_bounds()
+            previous=bisect.bisect_right(self._steering_curve_ends,s)-1
+            if previous<0 or s-self._steering_curve_ends[previous]>=12.:return math.inf
+            desired=self.heading(s);point=self.point(s)
+        else:
+            frame=self._straight_curve_tail(s)
+            if frame is None:return math.inf
+            point,desired=frame
+        yaw=abs((heading-desired+math.pi)%(2*math.pi)-math.pi)
+        lateral=abs(-(p[0]-point[0])*math.sin(desired)+(p[1]-point[1])*math.cos(desired))
+        # Limit straight acceleration while correcting residual orientation.
+        # Allow normal straight acceleration only after actual alignment.
+        if yaw>math.radians(12) or lateral>.35:return 1.0
+        return 2.0 if yaw>math.radians(3) or lateral>.10 else math.inf
+
+    def _gear_change_approach(self,s):
+        """The straight stopping pose belongs to the incoming gear."""
+        if not hasattr(self,'_gear_stop_frames'):
+            self._steering_gear_stations=[cp['s'] for cp in self.checkpoints if cp['event']=='GEAR_CHANGE']
+            self._gear_stop_frames=[]
+            for station in self._steering_gear_stations:
+                desired=self.heading(max(0.,station-.02))
+                reverse=self.reverse(max(0.,station-.02));start=station
+                i=bisect.bisect_left(self.stations,station)-1
+                while i>=0 and station-start<6.:
+                    a,b=self.points[i],self.points[i+1]
+                    span=self.stations[i+1]-self.stations[i]
+                    if span>=.05:
+                        heading=math.atan2(b[1]-a[1],b[0]-a[0])+(math.pi if reverse else 0.)
+                        if abs((heading-desired+math.pi)%(2*math.pi)-math.pi)>math.radians(.5):break
+                    start=self.stations[i];i-=1
+                self._gear_stop_frames.append((max(start,station-6.),desired,reverse))
+        index=bisect.bisect_right(self._steering_gear_stations,s+1e-7)
+        if index==len(self._steering_gear_stations):return None
+        start,desired,reverse=self._gear_stop_frames[index]
+        if s<start or self.reverse(s)!=reverse:return None
+        return self.point(self._steering_gear_stations[index]),desired,reverse
+
+    def steering(self,p,heading,s,speed=0.,*,feedback=None):
+        # Direct single-vehicle callers may omit feedback. Fleet execution
+        # always supplies its own history: ServiceRouteGeometry caches and
+        # shares this plan between vehicles and successive movements.
+        if feedback is None:
+            if not hasattr(self,'_single_vehicle_feedback'):
+                self._single_vehicle_feedback=SteeringFeedback()
+            feedback=self._single_vehicle_feedback
+        feedback.observe(p,heading,speed)
         index=self.edge_index(s);e=self.model.edges[self.edges[index]]
+        frame=self._gear_change_approach(s)
+        if frame is not None:
+            point,desired,reverse=frame
+            offset=math.pi if reverse else 0.
+            delta=self._exit_yaw_steering(p,heading+offset,speed,point,desired+offset,
+                                          5,.4,damp_motion=True,yaw_curvature=feedback.yaw_curvature)
+            return -delta if reverse else delta
         # A finite endpoint makes pure pursuit chase a nearby point without
         # controlling the final body orientation. Align to the service pose
-        # over the final six metres, with signed lateral feedback in reverse.
+        # with signed lateral feedback in reverse. Tight final bends still
+        # need curve tracking; gentler approaches need an earlier pose capture
+        # to remove lateral error before the longitudinal endpoint is reached.
         # Only use this after the last gear change and on service access.
-        if (hasattr(self,'arrival_heading') and self.length-s<6.
+        pose_distance=0.
+        if hasattr(self,'arrival_heading'):
+            if not hasattr(self,'_arrival_pose_distance'):
+                incoming=self.heading(max(0.,self.length-6.))
+                turn=abs((incoming-self.arrival_heading+math.pi)%(2*math.pi)-math.pi)
+                self._arrival_pose_distance=3. if turn>math.pi/3 else 6.
+            pose_distance=self._arrival_pose_distance
+        if (pose_distance and self.length-s<pose_distance
                 and e['kind']=='service_access'
                 and all(bool(self.model.edges[k].get('reverse'))==self.reverse(s)
                         for k in self.edges[index:])):
@@ -189,27 +331,61 @@ class RouteGeometry:
             error=(heading-desired+math.pi)%(2*math.pi)-math.pi
             lateral=-(p[0]-end[0])*math.sin(desired)+(p[1]-end[1])*math.cos(desired)
             direction=-1 if self.reverse(s) else 1
-            gain=1.8 if self.length-s<3. else 1.2
+            gain=2.2 if self.length-s<3. else 1.2
             delta=direction*math.atan(2.3285*(-gain*error-.5*lateral*direction))
             return max(-math.radians(40),min(math.radians(40),delta))
-        lookahead=1.65 if e['kind']=='uturn' or e.get('maneuver')=='RIGHT' else 2.7
+        if self.model.raw.get('speed_adaptive_steering',False):
+            frame=self._straight_curve_tail(s)
+            if frame is not None:
+                # A junction can contain a straight outlet before its road
+                # edge starts. Begin alignment there while the tail is still
+                # in the turn, rather than waiting for the edge label change.
+                point,desired=frame
+                return self._exit_yaw_steering(p,heading,speed,point,desired,10,.4)
+        # Native right-turn steering can take almost a second to build up.
+        # Preview the continuous bend far enough ahead to avoid a late,
+        # saturated correction that leaves the rear axle outside the outlet.
+        lookahead=2.2 if e['kind']=='uturn' else 2.7
         if (self.model.raw.get('speed_adaptive_steering',False)
                 and (e['kind']=='road' or e.get('maneuver')=='STRAIGHT') and not self.reverse(s)):
+            self._steering_curve_bounds()
+            previous=bisect.bisect_right(self._steering_curve_ends,s)-1
+            upcoming=bisect.bisect_right(self._steering_curve_starts,s)
+            near_next=(upcoming<len(self._steering_curve_starts)
+                       and self._steering_curve_starts[upcoming]-s<3.)
+            if (e['kind']=='road' and previous>=0
+                    and s-self._steering_curve_ends[previous]<12. and not near_next):
+                # Pure pursuit can request zero steering while the axle
+                # converges diagonally but the long body crosses the lane.
+                # Correct lateral error with a bounded body yaw instead.
+                offset=s-self._steering_curve_ends[previous]
+                # Until three metres into the road the tail still occupies
+                # the junction. Clear residual lateral error there before
+                # imposing the narrower full-body straight-road yaw limit.
+                transition=offset<3.
+                return self._exit_yaw_steering(p,heading,speed,self.point(s),self.heading(s),
+                    10 if transition else 2,.4 if transition else .2,damp_motion=True,
+                    yaw_curvature=feedback.yaw_curvature)
             lookahead=max(lookahead,min(6.4,abs(speed)*.8))
             # Keep the existing preview at curves. A longer straight-road
             # preview must not start cutting into a validated tight turn.
-            if not hasattr(self,'_steering_curve_starts'):
-                self._steering_curve_starts=[self.edge_starts[i] for i,k in enumerate(self.edges)
-                    if self.model.edges[k]['kind'] in ('uturn','lane_change','service_access')
-                    or self.model.edges[k].get('maneuver') in ('LEFT','RIGHT')]
+            self._steering_curve_bounds()
             j=bisect.bisect_right(self._steering_curve_starts,s)
             if j<len(self._steering_curve_starts):
                 lookahead=min(lookahead,max(2.7,self._steering_curve_starts[j]-s))
+            # Keep close tracking until the body has aligned after a curve.
+            # Immediately using the high-speed preview leaves residual yaw
+            # across the road boundary even with a small rear-axle error.
+            previous=bisect.bisect_right(self._steering_curve_ends,s)-1
+            if previous>=0:
+                distance=s-self._steering_curve_ends[previous]
+                blend=max(0.,min(1.,(distance-8.)/4.))
+                lookahead=min(lookahead,2.7+(6.4-2.7)*blend)
         delayed=e.get('straight_until_m') and s-self.edge_starts[index]<e['straight_until_m']-.02
         calibrated=e.get('right_turn_tracking_gain',1.)
         if not math.isfinite(calibrated) or not 1.<=calibrated<=1.35:
             raise ValueError('Invalid right turn tracking gain')
-        if delayed and calibrated==1.:return 0.
+        if delayed and calibrated==1. and e['kind']!='uturn':return 0.
         reversing=self.reverse(s)
         if reversing:lookahead=1.6;heading+=math.pi
         changes=(index+1<len(self.edges) and bool(self.model.edges[self.edges[index+1]].get('reverse'))!=reversing)
@@ -220,7 +396,14 @@ class RouteGeometry:
         if delayed:
             # Preserve the straight approach, but allow measured lateral/yaw
             # error correction instead of blindly suppressing all steering.
-            aim_station=min(aim_station,self.edge_starts[index]+e['straight_until_m'])
+            straight_end=self.edge_starts[index]+e['straight_until_m']
+            # Blend into the curve before the straight endpoint becomes a
+            # near-zero pursuit target. At native control intervals, aiming
+            # at that endpoint can briefly command the opposite lock from a
+            # few centimetres of approach error, then enter the bend late.
+            blend=2.0 if calibrated>1. or e['kind']=='uturn' else 0.
+            preview=max(0.,min(1.,(s-straight_end+blend)/blend)) if blend else 0.
+            aim_station=min(aim_station,straight_end+preview*lookahead)
         # A preview may cross several <=5 m slices. Stop it at the next gear
         # boundary so a forward truck never steers toward a future reverse leg.
         if not hasattr(self,'_steering_gear_stations'):

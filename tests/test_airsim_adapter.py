@@ -160,6 +160,34 @@ def test_overspeed_never_applies_throttle_and_brake_together(fixture):
     assert rpc.native[-1]['brake']==1 and rpc.native[-1]['throttle']==0
 
 
+@pytest.mark.parametrize('rolling_speed',[.8,-.8])
+def test_braking_retains_requested_wheel_angle_while_forward_or_reverse_coasting(fixture,rolling_speed):
+    from dataclasses import replace
+    a,rpc,clock=fixture;a.config=replace(a.config,allow_reverse=True)
+    rpc.speed=rolling_speed;rpc.stamp+=1;clock.now+=.1;a.read_states()
+    a.drive_direction['truck']=-1 if rolling_speed<0 else 1
+    target=-0. if rolling_speed<0 else 0.
+    a.send(ControlCommand('truck',0,clock.now,target,0,ttl=.8,steering_rad=pi/9))
+    native=rpc.native[-1]
+    assert native['brake']==1 and native['throttle']==0
+    assert native['steering']==pytest.approx((pi/9)/a.config.max_steer_rad)
+    assert native['manual_gear']==(-1 if rolling_speed<0 else 1)
+
+
+def test_explicit_wheel_angle_does_not_allow_stationary_yaw_command(fixture):
+    a,rpc,clock=fixture
+    with pytest.raises(AdapterFault):
+        a.send(ControlCommand('truck',0,clock.now,0,.5,ttl=.8,steering_rad=pi/9))
+    assert rpc.native[-1]['brake']==1
+
+
+def test_explicit_wheel_angle_cannot_exceed_native_steering_limit(fixture):
+    a,rpc,clock=fixture
+    with pytest.raises(AdapterFault):
+        a.send(ControlCommand('truck',0,clock.now,1,0,ttl=.8,steering_rad=pi/2))
+    assert rpc.native[-1]['brake']==1 and 'steering angle' in a.fault
+
+
 def test_recovery_target_ramps_but_stop_is_immediate(fixture):
     from dataclasses import replace
     a,rpc,clock=fixture;a.config=replace(a.config,speed_rise_m_s2=.6)
@@ -195,3 +223,105 @@ def test_staging_rejects_an_observed_moving_truck(fixture):
     a,rpc,clock=fixture;rpc.speed=.5
     with pytest.raises(AdapterFault,match='Stationary'):a.start_watchdog_after_staging()
     assert rpc.native[-1]['brake']==1
+
+
+def test_malformed_native_label_stops_vehicle_without_losing_rpc_stream(fixture):
+    a,rpc,clock=fixture;original=rpc.call
+    def call(method,*args):
+        if method=='simGetCollisionInfo':return dict(time_stamp=1,has_collided=True,object_name='Ramp\\xff',object_name_utf8_valid=False)
+        return original(method,*args)
+    rpc.call=call
+    with pytest.raises(AdapterFault,match='malformed native collision label'):a.read_states()
+    assert rpc.native[-1]['brake']==1
+
+
+def collision_snapshot(label='SM_Road_40',**kw):
+    row=dict(time_stamp=123,has_collided=True,object_name=label,object_id=2,
+             penetration_depth=.001,normal=dict(x_val=0.,y_val=0.,z_val=-1.),
+             impact_point=dict(x_val=1.,y_val=2.,z_val=3.),
+             position=dict(x_val=1.,y_val=2.,z_val=4.))
+    row.update(kw);return row
+
+
+def collision_sequence(rpc,rows):
+    import copy
+    original=rpc.call;queue=iter(rows)
+    def call(method,*args):
+        if method=='simGetCollisionInfo':return copy.deepcopy(next(queue))
+        return original(method,*args)
+    rpc.call=call
+
+
+def test_torn_label_recovers_only_two_consistent_reads_of_the_same_impact(fixture):
+    a,rpc,clock=fixture
+    bad=collision_snapshot('Ramp\\xff',object_name_utf8_valid=False)
+    good=collision_snapshot()
+    collision_sequence(rpc,[bad,good,good]);a.read_states()
+    assert a.telemetry['truck']['collision']==good
+    assert a.telemetry['truck']['collision']['has_collided'] is True
+
+
+@pytest.mark.parametrize('fault',['new_event','different_normal','different_depth',
+                                   'invalid_again','unstable_label','missing_identity'])
+def test_unknown_impact_cannot_be_replaced_by_a_different_or_incomplete_snapshot(fixture,fault):
+    a,rpc,clock=fixture;bad=collision_snapshot('Ramp\\xff',object_name_utf8_valid=False)
+    second=collision_snapshot();third=collision_snapshot()
+    if fault=='new_event':second['time_stamp']+=1
+    elif fault=='different_normal':second['normal']['x_val']=.1
+    elif fault=='different_depth':second['penetration_depth']=.02
+    elif fault=='invalid_again':second['object_name_utf8_valid']=False
+    elif fault=='unstable_label':third['object_name']='Obstacle'
+    elif fault=='missing_identity':del bad['impact_point']
+    collision_sequence(rpc,[bad,second,third])
+    with pytest.raises(AdapterFault,match='malformed native collision label'):a.read_states()
+    assert rpc.native[-1]['brake']==1
+
+
+def test_recovered_obstacle_name_remains_an_obstacle(fixture):
+    from logistics_park.runtime.ground_contact import supported_ramp_contact
+    a,rpc,clock=fixture;bad=collision_snapshot('Obstacle\\xff',object_name_utf8_valid=False)
+    good=collision_snapshot('MetalObstacle')
+    collision_sequence(rpc,[bad,good,good]);a.read_states()
+    hit=a.telemetry['truck']['collision']
+    row=dict(collision=hit['object_name'],collision_normal=[0,0,-1],
+             collision_penetration_m=.001,wheel_surfaces=['SM_Road_40']*6,
+             wheel_clearances_m=[0.]*6,body_hits=[None]*3,
+             parked_vehicle_overlaps=[None]*3)
+    assert hit['has_collided'] is True
+    assert not supported_ramp_contact(row,{'SM_Road_40'},clearance_m=None)
+
+
+def test_modern_controls_arm_native_deadlines_and_bind_the_source_state(fixture):
+    a,rpc,clock=fixture
+    assert rpc.native[0]['brake']==1
+    assert rpc.native[0]['command_deadline_s']-rpc.native[0]['command_timestamp_s']==pytest.approx(.5)
+    clock.now+=.1;a.send(command(clock))
+    sent=rpc.native[-1]
+    assert sent['command_timestamp_s']==clock.now
+    assert sent['command_deadline_s']==pytest.approx(clock.now+.5)
+    assert sent['source_state_timestamp_s']==a.states['truck'].timestamp
+
+
+def test_native_deadline_guard_must_be_verified_before_using_native_watchdog(fixture):
+    a,rpc,clock=fixture
+    row=dict(sequence=rpc.stamp+1,monotonic_s=clock.now,paused=False,states={'truck':dict(x=0.,y=0.,z=.9,heading=0.,speed=0.,
+        native_guard_active=True,native_timed_controls_active=True,native_control_timeout_s=.5)})
+    a.snapshot_provider=lambda:row
+    a.start_watchdog_after_staging(native_guard=True)
+    assert a.thread is None and not a.watchdog_enabled and a.fault is None
+
+
+def test_missing_native_acknowledgement_cannot_disable_host_watchdog(fixture):
+    a,rpc,clock=fixture
+    with pytest.raises(AdapterFault,match='not verified'):a.start_watchdog_after_staging(native_guard=True)
+    assert a.fault and rpc.native[-1]['brake']==1
+
+
+def test_replan_hold_brakes_with_old_state_and_preserves_ownership_and_sequence(fixture):
+    a,rpc,clock=fixture;a.send(command(clock));sequence=a.sequences['truck'];clock.now+=2.
+    held=a.hold_for_replan()
+    assert held==clock.now and rpc.native[-1]['brake']==1 and rpc.api
+    assert a.fault is None and a.applied_speed['truck']==0 and a.throttle['truck']==0
+    assert a.sequences['truck']==sequence
+    a.fail_stop('fault latched')
+    with pytest.raises(AdapterFault):a.hold_for_replan()

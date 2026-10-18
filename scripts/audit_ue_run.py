@@ -10,6 +10,22 @@ def angle(a, b):
     return (a - b + math.pi) % (2 * math.pi) - math.pi
 
 
+def straight_route_bounds(edges, route, key, reference, co, si):
+    """Actual straight attachment boundaries, not the entire physical road."""
+    edge=edges[key];index=route.index(key);begin=end=index
+    while (begin>0 and edges.get(route[begin-1],{}).get('kind')=='road'
+           and edges[route[begin-1]].get('capacity_alias')==edge['capacity_alias']):begin-=1
+    while (end<len(route)-1 and edges.get(route[end+1],{}).get('kind')=='road'
+           and edges[route[end+1]].get('capacity_alias')==edge['capacity_alias']):end+=1
+    points=(edges[route[begin]]['centerline'][0],edges[route[end]]['centerline'][-1])
+    stations=[(x-reference[0])*co+(y-reference[1])*si for x,y in points]
+    return min(stations),max(stations)
+
+
+def complete_body_on_straight(station, extent, bounds):
+    return bounds[0]+extent+.25<=station<=bounds[1]-extent-.25
+
+
 def audit(directory):
     report = json.loads((directory / 'physical_acceptance.json').read_text())
     network = json.loads((ROOT / 'config/topology/industrialarea_ue_internal_waiting_network.json').read_text())
@@ -29,7 +45,7 @@ def audit(directory):
             heading_error_deg=math.degrees(angle(yaw, math.radians(site['heading_deg']))), speed_m_s=speed))
     # Only test the lane envelope when the complete body is on a straight
     # physical road. A nose crossing into an intersection is not a lane exit.
-    road_samples = 0; violations = []; transitions = []; delayed = []
+    road_samples = 0; violations = []; transitions = []; route_transitions = []; delayed = []
     for line in (directory / 'physical_control_diagnostics.jsonl').open():
         row = json.loads(line)
         for name, detail in row['execution_details'].items():
@@ -48,7 +64,14 @@ def audit(directory):
             lateral = abs(-(cx-ax)*si+(cy-ay)*co)
             along = 4.172*abs(math.cos(diff))+1.3*abs(math.sin(diff))
             extent = 4.172*abs(math.sin(diff))+1.3*abs(math.cos(diff))
-            if longitudinal < along+.25 or longitudinal > length-along-.25:
+            bounds=straight_route_bounds(edges,detail['route_edges'],detail['edge_id'],(ax,ay),co,si)
+            if not complete_body_on_straight(longitudinal,along,bounds):
+                excess=lateral+extent-edge['width']/2
+                if excess>.05:
+                    route_transitions.append(dict(time_s=row['t_s'],vehicle=name,edge=edge['edge_id'],
+                        lane_envelope_excess_m=excess,body_center_station_m=longitudinal,
+                        body_longitudinal_extent_m=along,straight_route_bounds_m=list(bounds),
+                        classification='Body crosses actual straight-road attachment boundary'))
                 continue
             road_samples += 1
             excess = lateral+extent-edge['width']/2
@@ -96,9 +119,11 @@ def audit(directory):
         local_stall=report['local_progress_check'],parking=parking,arrivals=arrivals,
         straight_road_body_samples=road_samples,lane_envelope_violations=violations,
         access_merge_envelope_flags=transitions,
+        route_transition_envelope_flags=route_transitions,
         maximum_continuous_start_response_s=max((s['duration_s'] for s in spans),default=0),
         following_stop_samples=delayed,
-        limitations=['Lane envelope uses recorded topology, not wheel raycasts at every frame.',
+        limitations=['Straight-road samples require the complete body between actual route attachment boundaries.',
+            'Lane envelope uses recorded topology, not wheel raycasts at every frame.',
             'Following stops require checking the leader and other constraints before classifying delay.'])
 
 

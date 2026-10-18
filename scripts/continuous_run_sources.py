@@ -3,6 +3,15 @@ import hashlib
 
 def algorithm_fingerprints(root):
     files=(
+        'scripts/continuous_run_sources.py',
+        'scripts/ue_demo_progress.py',
+        'src/logistics_park/common/messages.py',
+        'src/logistics_park/map/geometry.py',
+        'src/logistics_park/scheduling/optimization.py',
+        'src/logistics_park/scheduling/resource_calendar.py',
+        'src/logistics_park/scheduling/traffic_forecast.py',
+        'src/logistics_park/scheduling/global_scheduler.py',
+        'src/logistics_park/scheduling/eta_service.py',
         'src/logistics_park/scheduling/maneuver_admission.py',
         'src/logistics_park/runtime/safe_landing.py',
         'src/logistics_park/scheduling/efficiency_policy.py',
@@ -27,6 +36,7 @@ def algorithm_fingerprints(root):
         'scripts/validate_ue_continuous_tasks.py',
         'scripts/ue/monitor_short_cargo.py',
         'scripts/ue/monitor_fleet.py',
+        'scripts/ue/export_scene.py',
         'scripts/ue/node_pair_fleet_fixture.py',
         'scripts/ue/sample_fleet_wheels.py',
         'src/logistics_park/adapters/airsim.py',
@@ -35,5 +45,13 @@ def algorithm_fingerprints(root):
         'src/logistics_park/safety/collision.py',
         'src/logistics_park/runtime/run_lock.py',
         'src/logistics_park/runtime/ground_contact.py',
+        'src/logistics_park/runtime/geometry_integrity.py',
+        'src/logistics_park/runtime/safety_timing.py',
+        'src/logistics_park/runtime/drivable_surface.py',
+        'src/logistics_park/runtime/geos_surface.py',
+        'src/logistics_park/runtime/road_guard.py',
+        'src/logistics_park/runtime/surface_preflight.py',
+        'src/logistics_park/runtime/drivable_audit.py',
+        'scripts/ue/export_drivable_surface.py',
     )
     return {name:hashlib.sha256((root/name).read_bytes()).hexdigest() for name in files}

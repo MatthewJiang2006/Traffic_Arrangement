@@ -1,5 +1,6 @@
 """Polyline geometry used by matching and path tracking."""
 from dataclasses import dataclass
+from functools import cached_property
 from math import atan2, cos, hypot, pi, sin
 
 from logistics_park.common.messages import Point, finite
@@ -23,12 +24,13 @@ class Polyline:
     points: tuple[Point, ...]
 
     def __post_init__(self) -> None:
+        object.__setattr__(self,'points',tuple(tuple(point) for point in self.points))
         finite(*(value for point in self.points for value in point))
         if len(self.points) < 2 or any(hypot(b[0]-a[0], b[1]-a[1]) < 1e-9
                                       for a, b in zip(self.points, self.points[1:])):
             raise ValueError("polyline requires at least two distinct consecutive points")
 
-    @property
+    @cached_property
     def length(self) -> float:
         return sum(hypot(b[0]-a[0], b[1]-a[1]) for a, b in zip(self.points, self.points[1:]))
 

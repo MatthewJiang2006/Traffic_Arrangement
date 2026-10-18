@@ -96,3 +96,19 @@ def test_remote_promise_does_not_count_as_a_body_but_committed_ingress_does():
     assert d._parking_approach_clear(route,'near')
     d.admission_priorities['far']=(1.,True)
     assert not d._parking_approach_clear(route,'near')
+
+
+def test_parking_ingress_after_road_does_not_enter_an_occupied_dock_corridor():
+    d=parking_exit_dispatch();d.positions['far']='L'
+    d.network.edges['road']=dict(kind='road',centerline=[[40,10],[14,10]],reverse=False)
+    assert not d._parking_approach_clear({'edge_ids':['road','reverse']},'near')
+    assert d._parking_approach_clear({'edge_ids':['road','forward']},'near')
+
+
+def test_parking_ingress_after_road_ignores_remote_promise_until_committed():
+    d=parking_exit_dispatch()
+    d.network.edges['road']=dict(kind='road',centerline=[[40,10],[14,10]],reverse=False)
+    route={'edge_ids':['road','reverse']}
+    assert d._parking_approach_clear(route,'near')
+    d.admission_priorities['far']=(1.,True)
+    assert not d._parking_approach_clear(route,'near')

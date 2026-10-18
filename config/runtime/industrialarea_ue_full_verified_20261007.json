@@ -1,187 +1,241 @@
 {
-  "map": "config/topology/industrialarea_ue_internal_waiting_transport.json",
-  "positions": {
-    "Car_0_0": "fleet24-start-00",
-    "Car_0_1": "fleet24-start-01",
-    "Car_1_0": "fleet24-start-03",
-    "Car_1_1": "fleet24-start-04",
-    "Car_2_0": "fleet24-start-06",
-    "Car_2_1": "fleet24-start-07",
-    "Car_3_0": "fleet24-start-09",
-    "Car_3_1": "fleet24-start-10",
-    "Car_4_0": "fleet24-start-12",
-    "Car_4_1": "fleet24-start-13",
-    "Car_5_0": "fleet24-start-15",
-    "Car_5_1": "fleet24-start-16",
-    "Car_6_0": "fleet24-start-18",
-    "Car_6_1": "fleet24-start-19",
-    "Car_7_0": "fleet24-start-21",
-    "Car_7_1": "fleet24-start-22"
-  },
-  "tasks": [
-    [
-      "W1-loading",
-      "W3-unloading"
-    ],
-    [
-      "W2-loading",
-      "W4-unloading"
-    ],
-    [
-      "W3-loading",
-      "W5-unloading"
-    ],
-    [
-      "W4-loading",
-      "W6-unloading"
-    ],
-    [
-      "W5-loading",
-      "W1-unloading"
-    ],
-    [
-      "W6-loading",
-      "W2-unloading"
-    ],
-    [
-      "W1-loading",
-      "W4-unloading"
-    ],
-    [
-      "W2-loading",
-      "W5-unloading"
-    ],
-    [
-      "W3-loading",
-      "W6-unloading"
-    ],
-    [
-      "W4-loading",
-      "W1-unloading"
-    ],
-    [
-      "W5-loading",
-      "W2-unloading"
-    ],
-    [
-      "W6-loading",
-      "W3-unloading"
-    ],
-    [
-      "W1-loading",
-      "W5-unloading"
-    ],
-    [
-      "W2-loading",
-      "W6-unloading"
-    ],
-    [
-      "W3-loading",
-      "W1-unloading"
-    ],
-    [
-      "W4-loading",
-      "W2-unloading"
-    ],
-    [
-      "W5-loading",
-      "W3-unloading"
-    ],
-    [
-      "W6-loading",
-      "W4-unloading"
-    ],
-    [
-      "W1-loading",
-      "W2-unloading"
-    ],
-    [
-      "W2-loading",
-      "W3-unloading"
-    ],
-    [
-      "W3-loading",
-      "W4-unloading"
-    ],
-    [
-      "W4-loading",
-      "W5-unloading"
-    ],
-    [
-      "W5-loading",
-      "W6-unloading"
-    ],
-    [
-      "W6-loading",
-      "W1-unloading"
-    ],
-    [
-      "W1-loading",
-      "W6-unloading"
-    ],
-    [
-      "W2-loading",
-      "W1-unloading"
-    ],
-    [
-      "W3-loading",
-      "W2-unloading"
-    ],
-    [
-      "W4-loading",
-      "W3-unloading"
-    ],
-    [
-      "W5-loading",
-      "W4-unloading"
-    ],
-    [
-      "W6-loading",
-      "W5-unloading"
-    ],
-    [
-      "W1-loading",
-      "W3-unloading"
-    ],
-    [
-      "W2-loading",
-      "W4-unloading"
-    ]
+ "map": "config/topology/industrialarea_ue_internal_waiting_transport.json",
+ "positions": {
+  "Car_0_0": "fleet24-start-00",
+  "Car_0_1": "fleet24-start-01",
+  "Car_1_0": "fleet24-start-03",
+  "Car_1_1": "fleet24-start-04",
+  "Car_2_0": "fleet24-start-06",
+  "Car_2_1": "fleet24-start-07",
+  "Car_3_0": "fleet24-start-09",
+  "Car_3_1": "fleet24-start-10",
+  "Car_4_0": "fleet24-start-12",
+  "Car_4_1": "fleet24-start-13",
+  "Car_5_0": "fleet24-start-15",
+  "Car_5_1": "fleet24-start-16",
+  "Car_6_0": "fleet24-start-18",
+  "Car_6_1": "fleet24-start-19",
+  "Car_7_0": "fleet24-start-21",
+  "Car_7_1": "fleet24-start-22"
+ },
+ "tasks": [
+  [
+   "W1-loading",
+   "W3-unloading"
   ],
-  "map_sha256": {
-    "IndustrialArea\uff08\u590d\u4ef6\uff09.umap": "9b6fc0a3aa18ac55376c93a8379cfae88efe57b42a2101f21d63701d66ba3089",
-    "IndustrialArea_Copy.umap": "a9e176c9363a962a426f2c626724dbfce0478db2f813bbb97e7dab1010f75467"
-  },
-  "scope": "Complete native UE with parking, diversion, admission and physical queue ordering fixes",
-  "blocked_candidate_edges": [
-    "access_133",
-    "access_134",
-    "access_167"
+  [
+   "W2-loading",
+   "W4-unloading"
   ],
-  "traffic_routing": true,
-  "output": "runs/ue_full_verified_20261007",
-  "network": "config/topology/industrialarea_ue_internal_waiting_network.json",
-  "local_traffic": true,
-  "batch_observer": true,
-  "stall_limit_s": 120,
-  "early_stall_check_s": 15,
-  "physical_limit_s": 3600,
-  "light_dt_s": 0.1,
-  "light_max_sim_s": 3600,
-  "light_status_interval_s": 30,
-  "light_checkpoints": true,
-  "early_stall_displacement_m": 0.25,
-  "world_time_scale": 1,
-  "adapter_options": {
-    "speed_rise_m_s2": 0.6,
-    "speed_error_gain": 0.6
-  },
-  "park_idle_vehicles": true,
-  "offroad_busy_wait": true,
-  "local_stall_check_s": 20,
-  "local_wait_limit_s": 90,
-  "efficiency_policy": {
-    "proactive_admission": true
-  },
-  "physics_substepping": true
+  [
+   "W3-loading",
+   "W5-unloading"
+  ],
+  [
+   "W4-loading",
+   "W6-unloading"
+  ],
+  [
+   "W5-loading",
+   "W1-unloading"
+  ],
+  [
+   "W6-loading",
+   "W2-unloading"
+  ],
+  [
+   "W1-loading",
+   "W4-unloading"
+  ],
+  [
+   "W2-loading",
+   "W5-unloading"
+  ],
+  [
+   "W3-loading",
+   "W6-unloading"
+  ],
+  [
+   "W4-loading",
+   "W1-unloading"
+  ],
+  [
+   "W5-loading",
+   "W2-unloading"
+  ],
+  [
+   "W6-loading",
+   "W3-unloading"
+  ],
+  [
+   "W1-loading",
+   "W5-unloading"
+  ],
+  [
+   "W2-loading",
+   "W6-unloading"
+  ],
+  [
+   "W3-loading",
+   "W1-unloading"
+  ],
+  [
+   "W4-loading",
+   "W2-unloading"
+  ],
+  [
+   "W5-loading",
+   "W3-unloading"
+  ],
+  [
+   "W6-loading",
+   "W4-unloading"
+  ],
+  [
+   "W1-loading",
+   "W2-unloading"
+  ],
+  [
+   "W2-loading",
+   "W3-unloading"
+  ],
+  [
+   "W3-loading",
+   "W4-unloading"
+  ],
+  [
+   "W4-loading",
+   "W5-unloading"
+  ],
+  [
+   "W5-loading",
+   "W6-unloading"
+  ],
+  [
+   "W6-loading",
+   "W1-unloading"
+  ],
+  [
+   "W1-loading",
+   "W6-unloading"
+  ],
+  [
+   "W2-loading",
+   "W1-unloading"
+  ],
+  [
+   "W3-loading",
+   "W2-unloading"
+  ],
+  [
+   "W4-loading",
+   "W3-unloading"
+  ],
+  [
+   "W5-loading",
+   "W4-unloading"
+  ],
+  [
+   "W6-loading",
+   "W5-unloading"
+  ],
+  [
+   "W1-loading",
+   "W3-unloading"
+  ],
+  [
+   "W2-loading",
+   "W4-unloading"
+  ]
+ ],
+ "map_sha256": {
+  "map.umap": "da9b7e1df8dae89d2a50136717b655d288f496acb292a1366047af51d3fd3862",
+  "IndustrialArea_Copy.umap": "a9e176c9363a962a426f2c626724dbfce0478db2f813bbb97e7dab1010f75467"
+ },
+ "scope": "Q36 curb and apron geometry repaired and entry reopened; curve-tail alignment begins before road-label transition, with conservative speed for large pose error. Parking departure guard and native snapshot lock retained. Original time scale and safety thresholds. Validation: docs/20261012_q36_geometry_repair.md Calibrated early preview for turn_j_2_2_W_N_single_single. Terminal parking waits at most 30 seconds for a cheaper transiently blocked site, only for the last idle vehicle after all transports complete and no source waiter; all safety gates remain. Validation: docs/20261012_terminal_parking_fix.md Existing 1.2 response compensation and early preview applied consistently to all 22 native-map right turns; centreline and safety thresholds unchanged. Q33 access is closed in both the source topology and scenario after native entry/reverse-exit traction failures; tasks, fleet, map and safety thresholds are unchanged.",
+ "blocked_candidate_edges": [
+  "access_133",
+  "access_134",
+  "access_167",
+  "Q33_entry",
+  "Q33_exit"
+ ],
+ "traffic_routing": true,
+ "output": "runs/ue_full_verified_20261007",
+ "network": "config/topology/industrialarea_ue_internal_waiting_network.json",
+ "local_traffic": true,
+ "batch_observer": true,
+ "stall_limit_s": 120,
+ "early_stall_check_s": 15,
+ "physical_limit_s": 3600,
+ "light_dt_s": 0.1,
+ "light_max_sim_s": 3600,
+ "light_status_interval_s": 30,
+ "light_checkpoints": true,
+ "early_stall_displacement_m": 0.25,
+ "world_time_scale": 1,
+ "adapter_options": {
+  "speed_rise_m_s2": 0.6,
+  "speed_error_gain": 0.6
+ },
+ "park_idle_vehicles": true,
+ "offroad_busy_wait": true,
+ "local_stall_check_s": 20,
+ "local_wait_limit_s": 90,
+ "efficiency_policy": {
+  "proactive_admission": true,
+  "unavailable_waiting": [
+   "Q26",
+   "Q28",
+   "Q5",
+   "Q7",
+   "Q33"
+  ]
+ },
+ "physics_substepping": true,
+ "scheduling_options": {
+  "connected_clearance": true,
+  "parking_lookahead": true,
+  "submission_order_dispatch": false,
+  "protect_granted_queues": false,
+  "continuation_dispatch": true,
+  "max_loading_inflight": 0,
+  "pickup_tail_weight": 0.25,
+  "parking_entry_priority": true,
+  "calibrated_eta": true,
+  "waiting_completion_cost": true,
+  "transport_entry_priority": true,
+  "tail_prepositioning": true,
+  "parking_tail_reserve": true,
+  "berth_intent_hysteresis_s": 5.0
+ },
+ "ue_geometry_asset_sha256": {
+  "/home/aipc/Traffic_ue4/Content/TrafficRepairs/SM_Road87_Q36Smooth.uasset": "de75ece6d044138916be457cbac624264dccbc812c0c7a21dae0e57987efaa32",
+  "/home/aipc/Traffic_ue4/Content/TrafficRepairs/SM_Road55_Q36Smooth.uasset": "fdf8530a33322817905192df71e8d9f48de1259f1834fcad8f41a8b5a244a05f",
+  "/home/aipc/Traffic_ue4/Content/TrafficRepairs/SM_Q36_SmoothApron.uasset": "eb655dca162bb694cb420e43e38707ed0d9fb4358348fb24d8cd66e6a19d3820"
+ },
+ "ue_native_dependency_sha256": {
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/PawnSimApi.cpp": "4d3368d6cd82b5714694e2360bc9f933f02641e0dcbcb6198fb28b666cc53c2d",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/PawnSimApi.h": "36a8c47356593a8de5a292ac392551f9a5f23dac752c797e189c12d342d06d34",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Binaries/Linux/libUE4Editor-AirSim.so": "002a727d5cd81620e4f58243067de276f21c2c49f9003f443fa7a652619e9b0c",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/AirLib/include/vehicles/car/firmwares/physxcar/PhysXCarApi.hpp": "654cfa38182f300278087a6f6476394167397396e2dc58fbfb1bbca0cc92fc78",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/AirLib/include/vehicles/car/api/CarApiBase.hpp": "580e88f75eb055219defa8813e84c6d5d178404b10e010e0c9380765ae44419b",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/AirLib/include/vehicles/car/api/CarRpcLibAdaptors.hpp": "7c12d967576f09411b8cf57d23dc6affdfb955b82d1ba9c246eaead0044b42c2",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/Vehicles/Car/CarPawn.h": "99b451268266eace346f803c40e096962dc15846005fab5e7293774688fb8aa0",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/Vehicles/Car/CarPawnSimApi.h": "719cdcdfdb896bc03e971cb500cc9d6db38bb62edeeae0331a7f0023d39b8d6b",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/Vehicles/Car/CarPawnSimApi.cpp": "978f1e6fc65da862fb2889b7158fbf29f53c6ad3977efc281ec4215ab8033a4a",
+  "/home/aipc/Traffic_ue4/Plugins/AirSim/Source/TrafficCarRpcLibServer.cpp": "4158d734ecadffcf714939f21909028483ef242fa58b7b1b7a0e86ae5ac4edbe",
+  "/home/aipc/Traffic_ue4/Source/Traffic_ue4/TrafficTruckPawn.h": "a363ddfdc431781fc5870563620bd36b6655894174d04d6b9361797cc0bb74dd",
+  "/home/aipc/Traffic_ue4/Source/Traffic_ue4/TrafficTruckPawn.cpp": "1c26b200b208eb35f36b0192124b54be52beda0fcd1a7c6908c53d7fc8f9cf08",
+  "/home/aipc/Traffic_ue4/Source/Traffic_ue4/Traffic_ue4.Build.cs": "61e5cbc69296a87ef898dbf17367e8ca00f66a11a30f4a7270aa2c11903d179a",
+  "/home/aipc/Traffic_ue4/Binaries/Linux/libUE4Editor-Traffic_ue4.so": "43b599b786fa969a32dc9a72d116b656da7bc1c57c8a1050bc3a9d407fb4ca5f"
+ },
+ "native_safety": {
+  "require_drivable_surface": true,
+  "native_control_timeout_s": 0.5,
+  "maximum_native_frame_s": 0.1,
+  "reaction_budget_s": 1.2,
+  "maximum_source_state_age_s": 0.5
+ },
+ "ue_progress": true
 }

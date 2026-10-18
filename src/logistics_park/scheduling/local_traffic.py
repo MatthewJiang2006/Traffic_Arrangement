@@ -10,6 +10,7 @@ from functools import lru_cache
 from logistics_park.common.messages import VehicleState
 from logistics_park.safety.collision import overlaps,separating_gap
 from .conflict_timing import ConflictTiming
+from logistics_park.runtime.safety_timing import EMERGENCY_REACTION_S,braking_distance,braking_speed,MIN_ACTUATED_SPEED_M_S
 TAIL_CLEAR_M=6.
 
 @lru_cache(maxsize=512)
@@ -51,8 +52,9 @@ class LocalTraffic:
         self.timing=ConflictTiming()
 
     def _forecast(self,name,state,ex,target,hold,envelope,*,brake_after_s=None,allowed_start=None):
+        if abs(target)<MIN_ACTUATED_SPEED_M_S:target=0.
         if getattr(self,'clearance_pauses',{}).get(name):target=0.
-        dt=self.step_s;s=ex.progress;v=abs(state.speed);plan=ex.plan
+        dt=self.step_s;s=ex.progress;v=abs(state.speed);plan=ex.plan;was_braking=False
         stop=plan.length
         if ex.checkpoint<len(plan.checkpoints):
             cp=plan.checkpoints[ex.checkpoint]
@@ -78,9 +80,16 @@ class LocalTraffic:
             # plus its subsequent stopping distance, rather than today's
             # continuous-time speed bound (which can overshoot by a step).
             available=max(0.,stop-s-.5*v*dt-.3*dt*dt)
-            safe_next=max(0.,math.sqrt(1.2*available+(.3*dt)**2)-.3*dt)
+            safe_next=braking_speed(available)
             limit=min(requested,plan.speed_cap(s),safe_next)
             next_v=v+max(-.6*dt,min(.6*dt,limit-v))
+            # A zero/reduced command does not stop an older native command
+            # instantly. Forecast that hold before crediting deceleration.
+            delayed=index*dt<EMERGENCY_REACTION_S or (brake_after_s is not None and
+                brake_after_s<=index*dt<brake_after_s+EMERGENCY_REACTION_S and not was_braking)
+            if next_v<v and delayed:next_v=v
+            if next_v<v:was_braking=True
+            elif next_v>v:was_braking=False
             # A stop line is a command, not a teleport: preserve actual
             # braking overrun if the measured speed cannot stop before it.
             s=min(plan.length,s+.5*(v+next_v)*dt);v=next_v
@@ -177,26 +186,16 @@ class LocalTraffic:
         return stop,reason
 
     def _clearance_poses(self,name,ex,envelope,states,end):
-        """Front-to-back crawl the grantee would drive to satisfy clearance.
+        """Sample the whole span promised by a forward clearance duty.
 
-        Samples the poses the grantee would occupy while crawling out of the
-        owner's space, at a conservative low speed bounded by the same
-        acceleration and braking limits as the regulator. An obstacle that
-        blocks this motion also blocks the real truck, because the regulator
-        rejects exactly this kind of predicted-body overlap.
+        The duty can exceed the usual temporal forecast horizon. A partial
+        crawl cannot prove that a truck can reach its required clear endpoint.
         """
-        dt=self.step_s
-        s=float(ex.progress);v=max(0.,abs(states[name].speed))
-        poses=[envelope(VehicleState(name,*ex.plan.point(s),ex.plan.heading(s)))]
-        for _ in range(math.ceil(self.horizon_s/dt)):
-            if s>=end-1e-9:break
-            available=max(0.,end-s-.5*v*dt-.3*dt*dt)
-            safe_next=max(0.,math.sqrt(1.2*available+(.3*dt)**2)-.3*dt)
-            limit=min(.5,ex.plan.speed_cap(s),safe_next)
-            next_v=v+max(-.6*dt,min(.6*dt,limit-v))
-            s+=.5*(v+next_v)*dt;v=next_v
-            poses.append(envelope(VehicleState(name,*ex.plan.point(s),ex.plan.heading(s))))
-        return poses
+        span=max(1,math.ceil((end-ex.progress)/.25))
+        return [envelope(states[name])]+[
+            envelope(VehicleState(name,*ex.plan.point(ex.progress+(end-ex.progress)*i/span),
+                                  ex.plan.heading(ex.progress+(end-ex.progress)*i/span)))
+            for i in range(1,span+1)]
 
     def _clearance_executable(self,owner,name,ex,states,envelope,end):
         """Can the grantee really clear the paused owner's body?
@@ -229,6 +228,11 @@ class LocalTraffic:
         # owner for a truck which cannot fulfill it, closing a waiting cycle.
         occupied=[envelope(state) for other,state in states.items()
                   if other!=name and (other==owner or abs(state.speed)<.15)]
+        # A slow queue leader may still creep, then stop before the duty
+        # clears. Its observed braking endpoint is also an occupied boundary;
+        # clearance must remain possible if that leader brakes now.
+        for other,forecast in getattr(self,'braking',{}).items():
+            if other not in (name,owner) and forecast[0]:occupied.append(forecast[0][-1])
         poses=self._clearance_poses(name,ex,envelope,states,end)
         if len(poses)<2:return False
         return not any(overlaps(pose,body,self.margin_m) for pose in poses[1:] for body in occupied)
@@ -304,11 +308,14 @@ class LocalTraffic:
         if not hasattr(self,'clearance_shapes'):self.clearance_shapes={}
         for (owner,start),lease in self.passages.items():
             plan=lease['plan'];owner_ex=executions[owner]
-            canonical=[(station,box) for station,box in lease.get('stations',())
-                if station<=lease['end']+1e-7
-                and (plan.model.edges[plan.edges[plan.edge_index(station)]]['kind']=='uturn'
-                     or (plan.model.edges[plan.edges[plan.edge_index(station)]]['kind']=='service_access'
-                         and (plan.reverse(station) or self.proactive_admission)))]
+            if getattr(self,'protect_connected_merges',False):
+                canonical=self._special_stations(lease)
+            else:
+                canonical=[(station,box) for station,box in lease.get('stations',())
+                    if station<=lease['end']+1e-7
+                    and (plan.model.edges[plan.edges[plan.edge_index(station)]]['kind']=='uturn'
+                         or (plan.model.edges[plan.edges[plan.edge_index(station)]]['kind']=='service_access'
+                             and (plan.reverse(station) or self.proactive_admission)))]
             special=[(station,box) for station,box in canonical if station>=owner_ex.progress-.25]
             if not special:continue
             first_special=canonical[0][0]
@@ -410,7 +417,25 @@ class LocalTraffic:
                 if previous is None or stop<previous['stop_s']:
                     self.maneuver_holds[name]=dict(stop_s=stop,blocked_by=owner,start=start,reason='reserved_maneuver_clearance')
 
+    def _special_stations(self,lease):
+        plan=lease['plan']
+        stations=[(station,box) for station,box in lease.get('stations',()) if station<=lease['end']+1e-7]
+        special=[(station,box) for station,box in stations
+            if (plan.model.edges[plan.edges[plan.edge_index(station)]]['kind']=='uturn'
+                 or (plan.model.edges[plan.edges[plan.edge_index(station)]]['kind']=='service_access'
+                     and (plan.reverse(station) or self.proactive_admission)))]
+        # An access/lane-change/U-turn group owns one connected passage.
+        # Protect its connecting road and lane-change too: holding a truck
+        # only before the U-turn can strand it in the owner's merge path.
+        if (special and getattr(self,'protect_connected_merges',False)
+                and any(plan.model.edges[plan.edges[plan.edge_index(s)]]['kind']=='lane_change' for s,_ in stations)
+                and any(plan.model.edges[plan.edges[plan.edge_index(s)]]['kind']=='uturn' for s,_ in stations)):
+            return stations
+        return special
+
     def _special_boxes(self,lease,from_s=0.):
+        if getattr(self,'protect_connected_merges',False):
+            return [box for station,box in self._special_stations(lease) if station>=from_s]
         plan=lease['plan']
         return [box for station,box in lease.get('stations',()) if from_s<=station<=lease['end']+1e-7
             and (plan.model.edges[plan.edges[plan.edge_index(station)]]['kind']=='uturn'
@@ -538,7 +563,7 @@ class LocalTraffic:
                 if future:
                     speed=abs(states[owner].speed)
                     available=other_ex.plan.edge_starts[key[1]]-7.8-other_ex.progress
-                    stopping=speed*speed/1.2+speed*self.step_s+.3*self.step_s**2+.5
+                    stopping=braking_distance(speed)+.3*self.step_s**2
                     if available<stopping:return deny(owner,'passage_stop_line_committed')
                 own_window=self.timing.windows.get(name,{})
                 owner_window=self.timing.windows.get(owner,{})
@@ -619,7 +644,7 @@ class LocalTraffic:
 
     def regulate(self,states,executions,commands,holds,now,envelope):
         from logistics_park.runtime.traffic_policy import stop_line_speed
-        commands=dict(commands)
+        commands={n:(target if abs(target)>=MIN_ACTUATED_SPEED_M_S else 0.,steer) for n,(target,steer) in commands.items()}
         for n,(target,steer) in list(commands.items()):
             if self.clearance_pauses.get(n) or (self.paused_by.get(n) and (not self.point_conflicts or n not in self.yield_holds)):
                 commands[n]=(0.,steer)
@@ -672,7 +697,8 @@ class LocalTraffic:
             if recovery:
                 self.events.append(dict(event='CLEARANCE_RECOVERY_CHECK',vehicle_id=n,time=now,
                     blocked_by=sorted(recovery),maximum_m_s=maximum,crawl_filter_bypassed=True))
-            candidates=sorted({maximum*f for f in (1.,.75,.5,.25,.1,.05,.02,.01,0.)},reverse=True)
+            candidates=sorted({v for f in (1.,.75,.5,.25,.1,.05,.02,.01,0.)
+                               if (v:=maximum*f)==0. or v>=MIN_ACTUATED_SPEED_M_S},reverse=True)
             # Full-speed itineraries first. If none is safe, try a finite
             # command interval followed by complete braking. The horizon and
             # all paired-body/capacity tests stay unchanged; only the assumed
