@@ -16,6 +16,8 @@ if set(trucks)!=set(request['vehicles']) or any(not b for b in bodies.values()):
 origin=unreal.GameplayStatics.get_world_origin_location(world)
 ignore=list(trucks.values())+visuals
 path=ROOT/'runs/ue_scene'/request.get('file','flow_fleet_live.json')
+history=Path(request['road_history']) if request.get('road_history') else None
+if history:history.write_text('')
 previous={};last=0;sequence=0
 
 def absolute(p):return [(p.x+origin.x)/100,(p.y+origin.y)/100,(p.z+origin.z)/100]
@@ -44,7 +46,15 @@ def sample(delta):
         rows={};states={}
         for n,a in trucks.items():
             p=a.get_actor_location();r=a.get_actor_rotation();v=meshes[n].get_physics_linear_velocity();h=math.radians(r.yaw)
-            xyz=absolute(p);states[n]=dict(x=xyz[0],y=xyz[1],z=xyz[2],heading=h,speed=(v.x*math.cos(h)+v.y*math.sin(h))/100)
+            xyz=absolute(p);states[n]=dict(x=xyz[0],y=xyz[1],z=xyz[2],heading=h,speed=(v.x*math.cos(h)+v.y*math.sin(h))/100,
+                native_guard_active=a.get_editor_property('native_control_guard_active'),
+                native_timed_controls_active=a.get_editor_property('native_timed_controls_active'),
+                native_control_timeout_s=a.get_editor_property('native_control_timeout_seconds'),
+                native_control_expired=a.get_editor_property('native_control_expired'),
+                native_control_age_s=a.get_editor_property('native_control_age_seconds'),
+                native_source_age_s=a.get_editor_property('native_control_source_age_seconds'),
+                native_frame_s=a.get_editor_property('native_control_frame_seconds'),
+                native_rejected_controls=a.get_editor_property('native_control_rejected_count'))
             row=dict(monotonic_s=now,truck_ue_m=xyz,bodies=[],wheels=[],pitch_deg=r.pitch,roll_deg=r.roll)
             for c,b in current[n]:
                 centre,half,rotation=b;key=(n,c.get_name());old=previous.get(key)
@@ -60,6 +70,11 @@ def sample(delta):
                 previous[key]=(centre,rotation.yaw,hit_actor)
             rows[n]=row
         publish(dict(monotonic_s=now,sequence=sequence,paused=unreal.GameplayStatics.is_game_paused(world),game_time_s=unreal.GameplayStatics.get_time_seconds(world),states=states,audits=rows))
+        if history:
+            data=dict(monotonic_s=now,game_time_s=unreal.GameplayStatics.get_time_seconds(world),
+                positions={n:[s['x']-1.16425*math.cos(s['heading']),s['y']-1.16425*math.sin(s['heading']),s['heading'],s['speed']] for n,s in states.items()},
+                rear_z_m={n:s['z'] for n,s in states.items()})
+            with history.open('a') as stream:stream.write(json.dumps(data)+'\n')
     except Exception as exc:
         publish(dict(monotonic_s=now,error=repr(exc)));unreal.unregister_slate_post_tick_callback(getattr(builtins,handle));setattr(builtins,handle,None)
 setattr(builtins,handle,unreal.register_slate_post_tick_callback(sample));sample(0)

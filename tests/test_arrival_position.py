@@ -5,6 +5,37 @@ from logistics_park.common.messages import VehicleState
 from logistics_park.runtime.transport_control import stopped_at_point
 
 
+@pytest.mark.parametrize('offset,yaw_error',[(0,0),(.15,3),(-.15,-3),(.25,4),(-.25,-4)])
+def test_gentle_q6_approach_captures_pose_before_reaching_the_longitudinal_endpoint(offset,yaw_error):
+    from pathlib import Path
+    from types import SimpleNamespace
+    from logistics_park.routing.service_network import ServiceNetwork
+    from logistics_park.runtime.transport_routes import TransportMap
+    from logistics_park.runtime.task_execution import ServiceRouteGeometry
+    from logistics_park.runtime.transport_control import TransportController
+    root=Path(__file__).resolve().parents[1]
+    network=ServiceNetwork(root/'config/topology/industrialarea_ue_internal_waiting_network.json')
+    model=TransportMap(root/'config/topology/industrialarea_ue_internal_waiting_transport.json')
+    plan=ServiceRouteGeometry(network,model).plan(SimpleNamespace(origin='W4-unloading',destination='Q6',
+        route=network.route('W4-unloading','Q6')))
+    controller=TransportController(model,{'truck':plan},service_s=0,collect_at_destination=True,retain_finished_vehicles=True)
+    controller.activate('truck',0)
+    x,y=plan.point(0);heading=plan.heading(0)
+    state=VehicleState('truck',x-offset*math.sin(heading),y+offset*math.cos(heading),
+        heading+math.radians(yaw_error),speed=0)
+    dt=.1
+    for tick in range(2000):
+        commands=controller.tick({'truck':state},tick*dt)
+        if controller.executions['truck'].finished:break
+        target,delta=commands['truck']
+        speed=state.speed+max(-.6*dt,min(.6*dt,target-state.speed))
+        change=speed*math.tan(delta)/2.3285*dt;middle=state.heading+change/2
+        state.x+=speed*math.cos(middle)*dt;state.y+=speed*math.sin(middle)*dt
+        state.heading+=change;state.speed=speed
+    assert controller.executions['truck'].finished
+    assert stopped_at_point(state,plan.point(plan.length),plan.arrival_heading)
+
+
 @pytest.mark.parametrize('degrees,arrived',[(0,True),(4.9,True),(14.7,False),(-11.5,False),(360,True)])
 def test_service_pose_requires_body_heading(degrees,arrived):
     assert stopped_at_point(VehicleState('truck',0,0,math.radians(degrees)),(0,0),0) is arrived
@@ -21,7 +52,12 @@ def test_parking_alignment_with_measured_wheel_response_and_lag(node):
     edge=next(e for e in network['edges'] if e['to_node']==node)
     keys=sorted([k for k in model.edges if k.startswith(edge['edge_id']+'__test')],key=lambda k:int(k.rsplit('test',1)[1]))
     plan=RouteGeometry(model,keys,[],edge['from_node'],[node])
-    plan.arrival_heading=math.radians(network['service_nodes'][node]['heading_deg'])
+    # Retain the kinematic regression for a quarantined bay's old geometry;
+    # this test does not certify physical access or republish that bay.
+    definition=network['service_nodes'].get(node)
+    if definition is None:
+        definition=network['temporarily_unavailable_service_nodes'][node]['definition']
+    plan.arrival_heading=math.radians(definition['heading_deg'])
     s=max(0,plan.length-12);x,y=plan.point(s);heading=plan.heading(s);delta=0.;peak=0.
     for _ in range(2000):
         error,station=plan.project((x,y),s,ahead=3);s=max(s,station);peak=max(peak,error)

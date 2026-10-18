@@ -608,3 +608,22 @@ def test_forecast_cannot_clip_real_braking_distance_at_a_stop_line():
     ex=straight('ego',0,0);state=VehicleState('ego',0,0,0,speed=8.)
     boxes,_=LocalTraffic()._forecast('ego',state,ex,0,3.,envelope)
     assert boxes[-1].x>50  # 8 m/s cannot physically brake within 3 m.
+
+
+def test_native_command_hold_is_included_before_forecast_braking():
+    from logistics_park.runtime.safety_timing import EMERGENCY_REACTION_S
+    ex=straight('ego',0,0);state=VehicleState('ego',0,0,0,speed=4.)
+    policy=LocalTraffic();boxes,_=policy._forecast('ego',state,ex,0.,None,envelope)
+    first=boxes[1].x-boxes[0].x
+    assert first==pytest.approx(state.speed*policy.step_s)
+    # Final displacement reserves at least the complete configured hold and
+    # the constant-deceleration stop, even for an immediate brake proposal.
+    assert boxes[-1].x-boxes[0].x>=state.speed*EMERGENCY_REACTION_S+state.speed**2/1.2
+
+
+@pytest.mark.parametrize('target',[.001,.01,.071,.079,-.001,-.071,-.079])
+def test_sub_actuation_commands_are_brakes_in_control_and_forecast(target):
+    policy=LocalTraffic();ex=straight('ego',0,0);s=VehicleState('ego',0,0,0)
+    boxes,_=policy._forecast('ego',s,ex,target,None,envelope)
+    assert all(b==boxes[0] for b in boxes)
+    assert policy.regulate({'ego':s},{'ego':ex},{'ego':(target,.1)},{},0,envelope)['ego']==(0.,.1)

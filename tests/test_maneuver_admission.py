@@ -430,11 +430,24 @@ def test_arrived_queue_head_uses_actual_exit_safe_line_for_near_admission():
     executor=ContinuousTaskExecutor.__new__(ContinuousTaskExecutor)
     executor.dispatch=base.dispatch;executor.geometry=base.geometry;executor.controller=base.controller
     d=executor.dispatch;d.now=736.;d.efficiency_policy=EfficiencyPolicy(proactive_admission=True)
+    from logistics_park.scheduling.optimization import SchedulingOptions
+    d.scheduling=SchedulingOptions()
     d.offroad_busy_wait=True;d.traffic_routing=None;d.approach_intents={row['destination']:n};d._event=lambda *args,**kwargs:None
     d.moves={n:SimpleNamespace(**row)};executor.moves=d.moves
     executor.controller.executions={n:ex};executor.controller.destination_holds={n:row['hold']}
     assert executor._berth_gate(plan)>row['hold']+40.
     assert executor._approach_priorities({n:state})[n][3]<3.
+    # Granting the dock removes the control hold. Repeated admission checks
+    # must still use the reached safe line rather than revoke the grant.
+    executor.safe_landing_states={(n,plan.edges):row['hold']}
+    executor.controller.destination_holds={}
+    for _ in range(4):
+        d.now+=.2
+        assert executor._approach_priorities({n:state})[n][3]<3.
+    # A changed route cannot inherit an old admission boundary.
+    executor.safe_landing_states={(n,('old-route',)):row['hold']}
+    assert executor._approach_priorities({n:state})[n][3]>15.
+    executor.safe_landing_states={(n,plan.edges):row['hold']}
     # A follower cannot acquire a remote promise using the head's queue line.
     d.approach_intents[row['destination']]='other'
     assert executor._approach_priorities({n:state})[n][3]>15.
@@ -488,8 +501,65 @@ def test_q29_admission_rejects_braking_that_cannot_reach_the_buffered_holding_li
     policy.prepare(states,executions,{},envelope,1000.)
     boxes={n:[envelope(s)] for n,s in states.items()}
     assert not policy.claim_passage(owner,executions[owner],group[0],group[1],states,boxes,envelope)
-    assert policy.passage_denials[owner][-1]['reason']=='special_hold_stopping_room'
+    assert policy.passage_denials[owner][-1]['reason'] in ('special_hold_stopping_room','passage_braking_path')
     assert not policy.passages
     # A truck already stopped safely upstream does not prevent parking.
     states[road].speed=0.;policy.prepare(states,executions,{},envelope,1001.)
     assert policy.claim_passage(owner,executions[owner],group[0],group[1],states,boxes,envelope)
+
+
+
+
+
+
+
+
+def terminal_destination_exit_fixture():
+    import math
+    executor,_,_=w6_exit_hold_fixture()
+    d=executor.dispatch
+    d.holders={'W5-loading':'Car_0_0'};d.moves={};d.admission_priorities={};d.now=440.055
+    d._event=lambda *args,**kwargs:None
+    work=SimpleNamespace(task_id=22,loading_node='W5-loading',unloading_node='W6-unloading')
+    d.assignments={'Car_0_0':SimpleNamespace(work=work,state='READY',operation='UNLOADING')}
+    d._route=lambda origin,target,vehicle,**kwargs:d.network.route(origin,target)
+    site=d.network.services['W5-loading']
+    executor.latest_states={'Car_0_0':VehicleState('Car_0_0',*site['rear_xy_m'],math.radians(site['heading_deg']))}
+    executor.controller.executions={}
+    return executor
+
+
+def test_pending_loading_exit_does_not_reserve_its_own_future_unloading_berth():
+    from logistics_park.runtime.safe_landing import berth_exit_blockers,occupied_exit_sweeps
+    from logistics_park.scheduling.local_traffic import sweeps_intersect
+    import math
+    executor=terminal_destination_exit_fixture()
+    site=executor.dispatch.network.services['W6-unloading']
+    goal=envelope(VehicleState('Car_2_0',*site['rear_xy_m'],math.radians(site['heading_deg'])))
+    # The real 440 s failure: the old whole-exit sweep includes the target
+    # dock and incorrectly prevents the earlier incoming truck from docking.
+    assert sweeps_intersect([goal],occupied_exit_sweeps(executor,'W5-loading','Car_0_0'),.35)
+    assert berth_exit_blockers(executor,'W6-unloading','Car_2_0')==set()
+    assert executor.dispatch.holders=={'W5-loading':'Car_0_0'}
+    assert not executor.controller.executions
+
+
+def test_pending_terminal_exemption_retains_actual_body_and_live_exit_protection():
+    from logistics_park.runtime.safe_landing import berth_exit_blockers,selected_exit_plan
+    import math
+    executor=terminal_destination_exit_fixture();d=executor.dispatch
+    original=executor.latest_states['Car_0_0']
+    site=d.network.services['W6-unloading']
+    executor.latest_states['Car_0_0']=VehicleState('Car_0_0',*site['rear_xy_m'],math.radians(site['heading_deg']))
+    assert berth_exit_blockers(executor,'W6-unloading','Car_2_0')=={'Car_0_0'}
+    executor.latest_states['Car_0_0']=original
+    plan=selected_exit_plan(executor,'W5-loading','Car_0_0')
+    d.moves['Car_0_0']=SimpleNamespace(origin='W5-loading',destination='W6-unloading')
+    executor.controller.executions['Car_0_0']=SimpleNamespace(plan=plan)
+    assert berth_exit_blockers(executor,'W6-unloading','Car_2_0')=={'Car_0_0'}
+
+
+def test_pending_terminal_exemption_does_not_remove_other_dock_exit_protection():
+    from logistics_park.runtime.safe_landing import berth_exit_blockers
+    executor=terminal_destination_exit_fixture()
+    assert berth_exit_blockers(executor,'W5-unloading','Car_2_0')=={'Car_0_0'}

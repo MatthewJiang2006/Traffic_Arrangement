@@ -11,7 +11,9 @@ class ServiceNetwork:
         self.raw=json.loads(Path(path).read_text())
         self.nodes={n['node_id']:n for n in self.raw['nodes']}
         self.edges={e['edge_id']:e for e in self.raw['edges']}
-        self.blocked_edges=frozenset(blocked_edges)
+        # A topology-level closure applies to every caller, including callers
+        # which omit scenario-specific exclusions or allow pending access.
+        self.blocked_edges=frozenset(self.raw.get('disabled_edges',())) | frozenset(blocked_edges)
         if self.blocked_edges-set(self.edges):raise ValueError('Unknown blocked service edge')
         self.services=self.raw['service_nodes']
         self.outgoing=defaultdict(list);self.incoming=defaultdict(list)

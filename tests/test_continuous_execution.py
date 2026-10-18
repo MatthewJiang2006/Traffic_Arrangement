@@ -11,6 +11,13 @@ sys.path.insert(0,str(ROOT/'scripts'))
 from simulate_ue_continuous_tasks import setup as setup_runtime
 
 
+@pytest.fixture(autouse=True)
+def small_scenario(monkeypatch):
+    import simulate_ue_continuous_tasks as sim
+    spec=json.loads((ROOT/'config/runtime/industrialarea_ue_continuous_tasks.json').read_text())
+    monkeypatch.setattr(sim,'SPEC',spec)
+
+
 def setup():
     return setup_runtime(positions={'Car_0_0':'W1-loading','Car_0_1':'W2-loading'},
                          tasks=[('W1-loading','W3-unloading'),('W2-loading','W3-unloading'),('W1-loading','W4-unloading')])

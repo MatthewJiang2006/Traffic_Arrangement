@@ -1,6 +1,7 @@
 """Reorder stopped cycles by withdrawing only unentered, brake-safe promises."""
 import math
 from logistics_park.scheduling.wait_dependencies import wait_snapshot
+from .safety_timing import braking_distance
 
 
 def recover_wait_cycles(executor,states,commands,now):
@@ -25,7 +26,7 @@ def recover_wait_cycles(executor,states,commands,now):
             if name not in members:continue
             ex=executor.controller.executions[name]
             available=ex.plan.edge_starts[start]-7.8-ex.progress
-            stopping=abs(states[name].speed)**2/1.2+.5
+            stopping=braking_distance(states[name].speed)
             if available<stopping:continue
             # No entered or nose-committed permission can be stolen. Current
             # commands remain stopped until a fresh tick reevaluates admission.

@@ -4,6 +4,7 @@ The script only reads actors and writes runs/ue_scene/scene.json in this repo.
 """
 
 import json
+import os
 from pathlib import Path
 
 import unreal
@@ -19,15 +20,13 @@ def xyz(vector):
 
 
 editor_world = unreal.load_object(None, MAP_PATH)
-if editor_world is None:
+if editor_world is None or editor_world.get_path_name() != MAP_PATH:
     raise RuntimeError("IndustrialArea（复件） is not loaded")
 
-pie_worlds = [world for world in unreal.ObjectIterator(unreal.World)
-              if "UEDPIE_" in world.get_path_name()
-              and "IndustrialArea（复件）" in world.get_path_name()]
-if len(pie_worlds) != 1:
+pie_world = unreal.EditorLevelLibrary.get_game_world()
+if (pie_world is None or "UEDPIE_" not in pie_world.get_path_name()
+        or "IndustrialArea（复件）" not in pie_world.get_path_name()):
     raise RuntimeError("Expected one active IndustrialArea PIE world")
-pie_world = pie_worlds[0]
 origin = unreal.GameplayStatics.get_world_origin_location(pie_world)
 
 actors = []
@@ -72,6 +71,7 @@ for actor in unreal.GameplayStatics.get_all_actors_of_class(pie_world, unreal.Ac
 
 OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 OUTPUT.write_text(json.dumps({
+    "process_id": os.getpid(),
     "map_path": MAP_PATH,
     "editor_world": editor_world.get_path_name(),
     "pie_world": pie_world.get_path_name(),

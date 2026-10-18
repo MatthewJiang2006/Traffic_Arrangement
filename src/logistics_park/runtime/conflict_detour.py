@@ -52,9 +52,12 @@ def try_conflict_detours(executor,states,now):
                 plan=executor.geometry.plan(candidate)
                 # A detour must actually leave the blocked future corridor.
                 old_future=move.route['edge_ids'][len(prefix):]
-                old_cost=sum(costs.get(k,0) for k in old_future)
-                new_cost=sum(costs.get(k,0) for k in suffix['edge_ids'])
-                if new_cost>=old_cost:continue
+                # Compare full future time, including the extra travel caused
+                # by an alternative, rather than queue penalties alone.
+                old_cost=sum(network.edges[k]['estimated_travel_time_s']+costs.get(k,0) for k in old_future)
+                new_cost=sum(network.edges[k]['estimated_travel_time_s']+costs.get(k,0) for k in suffix['edge_ids'])
+                minimum_gain=policy.diversion_gain_s if policy else 3.
+                if new_cost+minimum_gain>old_cost:continue
                 c.reroute_stopped(name,plan,now,state=state)
             except ValueError:continue
             executor.moves[name]=candidate;d.moves[name]=candidate

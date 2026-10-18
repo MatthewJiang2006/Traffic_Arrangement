@@ -272,14 +272,43 @@ def test_changed_stop_line_withdraws_clearance_duty_without_revoking_lease():
     assert any(e['event']=='CLEARANCE_PRIORITY_WITHDRAWN' and not e['physical_leases_revoked'] for e in policy.events)
 
 
-def round38_pair():
+def round38_pair(tmp_path):
     """Exact round38 trucks, rebuilt from the frozen live diagnostic frame."""
     import json
     root=Path(__file__).resolve().parents[1]
     raw=json.loads((root/'tests/fixtures/round38_clearance_deadlock.json').read_text())
     spec=json.loads((root/'config/runtime/industrialarea_ue_fleet16_flow_optimized.json').read_text())
-    network=ServiceNetwork(root/spec['network'],blocked_edges=spec['blocked_candidate_edges'])
-    model=TransportMap(root/spec['map']);geometry=ServiceRouteGeometry(network,model)
+    # The recorded frame predates C's 1.6 m pavement correction. Reconstruct
+    # that historical bend in temporary test inputs; keep the live map fixed.
+    def historical(kind, source):
+        data=json.loads((root/source).read_text())
+        def gate_point(point):
+            x,y=point
+            if abs(y-297.4)<1e-7:y=299.
+            elif abs(y-301.11335)<1e-7:y=301.91335
+            return [x,y]
+        for edge in data['edges']:
+            key=edge['edge_id']
+            if key.startswith('uturn_C'):
+                edge['centerline']=[[x,y+1.6] for x,y in edge['centerline']]
+            elif 'gate_north_0' in key:
+                edge['centerline']=[gate_point(p) for p in edge['centerline']]
+            else:continue
+            old_length=edge.get('length_m')
+            length=sum(math.dist(a,b) for a,b in zip(edge['centerline'],edge['centerline'][1:]))
+            if old_length:
+                edge['length_m']=length
+                if 'estimated_travel_time_s' in edge:edge['estimated_travel_time_s']*=length/old_length
+        for node in data['nodes']:
+            if node['node_id'].startswith('uturn_C') and node['node_id']!='uturn_C_shift_end':
+                node['position'][1]+=1.6
+            elif 'gate_north_0' in node['node_id']:
+                node['position']=gate_point(node['position'])
+        if kind=='transport':
+            data['physical_centerlines']['uturn_C']=[[x,y+1.6] for x,y in data['physical_centerlines']['uturn_C']]
+        path=tmp_path/(kind+'.json');path.write_text(json.dumps(data));return path
+    network=ServiceNetwork(historical('network',spec['network']),blocked_edges=spec['blocked_candidate_edges'])
+    model=TransportMap(historical('transport',spec['map']));geometry=ServiceRouteGeometry(network,model)
     executions={};states={}
     for name,row in raw['vehicles'].items():
         keys=row['route_keys']
@@ -302,9 +331,9 @@ def round38_pair():
     return policy,executions,states,raw
 
 
-def test_round38_unexecutable_clearance_duty_is_refused_and_reverse_keeps_precedence():
+def test_round38_unexecutable_clearance_duty_is_refused_and_reverse_keeps_precedence(tmp_path):
     """round38: pausing the reversing truck for a walled-in forward truck deadlocks."""
-    policy,ex,states,raw=round38_pair()
+    policy,ex,states,raw=round38_pair(tmp_path)
     owner='Car_1_1';grantee='Car_0_1'
     # The reconstruction matches the saved measured poses to millimetres.
     assert math.dist(ex[grantee].plan.point(ex[grantee].progress)[:2],

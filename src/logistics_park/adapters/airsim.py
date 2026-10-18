@@ -7,6 +7,7 @@ import threading
 import time
 from typing import Callable, Protocol
 from logistics_park.common.messages import ControlCommand, VehicleState, finite
+from logistics_park.runtime.safety_timing import NATIVE_CONTROL_TIMEOUT_S,MIN_ACTUATED_SPEED_M_S
 
 
 class Transport(Protocol):
@@ -14,13 +15,33 @@ class Transport(Protocol):
     def close(self): ...
 
 
+def _decode_rpc_result(value, field=None):
+    """Decode after unpacking so a malformed native label cannot poison a stream.
+
+    Only collision object names tolerate invalid UTF-8; escaped bytes retain
+    the evidence and cannot match an allowed road surface. Keys and other
+    text remain strict.
+    """
+    if isinstance(value, bytes):
+        return value.decode('utf-8', errors='backslashreplace' if field=='object_name' else 'strict')
+    if isinstance(value, dict):
+        result={_decode_rpc_result(k): _decode_rpc_result(v, _decode_rpc_result(k)) for k,v in value.items()}
+        label=value.get(b'object_name',value.get('object_name'))
+        if isinstance(label,bytes):
+            try:label.decode('utf-8')
+            except UnicodeDecodeError:result['object_name_utf8_valid']=False
+        return result
+    if isinstance(value, list):return [_decode_rpc_result(v) for v in value]
+    return value
+
+
 class RPCTransport:
     def __init__(self, host: str, port: int, timeout: float):
         import msgpackrpc  # Optional backend dependency; lightweight simulation needs none.
         self.client = msgpackrpc.Client(msgpackrpc.Address(host, port), timeout=timeout,
-                                        pack_encoding='utf-8', unpack_encoding='utf-8')
+                                        pack_encoding='utf-8', unpack_encoding=None)
     def call(self, method, *args):
-        return self.client.call(method, *args)
+        return _decode_rpc_result(self.client.call(method, *args))
     def close(self):
         self.client.close()
 
@@ -89,7 +110,9 @@ class AirSimAdapter:
             for n in self.config.vehicle_ids:
                 self.original_api[n]=bool(self.transport.call('isApiControlEnabled',n))
                 self.transport.call('enableApiControl',True,n)
-                self.transport.call('setCarControls',controls(brake=1),n)
+                now=self.clock();brake=controls(brake=1)
+                brake.update(command_timestamp_s=now,command_deadline_s=now+NATIVE_CONTROL_TIMEOUT_S,source_state_timestamp_s=now)
+                self.transport.call('setCarControls',brake,n)
             now=self.clock();self.state_received={n:now for n in self.config.vehicle_ids}
             self.deadlines={n:now+self.config.command_ttl_s for n in self.config.vehicle_ids};self.opened=True
             self.read_states();self.record('OPEN',vehicles=list(self.config.vehicle_ids),origin_ue_m=self.config.origin_ue_m)
@@ -99,7 +122,7 @@ class AirSimAdapter:
         except Exception:
             self.close();raise
 
-    def start_watchdog_after_staging(self):
+    def start_watchdog_after_staging(self,*,native_guard=False):
         """Arm once, before any drive command, after stationary fixture setup."""
         with self.lock:
             if not self.opened or self.closed or self.fault or self.thread is not None:
@@ -107,15 +130,65 @@ class AirSimAdapter:
             if any(s>=0 for s in self.sequences.values()):
                 raise AdapterFault('Cannot rearm watchdog after commands')
             states=self.read_states()
+            if native_guard:
+                row=self.snapshot_provider() if self.snapshot_provider else {}
+                guards=row.get('states',{})
+                if set(guards)!=set(self.config.vehicle_ids) or any(
+                    r.get('native_guard_active') is not True or r.get('native_timed_controls_active') is not True
+                    or r.get('native_control_timeout_s')!=NATIVE_CONTROL_TIMEOUT_S for r in guards.values()):
+                    self.fail_stop('Native deadline guard not verified');raise AdapterFault(self.fault)
             if any(abs(s.speed)>.1 for s in states.values()):
                 self.fail_stop('moving during watchdog staging')
                 raise AdapterFault('Stationary staging required')
             now=self.clock()
             self.deadlines={n:now+self.config.command_ttl_s for n in self.config.vehicle_ids}
-            self.watchdog_enabled=True
-            self.thread=threading.Thread(target=self._watch,name='airsim-watchdog',daemon=True)
-            self.thread.start()
-            self.record('STAGING_COMPLETE')
+            self.watchdog_enabled=not native_guard
+            if not native_guard:
+                self.thread=threading.Thread(target=self._watch,name='airsim-watchdog',daemon=True)
+                self.thread.start()
+            self.record('STAGING_COMPLETE',native_deadline_guard=native_guard)
+
+    def hold_for_replan(self):
+        """Brake without clearing a fault or sending motion from old state."""
+        with self.lock:
+            if self.fault or self.closed or not self.opened:raise AdapterFault('Cannot hold a faulted or closed adapter')
+            try:
+                for n in self.original_api:self.transport.call('setCarControls',controls(brake=1),n)
+            except Exception as exc:
+                self.fail_stop('replan_brake_rpc: '+str(exc));raise AdapterFault(self.fault) from exc
+            now=self.clock()
+            for n in self.original_api:
+                self.applied_speed[n]=0.;self.throttle[n]=0.;self.last_send[n]=now
+                self.deadlines[n]=now+self.config.command_ttl_s
+            self.record('REPLAN_HOLD')
+            return now
+
+    def _collision_info(self,name):
+        hit=self.transport.call('simGetCollisionInfo',name)
+        if hit.get('object_name_utf8_valid') is not False:return hit
+        self.record('COLLISION_SNAPSHOT_INVALID',vehicle=name,collision=hit)
+        # The native writer updates this structure without a synchronized
+        # RPC snapshot. Recover a torn label only for the exact same event;
+        # never replace an unknown impact with a newer ground contact.
+        required={'time_stamp','has_collided','penetration_depth','normal',
+                  'impact_point','position','object_id'}
+        def identity(row):
+            return {k:v for k,v in row.items()
+                    if k not in ('object_name','object_name_utf8_valid')}
+        if not required.issubset(hit) or hit['has_collided'] is not True or hit['time_stamp']<=0:
+            raise AdapterFault('malformed native collision label '+name)
+        recovered=[]
+        for _ in range(2):
+            row=self.transport.call('simGetCollisionInfo',name)
+            if (row.get('object_name_utf8_valid') is False
+                    or not isinstance(row.get('object_name'),str)
+                    or identity(row)!=identity(hit)):
+                raise AdapterFault('malformed native collision label '+name)
+            recovered.append(row)
+        if recovered[0]['object_name']!=recovered[1]['object_name']:
+            raise AdapterFault('malformed native collision label '+name)
+        self.record('COLLISION_SNAPSHOT_RECOVERED',vehicle=name,collision=recovered[-1])
+        return recovered[-1]
 
     def read_states(self):
         if self.snapshot_provider is not None:return self._read_snapshot()
@@ -140,7 +213,9 @@ class AirSimAdapter:
                 ox,oy,oz=self.config.origin_ue_m
                 batch[n]=VehicleState(n,values[0]+ox,values[1]+oy,heading,speed=float(car['speed']),timestamp=received)
                 telemetry[n]={'ue_z_m':oz-values[2],'source_timestamp_ns':stamp,
-                              'collision':self.transport.call('simGetCollisionInfo',n)}
+                              'collision':self._collision_info(n)}
+                if telemetry[n]['collision'].get('object_name_utf8_valid') is False:
+                    raise AdapterFault('malformed native collision label '+n)
             if self.clock()-started>self.config.state_timeout_s:raise AdapterFault('state batch timed out')
             with self.lock:
                 self.states=batch;self.telemetry=telemetry
@@ -164,7 +239,9 @@ class AirSimAdapter:
                 if now-self.source_advanced[n]>self.config.state_timeout_s:raise AdapterFault('source state frozen '+n)
                 self.last_source[n]=stamp
                 batch[n]=VehicleState(n,r['x'],r['y'],r['heading'],speed=r['speed'],timestamp=received)
-                telemetry[n]=dict(ue_z_m=r['z'],source_timestamp_ns=stamp,collision=self.transport.call('simGetCollisionInfo',n))
+                telemetry[n]=dict(ue_z_m=r['z'],source_timestamp_ns=stamp,collision=self._collision_info(n))
+                if telemetry[n]['collision'].get('object_name_utf8_valid') is False:
+                    raise AdapterFault('malformed native collision label '+n)
             with self.lock:
                 self.states=batch;self.telemetry=telemetry
                 for n in batch:self.state_received[n]=received
@@ -185,6 +262,8 @@ class AirSimAdapter:
                 self.fail_stop('state_timeout '+n);raise AdapterFault(self.fault)
             if (command.v_target<0 and not self.config.allow_reverse) or (abs(command.v_target)<.05 and abs(command.omega_target)>1e-6):
                 self.fail_stop('unsupported reverse or stationary rotation');raise AdapterFault(self.fault)
+            if command.steering_rad is not None and abs(command.steering_rad)>self.config.max_steer_rad:
+                self.fail_stop('steering angle exceeds configured limit');raise AdapterFault(self.fault)
             dt=min(.3,max(.01,now-self.last_send[n]));self.last_send[n]=now
             requested_direction=-1 if command.v_target<0 else 1
             changing=abs(command.v_target)>=.05 and requested_direction!=self.drive_direction[n]
@@ -194,15 +273,22 @@ class AirSimAdapter:
             target=0. if changing else min(abs(command.v_target),self.applied_speed[n]+self.config.speed_rise_m_s2*dt)
             self.applied_speed[n]=target
             error=target-abs(self.states[n].speed)
-            throttle=0 if target<.08 or error<-.1 else min(self.config.max_throttle,max(0,.12+self.config.speed_error_gain*error))
+            throttle=0 if target<MIN_ACTUATED_SPEED_M_S or error<-.1 else min(self.config.max_throttle,max(0,.12+self.config.speed_error_gain*error))
             throttle=min(throttle,self.throttle[n]+self.config.throttle_rise_per_s*dt);self.throttle[n]=throttle
-            brake=1 if target<.08 else min(.4,max(0,-.3*(error+.1)))
+            brake=1 if target<MIN_ACTUATED_SPEED_M_S else min(.4,max(0,-.3*(error+.1)))
             if brake>0:throttle=0.;self.throttle[n]=0.
             # Compute steering from the requested yaw rate / speed so target
             # speed smoothing does not change the path's curvature.
             divisor=math.copysign(max(.05,abs(command.v_target)),command.v_target)
             steer=math.atan(self.config.wheelbase_m*command.omega_target/divisor)/self.config.max_steer_rad
+            if command.steering_rad is not None:
+                # Keep the requested wheel angle during braking/coasting.
+                # Zero target speed still applies full brake and no throttle.
+                steer=command.steering_rad/self.config.max_steer_rad
             native=controls(throttle,brake,max(-1,min(1,steer)))
+            native.update(command_timestamp_s=now,
+                          command_deadline_s=min(command.timestamp+command.ttl,now+NATIVE_CONTROL_TIMEOUT_S),
+                          source_state_timestamp_s=self.state_received[n])
             if self.config.allow_reverse:
                 native.update(is_manual_gear=True,manual_gear=self.drive_direction[n])
             try:self.transport.call('setCarControls',native,n)
@@ -210,7 +296,7 @@ class AirSimAdapter:
                 self.fail_stop('control_rpc: '+str(e));raise AdapterFault(str(e)) from e
             self.sequences[n]=command.sequence_id;self.deadlines[n]=min(command.timestamp+command.ttl,now+self.config.command_ttl_s)
             self.record('COMMAND',vehicle=n,sequence=command.sequence_id,v_target=command.v_target,
-                        omega_target=command.omega_target,deadline=self.deadlines[n],native=native)
+                        omega_target=command.omega_target,steering_rad=command.steering_rad,deadline=self.deadlines[n],native=native)
 
     def fail_stop(self,reason,transport=None):
         with self.lock:

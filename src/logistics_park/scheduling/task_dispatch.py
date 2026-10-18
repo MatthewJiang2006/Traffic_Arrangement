@@ -2,9 +2,21 @@
 from dataclasses import dataclass,replace
 from enum import Enum
 import math
+from functools import lru_cache
 
 from logistics_park.common.messages import finite
 from .fleet_lifecycle import FleetPhase, FleetRegistry
+
+
+@lru_cache(maxsize=512)
+def _access_body_samples(points,reverse):
+    from logistics_park.map.geometry import Polyline
+    from logistics_park.safety.collision import OBB
+    line=Polyline(points);result=[]
+    for index in range(math.ceil(line.length/.5)+1):
+        (x,y),h=line.at(min(index*.5,line.length));h+=math.pi if reverse else 0
+        result.append(OBB(x+.75*math.cos(h),y+.75*math.sin(h),h,8.344,2.6))
+    return tuple(result)
 
 
 class WorkStatus(str, Enum):
@@ -59,7 +71,7 @@ class TaskDispatcher:
     The backend must acknowledge actual stopped arrivals and tail-clear
     departures. Movement commands are plans, never teleportation instructions.
     """
-    def __init__(self, network, fleet: FleetRegistry, service_s=5.,protect_committed_routes=False,traffic_routing=None,follow_to_busy_destination=False,park_idle_vehicles=False,offroad_busy_wait=False,efficiency_policy=None):
+    def __init__(self, network, fleet: FleetRegistry, service_s=5.,protect_committed_routes=False,traffic_routing=None,follow_to_busy_destination=False,park_idle_vehicles=False,offroad_busy_wait=False,efficiency_policy=None,scheduling_options=None):
         finite(service_s)
         if service_s<0:raise ValueError('Negative service duration')
         self.network=network;self.fleet=fleet;self.service_s=service_s
@@ -68,14 +80,149 @@ class TaskDispatcher:
         self.follow_to_busy_destination=follow_to_busy_destination
         self.park_idle_vehicles=park_idle_vehicles
         self.offroad_busy_wait=offroad_busy_wait;self.clearance_estimates={};self.recovery_estimates={}
+        self.departure_rejected_at={}
+        self.actual_departure_blockers={}
         self.admission_priorities={}
         from .efficiency_policy import EfficiencyPolicy
         self.efficiency_policy=EfficiencyPolicy(**efficiency_policy) if efficiency_policy is not None else None
         self.approach_intents={};self.waiting_history={}
         self.hold_logged_at={}
         self.live_requirements={}
+        self.parking_deferred_candidates={}
+        self.parking_terminal_wait_since={}
+        self.parking_terminal_wait_logged_at={}
         self.waiting_lenders={}
         self.now=0.;self.sequence=0;self.queue_cache={};self.protect_committed_routes=protect_committed_routes;self.traffic_routing=traffic_routing
+        from .optimization import SchedulingOptions
+        self.scheduling=SchedulingOptions(**(scheduling_options or {}))
+        self.last_decision=-math.inf;self.last_decision_signature=None
+        self.rolling_plan_at=-math.inf
+        self.departure_plan_at=-math.inf;self.departure_not_before={};self.departure_plan_wait_since={}
+        if self.scheduling.rolling_scheduler:
+            from .global_scheduler import RollingScheduler
+            self.global_scheduler=RollingScheduler(self.scheduling.planning_budget_s)
+        else:self.global_scheduler=None
+        if self.scheduling.traffic_forecast:
+            from .traffic_forecast import TrafficForecast
+            self.traffic_forecast=TrafficForecast()
+        else:self.traffic_forecast=None
+
+    def _score_route(self,origin,target,route):
+        predictor=getattr(self,'route_eta_predictor',None)
+        if self.scheduling.calibrated_eta and predictor:
+            return predictor(self.network,route,origin,target)['total_s']
+        return route['estimated_travel_time_s']
+
+    def _pickup_eta(self,work,vehicle,route):
+        origin=self.positions[vehicle];travel=self._score_route(origin,work.loading_node,route)
+        if self.scheduling.calibrated_eta and origin==work.loading_node:return 0.
+        blockers=self._blockers(work.loading_node,vehicle)
+        if not self.scheduling.calibrated_eta:
+            return travel+self.service_s*(int(bool(blockers))+len(self._destination_queue(work.loading_node)))
+        # Clearance forecasts affect ranking only. A finite prediction never
+        # releases a berth, grants a passage, or overrides the departure guard.
+        release=0.
+        for owner in blockers:
+            forecast=self.clearance_estimates.get(owner)
+            a=self.assignments.get(owner)
+            if forecast is not None and math.isfinite(forecast):delay=max(0.,forecast-self.now)
+            elif a and a.state=='SERVICING':delay=max(0.,a.service_until-self.now)+20.
+            else:delay=30.
+            release=max(release,delay)
+        ahead=[a for a in self.assignments.values() if a.vehicle_id!=vehicle and a.vehicle_id not in blockers
+               and a.operation=='LOADING' and a.work.loading_node==work.loading_node]
+        arrivals=[]
+        for a in ahead:
+            eta=self._admission_priority(a,self.admission_priorities)[0]
+            arrivals.append(eta if math.isfinite(eta) else 60.)
+        for eta in sorted(arrivals):release=max(release,eta)+self.service_s+20.
+        return max(travel,release)
+
+    def _batch_pairs(self,pending):
+        from .optimization import bottleneck_assignment
+        vehicles=[v for v in sorted(self.fleet.available_vehicle_ids) if v in self.positions and v not in self.moves]
+        signature=(tuple((v,self.positions[v]) for v in vehicles),tuple(w.task_id for w in pending))
+        if not vehicles or not pending:return []
+        if signature==self.last_decision_signature and self.now-self.last_decision<self.scheduling.decision_interval_s:return []
+        self.last_decision=self.now;self.last_decision_signature=signature
+        submitted={key:i for i,key in enumerate(self.tasks)}
+        ordered=sorted(pending,key=lambda w:(-(w.priority+min(10.,(self.now-w.release_time)/120.)),w.release_time,submitted[w.task_id]))
+        counts={}
+        for a in self.assignments.values():
+            if a.operation=='LOADING':counts[a.work.loading_node]=counts.get(a.work.loading_node,0)+1
+        frontier=[];routes={}
+        for w in ordered:
+            count=counts.get(w.loading_node,0)
+            if self.scheduling.max_loading_inflight and count>=self.scheduling.max_loading_inflight:continue
+            for vehicle in vehicles:
+                busy=bool(self._blockers(w.loading_node,vehicle))
+                route=self._route(self.positions[vehicle],w.loading_node,vehicle,future=busy)
+                if route and (not busy or self.follow_to_busy_destination or self._waiting_options(self.positions[vehicle],w.loading_node,vehicle)):
+                    routes[vehicle,w.task_id]=route
+            if not any((vehicle,w.task_id) in routes for vehicle in vehicles):continue
+            frontier.append(w);counts[w.loading_node]=count+1
+            if len(frontier)>=len(vehicles):break
+        estimates={};costs=[]
+        for vehicle in vehicles:
+            row=[];origin=self.positions[vehicle]
+            for j,work in enumerate(frontier):
+                route=routes.get((vehicle,work.task_id))
+                if not route:
+                    row.append(math.inf);continue
+                pickup=self._pickup_eta(work,vehicle,route)
+                onward=self.network.route(work.loading_node,work.unloading_node,
+                    occupied_nodes=frozenset(),**({'transit_warehouses':self._traffic_warehouses(work.loading_node,work.unloading_node)} if self.traffic_routing else {}))
+                if not onward:row.append(math.inf);continue
+                finish=pickup+2*self.service_s+self._score_route(work.loading_node,work.unloading_node,onward)
+                estimates[vehicle,j]=(pickup,finish);row.append(finish)
+            costs.append(row)
+        pairs=[]
+        for i,j in bottleneck_assignment(costs):
+            vehicle=vehicles[i];pickup,finish=estimates[vehicle,j]
+            pairs.append((frontier[j],vehicle,pickup))
+            self._event('BATCH_MATCH_SELECTED',vehicle_id=vehicle,task_id=frontier[j].task_id,
+                        estimated_pickup_delay_s=pickup,estimated_completion_delay_s=finish)
+        return pairs
+
+    def _continuation_pending(self,pending):
+        # Startup keeps the previously accepted dispatch sequence. After a
+        # completion, rank available work by its best feasible empty pickup;
+        # optionally subtract a bounded loaded-leg weight to favor long tails.
+        # Ranking never changes any physical berth or passage reservation.
+        if not self.scheduling.continuation_dispatch or not any(
+                status==WorkStatus.COMPLETE for status in self.status.values()):
+            return pending
+        vehicles=[v for v in sorted(self.fleet.available_vehicle_ids)
+                  if v in self.positions and v not in self.moves]
+        if not vehicles:return pending
+        counts={}
+        for a in self.assignments.values():
+            if a.operation=='LOADING':counts[a.work.loading_node]=counts.get(a.work.loading_node,0)+1
+        signature=(tuple((v,self.positions[v]) for v in vehicles),
+                   tuple(w.task_id for w in pending),tuple(sorted(counts.items())))
+        cache=getattr(self,'continuation_cache',None)
+        if cache and cache[0]==signature and self.now-cache[1]<self.scheduling.decision_interval_s:
+            scores=cache[2]
+        else:
+            scores={}
+            for work in pending:
+                scores[work.task_id]=math.inf
+                if self.scheduling.max_loading_inflight and counts.get(work.loading_node,0)>=self.scheduling.max_loading_inflight:
+                    continue
+                best=math.inf
+                for vehicle in vehicles:
+                    origin=self.positions[vehicle];busy=bool(self._blockers(work.loading_node,vehicle))
+                    route=self._route(origin,work.loading_node,vehicle,future=busy)
+                    if not route:continue
+                    if busy and not self.follow_to_busy_destination and not self._waiting_options(origin,work.loading_node,vehicle):continue
+                    best=min(best,self._pickup_eta(work,vehicle,route))
+                if not math.isfinite(best):continue
+                onward=self.network.route(work.loading_node,work.unloading_node,occupied_nodes=frozenset(),
+                    **({'transit_warehouses':self._traffic_warehouses(work.loading_node,work.unloading_node)} if self.traffic_routing else {}))
+                if not onward:continue
+                scores[work.task_id]=best-self.scheduling.pickup_tail_weight*self._score_route(work.loading_node,work.unloading_node,onward)
+            self.continuation_cache=(signature,self.now,scores)
+        return sorted(pending,key=lambda w:(-w.priority,scores[w.task_id],w.release_time,w.task_id))
 
     def _time(self, now):
         finite(now)
@@ -119,7 +266,15 @@ class TaskDispatcher:
         kwargs={}
         if self.traffic_routing is not None:
             kwargs=dict(edge_costs=self.traffic_routing.costs_for(vehicle,self.moves),transit_warehouses=self._traffic_warehouses(origin,target))
-        return self.network.route(origin,target,occupied_nodes=occupied,**kwargs)
+        route=self.network.route(origin,target,occupied_nodes=occupied,**kwargs)
+        if route and self.traffic_forecast is not None:
+            predicted=self.traffic_forecast.route_delay(self.network,route,vehicle,self.now)
+            previous=route.get('congestion_delay_s',0.)
+            # Replace the advisory congestion component, never double-count it.
+            if predicted>previous:
+                route={**route,'congestion_delay_s':predicted,
+                       'estimated_travel_time_s':route['estimated_travel_time_s']+predicted-previous}
+        return route
 
     def _traffic_warehouses(self,origin,target):
         warehouses=set()
@@ -187,8 +342,144 @@ class TaskDispatcher:
                 if self.efficiency_policy and not self.efficiency_policy.affordable(
                         approach['distance_m'],detour,approach['estimated_travel_time_s']):continue
                 approach={**approach,'waiting_onward_freeflow_s':onward.get('freeflow_travel_time_s',onward['estimated_travel_time_s']), 'waiting_detour_m':detour}
-                options.append((approach['estimated_travel_time_s']+onward['estimated_travel_time_s'],q,approach))
-        return sorted(options,key=lambda item:((item[2]['waiting_detour_m'],item[0],item[1]) if self.offroad_busy_wait else (item[0],item[1])))
+                cost=approach['estimated_travel_time_s']+onward['estimated_travel_time_s']
+                if self.scheduling.waiting_completion_cost:
+                    travel=self._score_route(origin,q,approach)
+                    release=max((self.clearance_estimates.get(b,self.now+30.) for b in self._blockers(target,vehicle)),default=self.now)
+                    if not math.isfinite(release):release=self.now+30.
+                    cost=max(travel,release-self.now)+self._score_route(q,target,onward)
+                    approach={**approach,'waiting_completion_eta_s':cost}
+                options.append((cost,q,approach))
+        return sorted(options,key=lambda item:((item[2]['waiting_detour_m'],item[0],item[1]) if self.offroad_busy_wait and not self.scheduling.waiting_completion_cost else (item[0],item[1])))
+
+    def _parking_plan(self):
+        """Provisional future allocation; only observed idle trucks may move."""
+        from .optimization import bottleneck_assignment
+        idle=[v for v in sorted(self.fleet.available_vehicle_ids) if v in self.positions
+              and v not in self.moves and self.network.services[self.positions[v]]['kind']!='waiting']
+        if not idle:return {}
+        signature=(tuple(idle),tuple(sorted((name,a.operation,a.work.unloading_node)
+                                          for name,a in self.assignments.items())))
+        if (self.now-getattr(self,'parking_plan_at',-math.inf)<5.
+                and (not self.scheduling.parking_tail_reserve
+                     or signature==getattr(self,'parking_plan_signature',None))):
+            return getattr(self,'parking_plan_cache',{})
+        sites=[q for q,site in sorted(self.network.services.items()) if site['kind']=='waiting'
+               and q not in self.holders and (not self.efficiency_policy or self.efficiency_policy.parking_enabled(q))]
+        futures=[]
+        for name,a in self.assignments.items():
+            eta=self._admission_priority(a,self.admission_priorities)[0]
+            if not math.isfinite(eta):eta=600.
+            if a.operation=='LOADING':
+                onward=self.network.route(a.work.loading_node,a.work.unloading_node,occupied_nodes=frozenset(),
+                    **({'transit_warehouses':self._traffic_warehouses(a.work.loading_node,a.work.unloading_node)} if self.traffic_routing else {}))
+                eta+=self._score_route(a.work.loading_node,a.work.unloading_node,onward) if onward else 600.
+            futures.append((min(1200.,eta+2*self.service_s),name,a.work.unloading_node))
+        futures=sorted(futures,reverse=True)[:max(0,len(sites)-len(idle))]
+        costs=[];potential_idle_costs=[]
+        self.parking_deferred_candidates={}
+        for name in idle:
+            row=[];potential=[];origin=self.positions[name]
+            terminal=self._last_terminal_parking_vehicle(name)
+            for q in sites:
+                site=self.network.services[q]
+                if any(n in self.holders for n in site.get('departure_requires_empty',[])):
+                    row.append(math.inf);potential.append(math.inf);continue
+                route=self._route(origin,q,name)
+                value=self._score_route(origin,q,route) if route else math.inf
+                potential.append(value)
+                blocked=self.protect_committed_routes and self._blocks_committed_route(q,name)
+                clear=bool(route and (not blocked or terminal) and self._parking_approach_clear(route,name))
+                row.append(value if not blocked and clear else math.inf)
+                if blocked and clear and math.isfinite(value):
+                    self.parking_deferred_candidates.setdefault(name,[]).append((value,q,route))
+            costs.append(row);potential_idle_costs.append(potential)
+        occupied=frozenset(q for q in self.holders if self.network.services[q]['kind']=='waiting')
+        for eta,name,origin in futures:
+            row=[]
+            for q in sites:
+                route=self.network.route(origin,q,occupied_nodes=occupied,
+                    **({'transit_warehouses':self._traffic_warehouses(origin,q)} if self.traffic_routing else {}))
+                row.append(eta+self._score_route(origin,q,route) if route else math.inf)
+            costs.append(row)
+        self.parking_future_targets={}
+        if self.scheduling.parking_tail_reserve and futures:
+            # Finish-time ETA can fluctuate or miss a long berth queue. Solve
+            # the remaining trucks' terminal parking first, then leave those
+            # short destinations for them. These are advisory choices only.
+            # Rolling planning minimizes final completion, including remaining
+            # transport. Legacy tail protection keeps its ETA-independent rule.
+            future_costs=(costs[len(idle):] if self.scheduling.rolling_scheduler else
+                          [[value-eta if math.isfinite(value) else math.inf for value in costs[len(idle)+index]]
+                           for index,(eta,name,origin) in enumerate(futures)])
+            future_pairs=bottleneck_assignment(future_costs)
+            reserved={sites[j] for i,j in future_pairs}
+            restricted=[[math.inf if (q in reserved or set(self.network.services[q].get('departure_requires_empty',[])) & reserved)
+                         else value for q,value in zip(sites,row)] for row in costs[:len(idle)]]
+            idle_pairs=bottleneck_assignment(restricted)
+            potential_restricted=[[math.inf if (q in reserved or set(self.network.services[q].get('departure_requires_empty',[])) & reserved)
+                                   else value for q,value in zip(sites,row)] for row in potential_idle_costs]
+            potential_pairs=bottleneck_assignment(potential_restricted)
+            # Never retain a real source dock merely to honor a speculative
+            # parking preference when the available graph cannot fit everyone.
+            if len(future_pairs)==len(futures) and len(potential_pairs)==len(idle):
+                # Keep the late truck's preference while an alternative is
+                # temporarily blocked by an existing movement. Actual issue
+                # still requires all current route and body checks to pass.
+                self.parking_future_targets={futures[i][1]:sites[j] for i,j in future_pairs}
+                self._event('TAIL_PARKING_PREFERENCES',targets=dict(self.parking_future_targets),physical_leases_changed=False)
+                result={idle[i]:sites[j] for i,j in idle_pairs}
+            else:
+                result={idle[i]:sites[j] for i,j in bottleneck_assignment(costs) if i<len(idle)}
+        else:
+            result={idle[i]:sites[j] for i,j in bottleneck_assignment(costs) if i<len(idle)}
+        self.parking_plan_at=self.now;self.parking_plan_cache=result;self.parking_plan_signature=signature
+        if result:self._event('PARKING_ALLOCATION_PLANNED',targets=dict(result),forecast_vehicles=len(futures),physical_leases_changed=False)
+        return result
+
+    def _last_terminal_parking_vehicle(self,vehicle):
+        if (not self.scheduling.parking_tail_reserve or not self.status
+                or any(s!=WorkStatus.COMPLETE for s in self.status.values())):return False
+        idle=[v for v in self.fleet.available_vehicle_ids if v in self.positions
+              and v not in self.moves and self.network.services[self.positions[v]]['kind']!='waiting']
+        return idle==[vehicle]
+
+    def _wait_for_terminal_parking(self,vehicle,origin,options):
+        """Keep the real source briefly instead of taking a long terminal detour.
+
+        A blocked candidate remains advisory. Its lease and movement are issued
+        only after all normal route and departure checks succeed on a later tick.
+        """
+        if not options or self._source_waiters(origin,vehicle):return False
+        available=min(self._score_route(origin,q,route) for _,q,route in options)
+        candidates=[(cost,q,route) for cost,q,route in self.parking_deferred_candidates.get(vehicle,[])
+                    if q not in self.holders and self._blocks_committed_route(q,vehicle)
+                    and cost+30.+3.<available]
+        if not candidates:return False
+        cost,target,route=min(candidates,key=lambda item:(item[0],item[1]))
+        guard=getattr(self,'parking_departure_guard',getattr(self,'departure_guard',None))
+        if guard is not None and not guard(vehicle,origin,target,route,True):
+            wait_guard=getattr(self,'parking_wait_guard',None)
+            if wait_guard is None or not wait_guard(vehicle,origin,target,route):return False
+        previous=self.parking_terminal_wait_since.get(vehicle)
+        if previous is None or previous[0]!=origin:
+            previous=(origin,self.now);self.parking_terminal_wait_since[vehicle]=previous
+        waited=self.now-previous[1]
+        if waited>=30.:
+            if self.parking_terminal_wait_logged_at.get(vehicle,-math.inf)<previous[1]+30.:
+                self._event('TERMINAL_PARKING_WAIT_EXPIRED',vehicle_id=vehicle,origin=origin,
+                            target=target,waited_s=waited,physical_leases_changed=False)
+                self.parking_terminal_wait_logged_at[vehicle]=self.now
+            return False
+        if self.now-self.parking_terminal_wait_logged_at.get(vehicle,-math.inf)>=5.:
+            others=set(self.moves)
+            blockers=[n for n in sorted(others) if self._blocks_committed_route(
+                target,vehicle,ignore=frozenset(others-{n}))]
+            self._event('TERMINAL_PARKING_WAIT',vehicle_id=vehicle,origin=origin,target=target,
+                        blocked_by=blockers,waited_s=waited,maximum_wait_s=30.,
+                        candidate_eta_s=cost,available_eta_s=available,physical_leases_changed=False)
+            self.parking_terminal_wait_logged_at[vehicle]=self.now
+        return True
 
     def _parking_approach_clear(self,route,vehicle):
         # A booked parking place will become a stopped body. Do not choose an
@@ -197,7 +488,6 @@ class TaskDispatcher:
             and self.network.services[node]['kind']=='waiting'
             for node in route.get('must_be_empty_nodes',[])):return False
         if not self.offroad_busy_wait or not hasattr(self.network,'edges'):return True
-        from logistics_park.map.geometry import Polyline
         from logistics_park.safety.collision import OBB,overlaps
         bodies=[]
         for node,owner in self.holders.items():
@@ -207,15 +497,14 @@ class TaskDispatcher:
             if self.positions.get(owner)!=node and not priority[1]:continue
             x,y=site['rear_xy_m'];h=math.radians(site['heading_deg'])
             bodies.append(OBB(x+.75*math.cos(h),y+.75*math.sin(h),h,8.344,2.6))
-        # A real/committed adjacent dock body can block the immediate parking
-        # exit even when the graph does not visit that dock node explicitly.
+        if not bodies:return True
+        # Check every service-access segment, including the destination ingress.
+        # A dock body can block that ingress without the route visiting its node;
+        # entering the approach can then prevent that same dock body from exiting.
         for key in route['edge_ids']:
             edge=self.network.edges[key]
-            if edge['kind']!='service_access':break
-            line=Polyline(tuple(map(tuple,edge['centerline'])))
-            for index in range(math.ceil(line.length/.5)+1):
-                (x,y),h=line.at(min(index*.5,line.length));h+=math.pi if edge.get('reverse') else 0
-                body=OBB(x+.75*math.cos(h),y+.75*math.sin(h),h,8.344,2.6)
+            if edge['kind']!='service_access':continue
+            for body in _access_body_samples(tuple(map(tuple,edge['centerline'])),bool(edge.get('reverse'))):
                 if any(overlaps(body,other,.35) for other in bodies):return False
         return True
 
@@ -226,7 +515,19 @@ class TaskDispatcher:
         if self.offroad_busy_wait and any(m.vehicle_id!=vehicle and m.vehicle_id not in ignore
                 and node in m.route.get('must_be_empty_nodes',[]) for m in self.moves.values()):return True
         resources=set(self.network.services[node].get('occupation_resources',[]))
-        return any(m.vehicle_id!=vehicle and m.vehicle_id not in ignore and (node in self.live_requirements.get(m.vehicle_id,m.route).get('must_be_empty_nodes',[]) or resources.intersection(self.live_requirements.get(m.vehicle_id,m.route).get('required_resources',[]))) for m in self.moves.values())
+        if any(m.vehicle_id!=vehicle and m.vehicle_id not in ignore and (node in self.live_requirements.get(m.vehicle_id,m.route).get('must_be_empty_nodes',[]) or resources.intersection(self.live_requirements.get(m.vehicle_id,m.route).get('required_resources',[]))) for m in self.moves.values()):return True
+        # A stopped body can seal a pending task's only exit without any move
+        # to inspect: waiting slots share one spur, so parking in front of a
+        # staged truck can strand it (series10_normal_05, Q10 in front of Q9).
+        if self.network.services[node]['kind']=='waiting':
+            for other,assignment in self.assignments.items():
+                if other==vehicle or other in ignore or other in self.moves:continue
+                source=self.positions.get(other);target=self._target(assignment)
+                if source is None or source==node or target not in self.network.services:continue
+                if self.network.services[source]['kind']!='waiting':continue
+                if not self.network.route(source,target):continue
+                if not self.network.route(source,target,occupied_nodes=frozenset({node})):return True
+        return False
 
     def can_divert_waiting(self,move,destination,*,persistent_block=False):
         policy=self.efficiency_policy
@@ -312,9 +613,37 @@ class TaskDispatcher:
                 self.fleet.finish_task(vehicle,a.visit_id,a.work.task_id,now)
                 self._event('TRANSPORT_COMPLETE',vehicle_id=vehicle,task_id=a.work.task_id)
                 del self.assignments[vehicle]
+        submitted={task_id:i for i,task_id in enumerate(self.tasks)}
         pending=sorted((t for t in self.tasks.values() if self.status[t.task_id]==WorkStatus.PENDING and t.release_time<=now),
-                       key=lambda t:(-t.priority,t.release_time,t.task_id))
-        for work in pending:
+                       key=lambda t:(-t.priority,t.release_time,
+                           submitted[t.task_id] if self.scheduling.submission_order_dispatch else t.task_id))
+        pending=self._continuation_pending(pending)
+        rolling_used=False
+        pairs=[]
+        if self.global_scheduler is not None and pending:
+            # Existing active tasks and physical leases are never reassigned.
+            if now-self.rolling_plan_at>=self.scheduling.planning_interval_s:
+                pairs=self.global_scheduler.plan(self,pending)
+                self.rolling_plan_at=now
+                self._event('ROLLING_PLAN',**(self.global_scheduler.last_plan or {}))
+                rolling_used=pairs is not None
+                if pairs is None:pairs=[]
+            else:rolling_used=True
+        if not rolling_used and self.scheduling.batch_dispatch:pairs=self._batch_pairs(pending)
+        for work,vehicle,eta in pairs:
+            v=self.fleet.vehicles[vehicle]
+            self.fleet.assign_task(vehicle,v.visit_id,work.task_id,now)
+            self.assignments[vehicle]=Assignment(work,vehicle,v.visit_id)
+            self.status[work.task_id]=WorkStatus.ACTIVE
+            self._event('TASK_DISPATCHED',task_id=work.task_id,vehicle_id=vehicle,visit_id=v.visit_id,estimated_pickup_delay_s=eta)
+        for work in ([] if rolling_used or self.scheduling.batch_dispatch else pending):
+            # Limit work in flight at a loading dock, including tasks already
+            # approaching or servicing it. Completed loading releases the slot;
+            # physical berth ownership and movement permissions remain separate.
+            if self.scheduling.max_loading_inflight and sum(
+                    a.operation=='LOADING' and a.work.loading_node==work.loading_node
+                    for a in self.assignments.values())>=self.scheduling.max_loading_inflight:
+                continue
             candidates=[]
             for vehicle in self.fleet.available_vehicle_ids:
                 if vehicle not in self.positions or vehicle in self.moves:continue
@@ -322,8 +651,7 @@ class TaskDispatcher:
                 route=self._route(origin,work.loading_node,vehicle,future=busy)
                 if not route:continue
                 if busy and not self.follow_to_busy_destination and not self._waiting_options(origin,work.loading_node,vehicle):continue
-                wait=self.service_s*(int(busy)+len(self._destination_queue(work.loading_node)))
-                candidates.append((route['estimated_travel_time_s']+wait,vehicle))
+                candidates.append((self._pickup_eta(work,vehicle,route),vehicle))
             if not candidates:continue
             eta,vehicle=min(candidates);v=self.fleet.vehicles[vehicle]
             self.fleet.assign_task(vehicle,v.visit_id,work.task_id,now)
@@ -333,6 +661,9 @@ class TaskDispatcher:
         if self.offroad_busy_wait:
             self.promote_approaches(self.admission_priorities)
         ordered=sorted(self.assignments.values(),key=lambda a:(a.queued_at is None,a.queued_at or 0,a.work.release_time,a.work.task_id))
+        if self.global_scheduler is not None and self.scheduling.calendar_departure_wait and now-self.departure_plan_at>=self.scheduling.planning_interval_s:
+            self.departure_not_before=self.global_scheduler.ready_departures(self)
+            self.departure_plan_at=now
         for a in ordered:
             if a.state not in ('READY','WAITING'):continue
             vehicle=a.vehicle_id;origin=self.positions[vehicle];target=self._target(a)
@@ -372,6 +703,23 @@ class TaskDispatcher:
                     # Already off the road: retain this real parking place
                     # until the berth is available instead of feeding its queue.
                     if origin_kind=='waiting':
+                        # A far loaded tail may leave its buffer toward a
+                        # proved road hold while earlier trucks unload. It
+                        # receives no target lease or queue-head priority.
+                        if (self.scheduling.tail_prepositioning and self.efficiency_policy
+                                and self.efficiency_policy.proactive_admission
+                                and a.operation=='UNLOADING'
+                                and all(status!=WorkStatus.PENDING for status in self.status.values())
+                                and getattr(self,'departure_guard',None) is not None):
+                            priority=self._admission_priority(a,self.admission_priorities)
+                            entry_eta=priority[3] if len(priority)>3 else priority[0]
+                            if math.isfinite(entry_eta) and entry_eta>self.efficiency_policy.berth_near_eta_s:
+                                issued=self._checked_issue(a,target,approach,False) if approach else []
+                                if issued:
+                                    self._event('WAITING_TAIL_PREPOSITION',vehicle_id=vehicle,
+                                        origin=origin,target=target,
+                                        queue_head=self.approach_intents.get(target),entry_eta_s=entry_eta)
+                                    commands.extend(issued);continue
                         if a.queued_at is None:a.queued_at=now
                         continue
                 # A road queue beside a busy berth can obstruct the owner's
@@ -395,6 +743,24 @@ class TaskDispatcher:
                             target=target,source_waiters=sorted(source_waiters),
                             queue_head=self.approach_intents.get(target),entry_eta_s=gate_eta)
                         commands.extend(self._checked_issue(a,target,approach,False));continue
+                if (self.scheduling.tail_prepositioning and self.efficiency_policy
+                        and self.efficiency_policy.proactive_admission
+                        and origin_kind=='loading' and a.operation=='UNLOADING'
+                        and all(status!=WorkStatus.PENDING for status in self.status.values())
+                        and getattr(self,'departure_guard',None) is not None):
+                    # During the final assigned workload, overlap a loaded
+                    # journey with another truck's unloading. The queue intent
+                    # still controls the target berth, and the existing guard
+                    # must prove a real hold clear of every occupied dock exit.
+                    priority=self._admission_priority(a,self.admission_priorities)
+                    entry_eta=priority[3] if len(priority)>3 else priority[0]
+                    if math.isfinite(entry_eta) and entry_eta>self.efficiency_policy.berth_near_eta_s:
+                        approach=self._route(origin,target,vehicle,future=True)
+                        issued=self._checked_issue(a,target,approach,False) if approach else []
+                        if issued:
+                            self._event('DOCK_TAIL_PREPOSITION',vehicle_id=vehicle,origin=origin,
+                                target=target,queue_head=self.approach_intents.get(target),entry_eta_s=entry_eta)
+                            commands.extend(issued);continue
                 if self.offroad_busy_wait:
                     if a.queued_at is None:a.queued_at=now
                     if not self.efficiency_policy or now-self.hold_logged_at.get(vehicle,-math.inf)>=5.:
@@ -412,7 +778,9 @@ class TaskDispatcher:
                         self._event('TRAFFIC_WAIT_RELEASED',vehicle_id=vehicle,target=target,waited_s=self.now-a.traffic_wait_since)
                         a.traffic_wait_since=None
                     elif a.state!='WAITING' and route.get('congestion_delay_s',0)>=self.traffic_routing.enter_wait_s:
-                        choice=self.traffic_routing.waiting_choice(route,self._waiting_options(origin,target,vehicle))
+                        direct=({**route,'estimated_travel_time_s':self._score_route(origin,target,route)}
+                                if self.scheduling.waiting_completion_cost else route)
+                        choice=self.traffic_routing.waiting_choice(direct,self._waiting_options(origin,target,vehicle))
                         if choice:
                             cost,q,approach=choice;a.traffic_wait_since=self.now
                             if a.queued_at is None:a.queued_at=self.now
@@ -431,6 +799,7 @@ class TaskDispatcher:
         # Repositioning is a real movement with a source lease and target lease,
         # not deletion of the parked truck from the occupancy model.
         if self.park_idle_vehicles or any(s!=WorkStatus.COMPLETE for s in self.status.values()):
+            parking_plan=self._parking_plan() if self.scheduling.parking_lookahead else {}
             for vehicle in self.fleet.available_vehicle_ids:
                 if vehicle not in self.positions or vehicle in self.moves:continue
                 origin=self.positions[vehicle]
@@ -463,9 +832,35 @@ class TaskDispatcher:
                     if self.protect_committed_routes and self._blocks_committed_route(q,vehicle):continue
                     if any(n in self.holders for n in node.get('departure_requires_empty',[])):continue
                     route=self._route(origin,q,vehicle)
-                    if route and self._parking_approach_clear(route,vehicle):options.append((route['estimated_travel_time_s'],q,route))
+                    if not route or not self._parking_approach_clear(route,vehicle):continue
+                    guard=getattr(self,'parking_departure_guard',getattr(self,'departure_guard',None))
+                    if guard is not None and not guard(vehicle,origin,q,route,True):continue
+                    options.append((route['estimated_travel_time_s'],q,route))
                 if not options:continue
-                _,q,route=min(options,key=lambda v:(v[0],v[1]));v=self.fleet.vehicles[vehicle]
+                terminal=self._last_terminal_parking_vehicle(vehicle)
+                if terminal and self._wait_for_terminal_parking(vehicle,origin,options):continue
+                future_targets=getattr(self,'parking_future_targets',{}) if self.scheduling.parking_tail_reserve else {}
+                planned=parking_plan.get(vehicle,future_targets.get(vehicle))
+                future_sites={q for owner,q in future_targets.items() if owner!=vehicle}
+                unreserved=[item for item in options if item[1] not in future_sites
+                    and not set(self.network.services[item[1]].get('departure_requires_empty',[])) & future_sites]
+                if future_targets:
+                    source_needed=blocks_target and any(m.vehicle_id!=vehicle and m.destination==origin
+                        for m in self.moves.values())
+                    if unreserved:options=unreserved
+                    elif not source_needed:continue
+                # For the last stationary truck there is no matching tradeoff.
+                # Re-evaluate live options after a blocker clears, even if the
+                # five-second parking-plan cache still names a farther site.
+                _,q,route=min(options,key=lambda v:(self._score_route(origin,v[1],v[2]),v[1])
+                    if terminal else (v[1]!=planned,v[0],v[1]));v=self.fleet.vehicles[vehicle]
+                self.parking_terminal_wait_since.pop(vehicle,None)
+                self.parking_terminal_wait_logged_at.pop(vehicle,None)
+                if q in future_sites:
+                    self.parking_future_targets={owner:node for owner,node in future_targets.items() if node!=q}
+                    self.parking_plan_at=-math.inf
+                    self._event('TAIL_PARKING_PREFERENCE_YIELDED',vehicle_id=vehicle,node=q,
+                        reason='clear_actual_source_for_inbound_vehicle',physical_leases_revoked=False)
                 self.sequence+=1;task_id='reposition-'+str(self.sequence)
                 self.fleet.assign_task(vehicle,v.visit_id,task_id,now)
                 move=DispatchMove(self.sequence,task_id,vehicle,v.visit_id,origin,q,route,True,'REPOSITION')
@@ -474,9 +869,25 @@ class TaskDispatcher:
         return commands
 
     def _checked_issue(self,a,destination,route,waiting):
+        suggestion=self.departure_not_before.get(a.vehicle_id)
+        origin=self.positions[a.vehicle_id]
+        key=(a.vehicle_id,a.work.task_id,a.operation,origin)
+        if (self.global_scheduler is not None and not waiting and suggestion
+                and suggestion[:3]==(a.work.task_id,a.operation,origin)
+                and self.now-self.departure_plan_at<=self.scheduling.planning_interval_s
+                and self.now<suggestion[3] and not self._source_waiters(origin,a.vehicle_id)):
+            since=self.departure_plan_wait_since.setdefault(key,self.now)
+            if self.now-since<20.:
+                if self.now-self.hold_logged_at.get(key,-math.inf)>=5.:
+                    self.hold_logged_at[key]=self.now
+                    self._event('ROLLING_SOURCE_WAIT',vehicle_id=a.vehicle_id,origin=origin,
+                                target=destination,not_before=suggestion[3],maximum_wait_s=20.,physical_leases_changed=False)
+                return []
         guard=getattr(self,'departure_guard',None)
         if guard is None or guard(a.vehicle_id,self.positions[a.vehicle_id],destination,route,waiting):
+            self.departure_rejected_at.pop((a.vehicle_id,destination),None)
             return [self._issue(a,destination,route,waiting)]
+        self.departure_rejected_at[a.vehicle_id,destination]=self.now
         # A blocked departure should choose an actual off-road buffer now,
         # rather than leaving the source and searching after it gets stuck.
         if not waiting:
@@ -510,10 +921,17 @@ class TaskDispatcher:
         credit=min(30.,.1*waited) if self.offroad_busy_wait else 0.
         return (eta-credit,a.queued_at is None,a.queued_at or 0.,a.work.task_id,a.vehicle_id)
 
+    def _actual_source_blocked(self,vehicle,target):
+        row=self.actual_departure_blockers.get((vehicle,target))
+        return bool(self.scheduling.rolling_scheduler and row and row['blocked_by']
+                    and 0<=self.now-row['time']<5. and self.positions.get(vehicle)==row['source'])
+
     def promote_approaches(self,priorities=None):
         if not self.follow_to_busy_destination:return
         if priorities is not None:self.admission_priorities=dict(priorities)
         by_target={};previous_intents=self.approach_intents;self.approach_intents={}
+        intent_since=getattr(self,'berth_intent_since',None)
+        if intent_since is None:self.berth_intent_since=intent_since={}
         for a in self.assignments.values():
             move=self.moves.get(a.vehicle_id)
             if move:by_target.setdefault(move.destination,[]).append(a)
@@ -524,8 +942,28 @@ class TaskDispatcher:
                 by_target.setdefault(target,[]).append(a)
         for target,candidates in by_target.items():
             resources=set(self.network.services[target].get('occupation_resources',[]))
+            candidate_ids={a.vehicle_id for a in candidates}
+            if self.scheduling.connected_clearance:
+                # Adjacent loading/unloading bays share one clearance space.
+                # A follower at a waiting site must not acquire the other
+                # bay and then freeze the lane leader at its admission line.
+                candidate_ids.update(a.vehicle_id for node,rows in by_target.items()
+                    if (resources.intersection(self.network.services[node].get('occupation_resources',[]))
+                        or self.network.services[target].get('warehouse')
+                        and self.network.services[target].get('warehouse')==self.network.services[node].get('warehouse'))
+                    for a in rows)
             reservations={node:owner for node,owner in self.holders.items()
                           if node==target or resources.intersection(self.network.services[node].get('occupation_resources',[]))}
+            if self.scheduling.connected_clearance and priorities is not None:
+                warehouse=self.network.services[target].get('warehouse')
+                for node,owner in self.holders.items():
+                    if not warehouse or self.network.services[node].get('warehouse')!=warehouse:continue
+                    owner_priority=priorities.get(owner,())
+                    owner_leaders=owner_priority[2] if len(owner_priority)>2 else frozenset()
+                    if any(a.vehicle_id in owner_leaders or owner in (
+                            self._admission_priority(a,priorities)[2]
+                            if len(self._admission_priority(a,priorities))>2 else frozenset()) for a in candidates):
+                        reservations[node]=owner
             # A shared dock promise may belong to the other bay at this warehouse.
             # Only future destination promises can move; parked/source bodies and
             # trucks already committed to their final approach keep their leases.
@@ -535,21 +973,61 @@ class TaskDispatcher:
                 if (self.positions.get(owner)==node or (not move and not self.offroad_busy_wait) or (move and move.destination!=node and not self.offroad_busy_wait)
                         or priorities is None or priorities.get(owner,(0,not self.offroad_busy_wait))[1]):
                     protected.add(owner)
+            if self.scheduling.rolling_scheduler:
+                for node,owner in list(reservations.items()):
+                    if owner not in protected and owner not in self.moves and self._actual_source_blocked(owner,node):
+                        if self.holders.get(node)==owner:del self.holders[node]
+                        del reservations[node]
+                        self._event('SOURCE_EXIT_BLOCKED_PROMISE_RELEASED',vehicle_id=owner,node=node,
+                                    physical_occupancy_retained=True)
+            if (self.scheduling.connected_clearance and self.efficiency_policy and not protected
+                    and any(a.vehicle_id in self.moves and self.moves[a.vehicle_id].destination==target for a in candidates)):
+                for node,owner in list(reservations.items()):
+                    if (node==target and owner not in self.moves
+                            and self.now-self.departure_rejected_at.get((owner,target),-math.inf)<5.):
+                        del self.holders[node];del reservations[node]
+                        self._event('UNENTERED_DEPARTURE_BLOCKED_PROMISE_RELEASED',vehicle_id=owner,node=node,physical_occupancy_retained=True)
             candidates.sort(key=lambda a:self._admission_rank(a,priorities))
             if self.efficiency_policy and self.network.services[target]['kind'] in ('loading','unloading'):
                 # A physical owner still keeps its bay. Separately select the
                 # next queue intent so a proven departing owner can be followed
                 # from a waiting place without stealing its actual occupancy.
                 eligible=[a for a in candidates if a.vehicle_id in protected] or candidates
+                if not protected and self.scheduling.rolling_scheduler:
+                    eligible=[a for a in eligible if not self._actual_source_blocked(a.vehicle_id,target)]
+                    if not eligible:continue
+                if self.scheduling.connected_clearance and not protected:
+                    # A parked truck whose real departure check just failed
+                    # cannot freeze an already approaching truck at the berth
+                    # gate. Only its future intent may yield; occupied source
+                    # leases and entered destination permissions stay intact.
+                    approaching=[a for a in eligible if a.vehicle_id in self.moves
+                        and self.moves[a.vehicle_id].destination==target]
+                    ready=[a for a in eligible if not (
+                        a.vehicle_id not in self.moves
+                        and self.now-self.departure_rejected_at.get((a.vehicle_id,target),-math.inf)<5.)]
+                    if approaching and ready:eligible=ready
                 # Queue intent is a permission dependency even while the
                 # dock remains physically occupied. A faster ETA must not
                 # select a follower whose same-dock leader cannot pass it.
-                candidate_ids={a.vehicle_id for a in candidates}
                 front=[a for a in eligible if not (
                     (self._admission_priority(a,priorities)[2]
                      if len(self._admission_priority(a,priorities))>2 else frozenset())
-                    & candidate_ids)]
+                    & {candidate.vehicle_id for candidate in candidates})]
                 if front:eligible=front
+                margin=self.scheduling.berth_intent_hysteresis_s
+                incumbent=next((a for a in eligible if a.vehicle_id==previous_intents.get(target)),None)
+                if (margin and incumbent is not None
+                        and self.now-intent_since.get(target,self.now)<2*margin):
+                    best_score=self._admission_rank(eligible[0],priorities)[0]
+                    incumbent_score=self._admission_rank(incumbent,priorities)[0]
+                    if (math.isfinite(incumbent_score) and math.isfinite(best_score)
+                            and incumbent_score<=best_score+margin):
+                        # Only stabilize an eligible queue intent. Body owners,
+                        # lane leaders and blocked departures were filtered above.
+                        # The normal exit checks below still authorize each grant.
+                        eligible=[incumbent]+[a for a in eligible if a is not incumbent]
+                        candidates=[incumbent]+[a for a in candidates if a is not incumbent]
                 selected=eligible[0].vehicle_id
                 self.approach_intents[target]=selected
                 if previous_intents.get(target)!=selected:
@@ -557,6 +1035,16 @@ class TaskDispatcher:
                                 eta_s=self._admission_priority(eligible[0],priorities)[0])
             for a in candidates:
                 vehicle=a.vehicle_id
+                if not protected and vehicle not in self.moves and self._actual_source_blocked(vehicle,target):continue
+                if (self.scheduling.connected_clearance and self.efficiency_policy
+                        and not protected and vehicle not in self.moves
+                        and self.now-self.departure_rejected_at.get((vehicle,target),-math.inf)<5.
+                        and (any(c.vehicle_id in self.moves and self.moves[c.vehicle_id].destination==target for c in candidates)
+                             or self._actual_source_blocked(vehicle,target))):
+                    if self.holders.get(target)==vehicle:
+                        del self.holders[target]
+                        self._event('UNENTERED_DEPARTURE_BLOCKED_PROMISE_RELEASED',vehicle_id=vehicle,node=target,physical_occupancy_retained=True)
+                    continue
                 if protected-{vehicle}:continue
                 previous={owner for owner in reservations.values() if owner!=vehicle}
                 exit_blockers=self._blockers(target,vehicle)-previous
@@ -568,7 +1056,7 @@ class TaskDispatcher:
                     continue
                 priority=self._admission_priority(a,priorities)
                 leaders=priority[2] if len(priority)>2 else frozenset()
-                if leaders & {candidate.vehicle_id for candidate in candidates}:continue
+                if leaders & candidate_ids:continue
                 score=self._admission_rank(a,priorities)[0]
                 if priorities is not None and any(score+.5>self._admission_rank(self.assignments[owner],priorities)[0]
                         and not (len(priorities.get(owner,()))>2 and vehicle in priorities[owner][2])
@@ -581,13 +1069,14 @@ class TaskDispatcher:
                     entry_eta=priority[3] if len(priority)>3 else priority[0]
                     if not priority[1] and entry_eta>self.efficiency_policy.berth_near_eta_s:
                         for node,owner in reservations.items():
-                            if owner not in protected:
+                            if owner not in protected and self.holders.get(node)==owner:
                                 del self.holders[node]
                                 self._event('REMOTE_BERTH_PROMISE_RELEASED',vehicle_id=owner,node=node,eta_s=priority[0])
                         break
                 holder=self.holders.get(target)
                 for node,owner in reservations.items():
                     if owner==vehicle:continue
+                    if self.holders.get(node)!=owner:continue
                     del self.holders[node]
                     if node!=target:
                         self._event('UNENTERED_DOCK_RESERVATION_REASSIGNED',vehicle_id=vehicle,
@@ -596,6 +1085,12 @@ class TaskDispatcher:
                     self.holders[target]=vehicle
                     self._event('APPROACH_BERTH_GRANTED',vehicle_id=vehicle,node=target,previous_unentered_holder=holder)
                 break
+
+        for target,vehicle in self.approach_intents.items():
+            if previous_intents.get(target)!=vehicle or target not in intent_since:
+                intent_since[target]=self.now
+        for target in list(intent_since):
+            if target not in self.approach_intents:del intent_since[target]
 
     def departed(self, command_id, vehicle, visit_id, now, *, tail_clear):
         self._time(now);move=self.moves[vehicle]

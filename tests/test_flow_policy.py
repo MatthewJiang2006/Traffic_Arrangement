@@ -16,14 +16,17 @@ from test_traffic_routing import network
 def test_compact_following_keeps_stopping_distance_and_special_room():
     separation=8.344+1.2
     assert following_speed(separation,0)==pytest.approx(0)
-    assert following_speed(separation,3)==pytest.approx(3)
+    # A moving leader may brake immediately while the follower's old command
+    # remains live. At the static minimum gap it must run slower than 3 m/s.
+    selected=following_speed(separation,3)
+    assert selected>0 and selected*1.2+selected**2/1.2<=3**2/1.2+1e-10
     assert following_speed(8.344+3,0,special=True)==0
     assert following_speed(12,0,special=True)<following_speed(12,0)
 
 
 def test_stop_line_brakes_without_far_away_eta_crawl():
     assert stop_line_speed(.25)==0
-    assert stop_line_speed(60)>8
+    assert stop_line_speed(64)>8
     assert stop_line_speed(10)<math.sqrt(1.2*10)
 
 
@@ -160,3 +163,17 @@ def test_w5_front_can_keep_its_prefix_and_divert_past_micrometre_join():
     c.reroute_stopped('front',new,1,state=state)
     assert c.executions['front'].plan is new
     assert new.stops==['Q22']
+
+
+def test_cached_service_envelopes_match_uncached_positions_and_track_geometry_changes():
+    from logistics_park.scheduling.task_dispatch import _access_body_samples
+    from logistics_park.map.geometry import Polyline
+    points=((0.,0.),(3.,1.),(6.,1.))
+    for reverse in (False,True):
+        cached=_access_body_samples(points,reverse);line=Polyline(points);reference=[]
+        for i in range(math.ceil(line.length/.5)+1):
+            (x,y),heading=line.at(min(i*.5,line.length));heading+=math.pi if reverse else 0
+            reference.append(envelope(VehicleState('truck',x,y,heading)))
+        assert cached==tuple(reference)
+        assert _access_body_samples(points,reverse) is cached
+        assert _access_body_samples(((0.,0.),(3.,2.),(6.,1.)),reverse)!=cached

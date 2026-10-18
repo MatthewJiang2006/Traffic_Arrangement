@@ -1,0 +1,10 @@
+# 实验数据与运行产物不进入版本库。
+# 轨迹、日志、验收报告和 checkpoint 统一存放在 Demo 之外的实验目录
+# （Experiment_Data/<系列>/），由 campaign 脚本生成。
+runs/
+
+# Python 缓存与本地环境
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/

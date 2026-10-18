@@ -4,6 +4,7 @@ import pytest
 from logistics_park.common.messages import VehicleState
 from logistics_park.runtime.task_execution import ContinuousTaskExecutor
 from logistics_park.scheduling.efficiency_policy import EfficiencyPolicy
+from logistics_park.scheduling.optimization import SchedulingOptions
 
 
 @pytest.mark.parametrize('cached,expected',[(70.,12.),(8.,8.)])
@@ -20,7 +21,7 @@ def test_lost_berth_keeps_current_or_earlier_hold_when_no_new_landing_exists(mon
     geometry=SimpleNamespace(model=SimpleNamespace(edges={'road':{'kind':'road'},'dock':{'kind':'service_access'}}))
     executor=ContinuousTaskExecutor.__new__(ContinuousTaskExecutor)
     executor.dispatch=dispatch;executor.controller=controller;executor.geometry=geometry
-    executor.moves={name:move};executor.eta_log_at=0.;executor.sources={}
+    executor.moves={name:move};executor.eta_log_at=0.;executor.sources={};executor.move_measurements={}
     executor.travel_time=SimpleNamespace(scale={},observe=lambda *args:None)
     executor.safe_landing_states={(name,plan.edges):cached}
     executor._berth_priorities=lambda states:{};executor._queue_gate=lambda *args:12.
@@ -50,7 +51,7 @@ def test_recorded_q2_to_w6_action_retains_berth_after_entering_its_admission_bou
     e=ContinuousTaskExecutor.__new__(ContinuousTaskExecutor)
     e.geometry=geometry;e.moves={'incoming':SimpleNamespace(destination=fixture['destination'],route=fixture['route'])}
     e.dispatch=SimpleNamespace(efficiency_policy=EfficiencyPolicy(proactive_admission=True),offroad_busy_wait=False,
-        network=network,holders={fixture['destination']:'incoming'},now=0.,approach_intents={})
+        network=network,holders={fixture['destination']:'incoming'},now=0.,approach_intents={},scheduling=SchedulingOptions())
     ex=SimpleNamespace(plan=plan,progress=progress,finished=False,checkpoint=0)
     local=SimpleNamespace(passages={('incoming',0):dict(plan=plan,end=43.92)} if permit else {})
     e.controller=SimpleNamespace(executions={'incoming':ex},local_traffic=local,destination_holds={})
