@@ -1,0 +1,1094 @@
+{
+  "ClockSpeed": 1,
+  "ApiServerPort": 41451,
+  "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/master/docs/settings.md",
+  "SettingsVersion": 1.2,
+  "SimMode": "Car",
+  "ViewMode": "",
+  "SpeedUnitFactor": 1.0,
+  "SpeedUnitLabel": "m/s",
+  "OriginGeopoint": {
+    "Latitude": 47.641468,
+    "Longitude": -122.140165,
+    "Altitude": 122
+  },
+  "Recording": {
+    "RecordOnMove": false,
+    "RecordInterval": 5,
+    "Cameras": [
+      {
+        "CameraName": "camera_0_0",
+        "ImageType": 0,
+        "PixelsAsFloat": false,
+        "Compress": false,
+        "VehicleName": "Car_0_0"
+      },
+      {
+        "CameraName": "camera_0_1",
+        "ImageType": 0,
+        "PixelsAsFloat": false,
+        "Compress": false,
+        "VehicleName": "Car_0_1"
+      }
+    ]
+  },
+  "ExternalCameras": {
+    "IntersectionTop": {
+      "X": 160.5,
+      "Y": 133.2,
+      "Z": -85.0,
+      "Pitch": -90.0,
+      "Roll": 0.0,
+      "Yaw": 0.0,
+      "CaptureSettings": [
+        {
+          "ImageType": 0,
+          "Width": 2048,
+          "Height": 2048,
+          "FOV_Degrees": 90,
+          "MotionBlurAmount": 0,
+          "TargetGamma": 1.0
+        }
+      ]
+    }
+  },
+  "Vehicles": {
+    "Car_0_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_0_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_0_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -132.4257,
+      "Y": -0.8376,
+      "Z": 7.1562,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_0_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_0_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_0_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -121.8617,
+      "Y": -0.8376,
+      "Z": 7.1562,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_0_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_0_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_0_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -111.2977,
+      "Y": -0.8376,
+      "Z": 7.1564,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_1_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_1_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_1_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -100.7337,
+      "Y": -0.8376,
+      "Z": 7.1554,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_1_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_1_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_1_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -90.1697,
+      "Y": -0.8376,
+      "Z": 7.1552,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_1_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_1_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_1_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -79.6057,
+      "Y": -0.8376,
+      "Z": 7.1562,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_2_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_2_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_2_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -132.4257,
+      "Y": 127.1864,
+      "Z": 7.1562,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_2_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_2_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_2_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -121.8617,
+      "Y": 127.1864,
+      "Z": 7.1562,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_2_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_2_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_2_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -111.2977,
+      "Y": 127.1864,
+      "Z": 7.1564,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_3_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_3_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_3_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -100.7337,
+      "Y": 127.1864,
+      "Z": 7.1554,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_3_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_3_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_3_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -90.1697,
+      "Y": 127.1864,
+      "Z": 7.1552,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_3_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_3_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_3_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -79.6057,
+      "Y": 127.1864,
+      "Z": 7.1562,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 180,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_4_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_4_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_4_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -79.6057,
+      "Y": 50.7624,
+      "Z": 7.1563,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_4_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_4_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_4_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -90.1697,
+      "Y": 50.7624,
+      "Z": 7.1553,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_4_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_4_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_4_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -100.7337,
+      "Y": 50.7624,
+      "Z": 7.1551,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_5_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_5_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_5_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -111.2977,
+      "Y": 50.7624,
+      "Z": 7.1561,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_5_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_5_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_5_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -121.8617,
+      "Y": 50.7624,
+      "Z": 7.1563,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_5_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_5_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_5_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -132.4257,
+      "Y": 50.7624,
+      "Z": 7.1563,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_6_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_6_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_6_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -79.6057,
+      "Y": 178.7864,
+      "Z": 7.1563,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_6_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_6_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_6_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -90.1697,
+      "Y": 178.7864,
+      "Z": 7.1553,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_6_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_6_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_6_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -100.7337,
+      "Y": 178.7864,
+      "Z": 7.1551,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_7_0": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_7_0": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_7_0": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -111.2977,
+      "Y": 178.7864,
+      "Z": 7.1561,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_7_1": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_7_1": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_7_1": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -121.8617,
+      "Y": 178.7864,
+      "Z": 7.1563,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    },
+    "Car_7_2": {
+      "VehicleType": "PhysXCar",
+      "Cameras": {
+        "camera_7_2": {
+          "CaptureSettings": [
+            {
+              "ImageType": 0,
+              "Width": 84,
+              "Height": 84,
+              "FOV_Degrees": 90,
+              "TargetGamma": 1
+            }
+          ],
+          "X": 0.3,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Pitch": 0.0,
+          "Roll": 0.0,
+          "Yaw": 0.0
+        }
+      },
+      "Sensors": {
+        "Distance_7_2": {
+          "SensorType": 5,
+          "Enabled": true,
+          "X": 0.0,
+          "Y": 0.0,
+          "Z": 0.0,
+          "Yaw": 0.0,
+          "Pitch": -90.0,
+          "Roll": 0.0,
+          "MinDistance": 0.2,
+          "MaxDistance": 120.0
+        }
+      },
+      "X": -132.4257,
+      "Y": 178.7864,
+      "Z": 7.1563,
+      "Pitch": 0.0,
+      "Roll": 0.0,
+      "Yaw": 0,
+      "PawnPath": "TruckPawn"
+    }
+  },
+  "PawnPaths": {
+    "TruckPawn": {
+      "PawnBP": "Class'/Script/Traffic_ue4.TrafficTruckPawn'"
+    }
+  }
+}
