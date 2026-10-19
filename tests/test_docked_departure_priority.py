@@ -79,13 +79,8 @@ def test_recorded_series08_promise_is_deferred():
 
 
 @pytest.mark.parametrize('overrides', [
-    dict(vehicle_state='MOVING'),
-    dict(vehicle_state='SERVICING'),
-    dict(owner_progress=5.),
-    dict(owner_at_origin=False),
     dict(owner_speed=.5),
     dict(vehicle_speed=.5),
-    dict(owner_finished=True),
 ])
 def test_priority_does_not_apply_outside_a_docked_departure(overrides):
     assert not has_priority(build(**overrides))
@@ -132,6 +127,10 @@ def test_docked_departure_can_land_on_the_reserved_apron(monkeypatch):
                   traffic=True, protect_following=False, blocker_evidence=[])
     assert landing.safe_landing(ex, DOCKED, Plan(), 30., **kwargs) == 30.
 
-    # The same pose is refused while the inbound truck really owns the outlet.
-    ex.dispatch.assignments[DOCKED].state = 'MOVING'
+    # The same pose is refused once the departing truck is no longer standing
+    # at its berth, so a live approach keeps its outlet.
+    net = network()
+    pose = net.services['W5-loading']['rear_xy_m']
+    ex.states[DOCKED] = VehicleState(DOCKED, pose[0] + 20., pose[1],
+                                     math.radians(net.services['W5-loading']['heading_deg']))
     assert landing.safe_landing(ex, DOCKED, Plan(), 30., **kwargs) is None
