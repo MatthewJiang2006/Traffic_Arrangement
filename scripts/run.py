@@ -7,6 +7,7 @@ default, so the working tree never receives trajectories, logs or reports.
 
 import argparse
 import os
+import shutil
 import socket
 import subprocess
 import sys
@@ -29,6 +30,29 @@ def ue(code):
         raise RuntimeError('UE remote command failed: ' + result.stderr[-2000:])
     return result.stdout
 
+
+
+
+def prepare_scratch(output):
+    """Point the UE scripts' fixed runs/ paths at the external output dir.
+
+    The editor-side scripts (export_scene, monitor_fleet, ...) write to
+    ROOT/runs/... by design; symlinks keep that contract while the actual
+    data stays outside the repository.
+    """
+    runs = ROOT / 'runs'
+    runs.mkdir(exist_ok=True)
+    for name in ('ue_scene', 'ue_node_pairs', 'continuous_tasks'):
+        target = output / name
+        target.mkdir(parents=True, exist_ok=True)
+        link = runs / name
+        if link.is_symlink():
+            if link.resolve() == target.resolve():
+                continue
+            link.unlink()
+        elif link.exists():
+            shutil.rmtree(link)
+        link.symlink_to(target)
 
 def wait_until_port_free(port=41451, timeout_s=120):
     deadline = time.monotonic() + timeout_s
@@ -117,6 +141,7 @@ def main():
     output = output.resolve()
     print('直接 UE 验收（%s 倍速），输出目录: %s' % (args.time_scale, output), flush=True)
     try:
+        prepare_scratch(output)
         start_pie()
         result = subprocess.run(
             [sys.executable, str(ROOT / 'scripts/validate_ue_continuous_tasks.py'),

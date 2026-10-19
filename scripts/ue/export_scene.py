@@ -12,7 +12,7 @@ import unreal
 
 ROOT = Path(__file__).resolve().parents[2]
 OUTPUT = ROOT / "runs" / "ue_scene" / "scene.json"
-MAP_PATH = "/Game/IndustrialArea/Map/IndustrialArea（复件）.IndustrialArea（复件）"
+MAP_PATH = "/Game/IndustrialArea/Map/map.map"
 
 
 def xyz(vector):
@@ -21,11 +21,11 @@ def xyz(vector):
 
 editor_world = unreal.load_object(None, MAP_PATH)
 if editor_world is None or editor_world.get_path_name() != MAP_PATH:
-    raise RuntimeError("IndustrialArea（复件） is not loaded")
+    raise RuntimeError("map level is not loaded")
 
 pie_world = unreal.EditorLevelLibrary.get_game_world()
 if (pie_world is None or "UEDPIE_" not in pie_world.get_path_name()
-        or "IndustrialArea（复件）" not in pie_world.get_path_name()):
+        or "UEDPIE_0_map" not in pie_world.get_path_name()):
     raise RuntimeError("Expected one active IndustrialArea PIE world")
 origin = unreal.GameplayStatics.get_world_origin_location(pie_world)
 

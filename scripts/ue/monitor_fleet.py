@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[2]
 request=builtins.fleet_monitor_request
 handle='flow_fleet_monitor'
 if getattr(builtins,handle,None):unreal.unregister_slate_post_tick_callback(getattr(builtins,handle))
-world=next(w for w in unreal.ObjectIterator(unreal.World) if 'UEDPIE_' in w.get_path_name() and 'IndustrialArea（复件）' in w.get_path_name())
+world=next(w for w in unreal.ObjectIterator(unreal.World) if 'UEDPIE_' in w.get_path_name() and 'map.map' in w.get_path_name())
 actors=unreal.GameplayStatics.get_all_actors_of_class(world,unreal.Actor)
 trucks={a.get_name():a for a in actors if a.get_name() in request['vehicles']}
 visuals=[a for a in actors if a.get_class().get_name()=='BP_Truck_C']

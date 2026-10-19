@@ -7,7 +7,7 @@ OUT=ROOT/'runs/ue_node_pairs'
 request=json.loads((OUT/'fleet_request.json').read_text())
 OUT=Path(request.get('output_dir',str(OUT)))
 OUT.mkdir(parents=True,exist_ok=True)
-world=next(w for w in unreal.ObjectIterator(unreal.World) if 'UEDPIE_' in w.get_path_name() and 'IndustrialArea（复件）' in w.get_path_name())
+world=next(w for w in unreal.ObjectIterator(unreal.World) if 'UEDPIE_' in w.get_path_name() and 'map.map' in w.get_path_name())
 actors=unreal.GameplayStatics.get_all_actors_of_class(world,unreal.Actor)
 state=getattr(builtins,'node_pair_fleet_fixture',None)
 if request['action']=='INIT':

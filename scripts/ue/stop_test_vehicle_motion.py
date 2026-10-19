@@ -4,7 +4,7 @@ from pathlib import Path
 import unreal
 ROOT=Path(__file__).resolve().parents[2]
 request=json.loads((ROOT/'runs/ue_scene/test_sites/motion_stop_request.json').read_text())
-world=next(w for w in unreal.ObjectIterator(unreal.World) if 'UEDPIE_' in w.get_path_name() and 'IndustrialArea（复件）' in w.get_path_name())
+world=next(w for w in unreal.ObjectIterator(unreal.World) if 'UEDPIE_' in w.get_path_name() and 'map.map' in w.get_path_name())
 rows=[]
 for actor in unreal.GameplayStatics.get_all_actors_of_class(world,unreal.Actor):
  if actor.get_name() not in request['vehicles']:continue
