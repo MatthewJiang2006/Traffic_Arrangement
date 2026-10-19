@@ -6,6 +6,7 @@ default, so the working tree never receives trajectories, logs or reports.
 """
 
 import argparse
+import fcntl
 import os
 import shutil
 import socket
@@ -33,6 +34,20 @@ def ue(code):
 
 
 
+def run_is_active(target):
+    """True while another acceptance still holds the run's scratch lock."""
+    lock = target / 'continuous_physical.lock'
+    if not lock.is_file():
+        return False
+    with lock.open() as handle:
+        try:
+            fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            return True
+        fcntl.flock(handle, fcntl.LOCK_UN)
+    return False
+
+
 def prepare_scratch(output):
     """Point the UE scripts' fixed runs/ paths at the external output dir.
 
@@ -49,7 +64,9 @@ def prepare_scratch(output):
         if link.is_symlink():
             if link.resolve() == target.resolve():
                 continue
-            raise RuntimeError('runs/%s already points at another run: %s' % (name, link.resolve()))
+            if run_is_active(link.resolve()):
+                raise RuntimeError('runs/%s is owned by a live run: %s' % (name, link.resolve()))
+            link.unlink()
         elif link.exists():
             shutil.rmtree(link)
         link.symlink_to(target)
@@ -116,6 +133,9 @@ def start_pie():
     for name in names:
         client.enableApiControl(False, vehicle_name=name)
     client.simPause(False)
+    # Let the skeletal-mesh physics instances initialise before the acceptance
+    # freezes the fleet; a fresh PIE world needs a couple of ticks first.
+    time.sleep(3)
 
 
 def end_pie():

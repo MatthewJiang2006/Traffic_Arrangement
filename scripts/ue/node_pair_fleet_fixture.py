@@ -16,6 +16,7 @@ if request['action']=='INIT':
     for a in actors:
         if a.get_class().get_name()!='TrafficTruckPawn':continue
         mesh=a.get_component_by_class(unreal.SkeletalMeshComponent)
+        if mesh is None:continue
         children=[a]+[v for v in actors if v.get_attach_parent_actor()==a]
         state[a.get_name()]=dict(actor=a,mesh=mesh,physics=mesh.is_simulating_physics(),
             visibility=[(v,v.get_editor_property('hidden')) for v in children],
