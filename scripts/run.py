@@ -7,6 +7,7 @@ default, so the working tree never receives trajectories, logs or reports.
 
 import argparse
 import fcntl
+import json
 import os
 import shutil
 import socket
@@ -71,6 +72,94 @@ def prepare_scratch(output):
             shutil.rmtree(link)
         link.symlink_to(target)
 
+
+
+def ue_eval(code):
+    """Run Python in the editor and return its printed lines."""
+    result = subprocess.run(
+        [sys.executable, str(ROOT / 'scripts/ue_remote.py'), 'exec(' + repr(code) + ', {})'],
+        capture_output=True, text=True)
+    if result.returncode:
+        raise RuntimeError('UE remote command failed: ' + result.stderr[-2000:])
+    row = json.loads(result.stdout)
+    return [str(item.get('output', '')) for item in row.get('output', [])]
+
+
+def assert_clean_editor():
+    """Refuse to start on an editor that still holds a PIE world.
+
+    Repeated PIE sessions leave stale worlds and duplicated truck pawns behind;
+    every later trial then reads the wrong world and fails for the wrong reason.
+    """
+    lines = ue_eval("import unreal\n"
+                    "print([w.get_path_name() for w in unreal.ObjectIterator(unreal.World) "
+                    "if 'UEDPIE_' in w.get_path_name()])")
+    if any('UEDPIE_' in line for line in lines):
+        raise RuntimeError('editor still holds a PIE world; restart the editor before running')
+
+
+def prepare_scratch(output):
+    """Point the UE scripts' fixed runs/ paths at the external output dir.
+
+    The editor-side scripts (export_scene, monitor_fleet, ...) write to
+    ROOT/runs/... by design; symlinks keep that contract while the actual
+    data stays outside the repository.
+    """
+    runs = ROOT / 'runs'
+    runs.mkdir(exist_ok=True)
+    for name in ('ue_scene', 'ue_node_pairs', 'continuous_tasks'):
+        target = output / name
+        target.mkdir(parents=True, exist_ok=True)
+        link = runs / name
+        if link.is_symlink():
+            if link.resolve() == target.resolve():
+                continue
+            if run_is_active(link.resolve()):
+                raise RuntimeError('runs/%s is owned by a live run: %s' % (name, link.resolve()))
+            link.unlink()
+        elif link.exists():
+            shutil.rmtree(link)
+        link.symlink_to(target)
+
+
+
+def ue_eval(code):
+    """Run Python in the editor and return its printed lines."""
+    result = subprocess.run(
+        [sys.executable, str(ROOT / 'scripts/ue_remote.py'), 'exec(' + repr(code) + ', {})'],
+        capture_output=True, text=True)
+    if result.returncode:
+        raise RuntimeError('UE remote command failed: ' + result.stderr[-2000:])
+    row = json.loads(result.stdout)
+    return [str(item.get('output', '')) for item in row.get('output', [])]
+
+
+def assert_clean_editor():
+    """Refuse to start on an editor that still holds a PIE world.
+
+    Repeated PIE sessions leave stale worlds and duplicated truck pawns behind;
+    every later trial then reads the wrong world and fails for the wrong reason.
+    """
+    lines = ue_eval("import unreal\n"
+                    "print([w.get_path_name() for w in unreal.ObjectIterator(unreal.World) "
+                    "if 'UEDPIE_' in w.get_path_name()])")
+    if any('UEDPIE_' in line for line in lines):
+        raise RuntimeError('editor still holds a PIE world; restart the editor before running')
+
+
+def assert_clean_fleet(names):
+    if len(names) != 24 or len(set(names)) != 24:
+        raise RuntimeError('expected 24 distinct AirSim vehicles, got %d' % len(names))
+    lines = ue_eval("import unreal\n"
+                    "w=next(w for w in unreal.ObjectIterator(unreal.World) if 'UEDPIE_' in w.get_path_name())\n"
+                    "actors=unreal.GameplayStatics.get_all_actors_of_class(w,unreal.Actor)\n"
+                    "cars=[a.get_name() for a in actors if a.get_name().startswith('Car_')]\n"
+                    "print(len(cars), len(set(cars)))")
+    numbers = [int(x) for x in __import__('re').findall(r'\d+', lines[-1])] if lines else []
+    if numbers != [24, 24]:
+        raise RuntimeError('PIE world holds duplicated or missing trucks: %s' % numbers)
+
+
 def wait_until_port_free(port=41451, timeout_s=120):
     deadline = time.monotonic() + timeout_s
     while True:
@@ -87,6 +176,7 @@ def wait_until_port_free(port=41451, timeout_s=120):
 def start_pie():
     """Load the map, enter PIE and stop the fresh fleet before acceptance."""
     wait_until_port_free()
+    assert_clean_editor()
     ue("import unreal\n"
        "assert unreal.EditorLevelLibrary.get_game_world() is None\n"
        "unreal.EditorLevelLibrary.load_level(%r)" % LEVEL)
