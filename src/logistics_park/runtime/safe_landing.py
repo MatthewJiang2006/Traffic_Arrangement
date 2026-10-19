@@ -158,8 +158,9 @@ def docked_departure_has_priority(executor,vehicle,owner,states):
     dock that truck has not reached yet. Protecting that promise across the
     apron of a berth which is already occupied and ready to leave closes a
     loop with no body in it: the docked truck may not go, the queued trucks
-    may not enter, and the inbound truck may not approach. Let the docked
-    truck leave first. Only future exit prediction changes here; actual
+    may not enter, and the inbound truck may not approach. That holds whether
+    the callow promise targets a neighbouring dock or this very berth, so the
+    docked truck leaves first. Only future exit prediction changes here; actual
     bodies, passage leases, target pose checks and the controller's full
     sweeps stay mandatory, exactly as for
     source_must_leave_before_inbound.
@@ -168,10 +169,11 @@ def docked_departure_has_priority(executor,vehicle,owner,states):
     assignment=dispatch.assignments.get(vehicle);dock=getattr(dispatch,'positions',{}).get(vehicle)
     outbound=dispatch.moves.get(vehicle);inbound=dispatch.moves.get(owner)
     execution=executor.controller.executions.get(owner)
-    if (not assignment or not outbound or not inbound or execution is None or dock is None
-            or execution.finished or assignment.state not in ('READY','WAITING')
+    if (not outbound or not inbound or execution is None or dock is None
+            or execution.finished
+            or (assignment is not None and assignment.state not in ('READY','WAITING'))
             or dispatch.network.services[dock]['kind'] not in ('loading','unloading')
-            or getattr(outbound,'origin',None)!=dock or inbound.destination==dock
+            or getattr(outbound,'origin',None)!=dock
             or dispatch.positions.get(owner)!=inbound.origin or execution.progress>=.5
             or abs(states[owner].speed)>=.15 or abs(states[vehicle].speed)>=.15):return False
     # A truck already inside the approach corridor really does need the outlet

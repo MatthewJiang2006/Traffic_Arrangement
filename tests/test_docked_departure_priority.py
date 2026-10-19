@@ -63,6 +63,12 @@ def has_priority(ex):
     return landing.docked_departure_has_priority(ex, DOCKED, OWNER, ex.states)
 
 
+def test_inbound_for_the_same_dock_still_yields_to_the_departure():
+    """The occupant leaving outranks the next truck's promise for that berth."""
+    ex = build(owner_target='W6-unloading')
+    assert has_priority(ex)
+
+
 def test_recorded_series08_promise_is_deferred():
     # Car_0_1 was staged at fleet24-start-02, 68.8 m from W6-unloading.
     net = network()
@@ -79,7 +85,6 @@ def test_recorded_series08_promise_is_deferred():
     dict(owner_at_origin=False),
     dict(owner_speed=.5),
     dict(vehicle_speed=.5),
-    dict(owner_target='W5-loading'),
     dict(owner_finished=True),
 ])
 def test_priority_does_not_apply_outside_a_docked_departure(overrides):
