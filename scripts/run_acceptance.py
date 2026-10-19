@@ -251,11 +251,11 @@ def start_pie(work, label):
     for name in names:
         client.enableApiControl(False, vehicle_name=name)
     client.simPause(False)
+    # The viewport camera is deliberately left untouched: the run must not
+    # impose an overhead view. PIE renders from the editor's current camera,
+    # which restore_editor() puts back to the operator's own pose afterwards.
     ue("import unreal\n"
        "w=unreal.EditorLevelLibrary.get_game_world()\n"
-       "o=unreal.GameplayStatics.get_world_origin_location(w)\n"
-       "unreal.EditorLevelLibrary.set_level_viewport_camera_info("
-       "unreal.Vector(-4200-o.x,16000-o.y,22500-o.z),unreal.Rotator(pitch=-90,yaw=90,roll=0))\n"
        "unreal.SystemLibrary.print_string(w,%r,True,False,unreal.LinearColor(0,1,1,1),3600)"
        % ('DEMO STABILITY: ' + label))
 
