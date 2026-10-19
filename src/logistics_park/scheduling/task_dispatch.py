@@ -508,6 +508,21 @@ class TaskDispatcher:
                 if any(overlaps(body,other,.35) for other in bodies):return False
         return True
 
+
+    def _seals_free_waiting(self,node):
+        """Parking here would deny another free waiting slot its only exit.
+
+        Waiting slots chain on a spur: Q10 sits between Q9 and the road, so a
+        truck parked at Q10 strands an empty Q9 for good. The chain is already
+        declared as departure_requires_empty on the inner slot.
+        """
+        site=self.network.services.get(node)
+        if not site or site['kind']!='waiting':return False
+        for name,other in self.network.services.items():
+            if other['kind']!='waiting' or name==node or name in self.holders:continue
+            if node in other.get('departure_requires_empty',[]):return True
+        return False
+
     def _blocks_committed_route(self,node,vehicle,ignore=frozenset()):
         if self.offroad_busy_wait and any(m.vehicle_id!=vehicle and m.vehicle_id not in ignore
                 and m.waiting and node in self.network.services[m.destination].get('departure_requires_empty',[])
@@ -516,6 +531,7 @@ class TaskDispatcher:
                 and node in m.route.get('must_be_empty_nodes',[]) for m in self.moves.values()):return True
         resources=set(self.network.services[node].get('occupation_resources',[]))
         if any(m.vehicle_id!=vehicle and m.vehicle_id not in ignore and (node in self.live_requirements.get(m.vehicle_id,m.route).get('must_be_empty_nodes',[]) or resources.intersection(self.live_requirements.get(m.vehicle_id,m.route).get('required_resources',[]))) for m in self.moves.values()):return True
+        if self._seals_free_waiting(node):return True
         # A stopped body can seal a pending task's only exit without any move
         # to inspect: waiting slots share one spur, so parking in front of a
         # staged truck can strand it (series10_normal_05, Q10 in front of Q9).
