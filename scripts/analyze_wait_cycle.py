@@ -317,8 +317,8 @@ def describe(report):
                          f"{cut['reasons']}")
         lines.append('  member state')
         for name, state in cycle['member_state'].items():
-            lines.append(f"    {name:>7} {state['state']:<7} {state['operation']:<9} "
-                         f"-> {state['target']:<14} dist={state['distance_to_target_m']} "
+            lines.append(f"    {name:>7} {str(state['state']):<7} {str(state['operation']):<9} "
+                         f"-> {str(state['target']):<14} dist={state['distance_to_target_m']} "
                          f"inside_source={state['inside_source']}")
     if report['hold_and_wait']:
         lines.append('')
