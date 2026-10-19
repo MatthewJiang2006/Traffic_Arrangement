@@ -28,6 +28,7 @@ def test_launcher_runs_ue_acceptance_directly_with_external_output(monkeypatch, 
         return SimpleNamespace(returncode=7 if failed_stage is not None else 0)
 
     monkeypatch.setattr(entry.subprocess, 'run', child)
+    monkeypatch.setattr(entry, 'prepare_scratch', lambda output: None)
     monkeypatch.setattr(entry, 'start_pie', lambda: lifecycle.append('start'))
     monkeypatch.setattr(entry, 'end_pie', lambda: lifecycle.append('stop'))
     monkeypatch.setattr(entry, 'DEFAULT_OUTPUT_ROOT', tmp_path / 'outside')
@@ -51,6 +52,7 @@ def test_launcher_output_defaults_outside_the_repository(monkeypatch, tmp_path):
     seen = []
     monkeypatch.setattr(entry.subprocess, 'run',
                         lambda command, cwd: seen.append(command) or SimpleNamespace(returncode=0))
+    monkeypatch.setattr(entry, 'prepare_scratch', lambda output: None)
     monkeypatch.setattr(entry, 'start_pie', lambda: None)
     monkeypatch.setattr(entry, 'end_pie', lambda: None)
     monkeypatch.setattr(entry, 'DEFAULT_OUTPUT_ROOT', tmp_path / 'outside')

@@ -27,7 +27,7 @@ MAP_DIRECTORY = Path.home() / "Traffic_ue4/Content/IndustrialArea/Map"
 
 def map_fingerprints():
     return {name: hashlib.sha256((MAP_DIRECTORY/name).read_bytes()).hexdigest()
-            for name in ("map.umap","IndustrialArea_Copy.umap")}
+            for name in ("IndustrialArea（复件）.umap","IndustrialArea_Copy.umap")}
 
 
 def with_headings(points, final=None):

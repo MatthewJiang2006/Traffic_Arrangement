@@ -49,7 +49,7 @@ def prepare_scratch(output):
         if link.is_symlink():
             if link.resolve() == target.resolve():
                 continue
-            link.unlink()
+            raise RuntimeError('runs/%s already points at another run: %s' % (name, link.resolve()))
         elif link.exists():
             shutil.rmtree(link)
         link.symlink_to(target)
