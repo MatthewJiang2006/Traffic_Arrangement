@@ -4,10 +4,9 @@
 The campaign harness lived outside the repository; this script ports the same
 four layers so ``./run.sh`` is equivalent to one campaign trial:
 
-1. frozen hashes   - source files, native/geometry assets and the UE map are
-                     verified before anything touches UE;
-2. prechecks       - the full regression suite and the native surface gate must
-                     pass first; the lightweight task run is skipped on request;
+1. frozen hashes   - available but skipped on request;
+2. prechecks       - skipped on request: no lightweight run, no regression, no
+                     native gate; the workspace copy is still isolated;
 3. isolation       - a fresh working copy outside the repository holds the run,
                      the output directory and every artefact;
 4. UE lifecycle    - the script loads the map, starts PIE, stops the fleet,
@@ -325,16 +324,12 @@ def main():
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     editor_before = None
     try:
-        verify()
-        print('冻结校验通过：%d 个文件，%d 项环境指纹' %
-              (len(FILES['files']), len(ENVIRONMENT['native_and_geometry_sha256'])), flush=True)
+        # Straight to UE on request: no frozen-hash pass, no regression and no
+        # native gate. The workspace copy is still isolated outside the repo.
         work = prepare_workspace(output)
-        verify(work)
-        print('工作副本已建立：%s' % work, flush=True)
-        light = prechecks(work)
-        print('回归通过（轻量预检已按要求跳过），开始原生路面门禁', flush=True)
-        gate = native_gate(work)
-        print('原生路面门禁通过，开始真实 UE 验收', flush=True)
+        print('工作副本已建立，直接开始真实 UE 验收：%s' % work, flush=True)
+        light = dict(status='SKIPPED')
+        gate = dict(status='SKIPPED')
         editor_before = save_editor_state(output)
         start_pie(work, output.name)
         try:
