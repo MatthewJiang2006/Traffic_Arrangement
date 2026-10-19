@@ -58,7 +58,7 @@ def audit(action, reason):
 
 
 def guarded_dirs():
-    out = []
+    out = [ROOT]
     for path in sorted(ROOT.rglob('*')):
         if not path.is_dir() or not guarded(str(path.relative_to(ROOT))):
             continue
@@ -68,6 +68,9 @@ def guarded_dirs():
 
 def lock(reason=''):
     files = [ROOT / n for n in tracked_files() if guarded(n)]
+    MARKER.write_text(json.dumps(dict(locked=True,
+                                      time=datetime.datetime.now().isoformat(timespec='seconds'),
+                                      files=len(files), reason=reason), ensure_ascii=False) + '\n')
     changed = 0
     for path in files:
         if not path.is_file():
@@ -78,13 +81,12 @@ def lock(reason=''):
             changed += 1
     # Read-only files can still be deleted or renamed inside a writable
     # directory, so the directories lose their write bit as well.
+    # The repository root loses its write bit last: creating files there must
+    # fail too, but the marker itself still has to be written.
     for path in guarded_dirs():
         mode = path.stat().st_mode
         if mode & stat.S_IWUSR:
             path.chmod(mode & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH))
-    MARKER.write_text(json.dumps(dict(locked=True,
-                                      time=datetime.datetime.now().isoformat(timespec='seconds'),
-                                      files=len(files), reason=reason), ensure_ascii=False) + '\n')
     audit('lock', reason)
     print('仓库已锁定：%d 个文件设为只读（本次改动 %d 个）' % (len(files), changed))
     print('任何脚本写入这些文件都会失败；解锁必须显式执行：')
