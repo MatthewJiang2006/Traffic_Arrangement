@@ -8,4 +8,4 @@ else
     PYTHON=python3
 fi
 
-exec "$PYTHON" "$PROJECT_DIR/scripts/run.py" "$@"
+exec "$PYTHON" "$PROJECT_DIR/scripts/run_acceptance.py" "$@"
