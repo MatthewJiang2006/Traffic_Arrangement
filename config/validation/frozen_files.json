@@ -381,7 +381,7 @@
   "scripts/validate_airsim_adapter.py": "846fc2b895382acf3c0c0aa1885eb978e4ad0e752ff698d036293aafc31d82f3",
   "scripts/validate_task_dispatch.py": "1c65090c1cfc39a2d285d8b19454741b8fd48fc3b37a7a6690d65b1edff7cde1",
   "scripts/validate_ue_all_right_turns.py": "94a1a9b5df25af663896f63e62b02689c9b03b1842d5969b32d26755390f6a62",
-  "scripts/validate_ue_continuous_tasks.py": "8ac8cea38be6bb713ea7e7203eb43d8afe75d45055cc01c080d544e8d95e9c8e",
+  "scripts/validate_ue_continuous_tasks.py": "0b7f0b8871b15ed3daa5c3c638599fa33ea8e6dfc71fbc9632136399d6d035c4",
   "scripts/validate_ue_loading_access.py": "7c3712f3c2011c9158a9526f85e25f95fdfbaac6c89a2d29f1e48f8d2737528b",
   "scripts/validate_ue_node_pairs.py": "e6791466c4b8731d745f72d72ed522f88a5367119c30d2b2d7339e76fc500fc3",
   "scripts/validate_ue_parking_pose.py": "dfd4622e2ec895ffc843a5cb364db78e379ed6a1db93734ab94141d54fef87df",

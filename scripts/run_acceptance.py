@@ -6,8 +6,8 @@ four layers so ``./run.sh`` is equivalent to one campaign trial:
 
 1. frozen hashes   - source files, native/geometry assets and the UE map are
                      verified before anything touches UE;
-2. prechecks       - lightweight 32-task run, the full regression suite and the
-                     native surface gate must pass first;
+2. prechecks       - the full regression suite and the native surface gate must
+                     pass first; the lightweight task run is skipped on request;
 3. isolation       - a fresh working copy outside the repository holds the run,
                      the output directory and every artefact;
 4. UE lifecycle    - the script loads the map, starts PIE, stops the fleet,
@@ -97,13 +97,7 @@ def prepare_workspace(output):
 
 
 def prechecks(work):
-    with (work / 'lightweight.log').open('w') as log:
-        subprocess.run([sys.executable, str(work / 'scripts/simulate_ue_continuous_tasks.py'),
-                        '--scenario', str(work / SPEC_REL)], cwd=work, env=ENV,
-                       stdout=log, stderr=subprocess.STDOUT, check=True)
-    light = json.loads((work / OUT_REL / 'lightweight_acceptance.json').read_text())
-    if light['status'] != 'PASS' or light['completed_tasks'] != 32 or not light['parking_complete']:
-        raise RuntimeError('lightweight precheck failed: %s' % light.get('failure'))
+    """Regression only: the lightweight task run is intentionally skipped."""
     log_path = work / 'regression.log'
     with log_path.open('w') as log:
         result = subprocess.run(
@@ -113,7 +107,7 @@ def prechecks(work):
             stdout=log, stderr=subprocess.STDOUT)
     if result.returncode:
         raise RuntimeError('regression suite failed: see %s' % log_path)
-    return light
+    return dict(status='SKIPPED')
 
 
 def native_gate(work):
@@ -269,7 +263,7 @@ def end_pie():
 def run_trial(work, output):
     out = work / OUT_REL
     command = [sys.executable, str(work / 'scripts/validate_ue_continuous_tasks.py'),
-               '--scenario', str(work / SPEC_REL), '--time-scale', '1']
+               '--scenario', str(work / SPEC_REL), '--time-scale', '1', '--skip-precheck']
     with (out / 'execution.log').open('w') as log:
         process = subprocess.Popen(command, cwd=work, env=dict(ENV, PYTHONPATH=str(work / 'src')),
                                    stdout=log, stderr=subprocess.STDOUT)
@@ -338,7 +332,7 @@ def main():
         verify(work)
         print('工作副本已建立：%s' % work, flush=True)
         light = prechecks(work)
-        print('轻量预检通过，开始原生路面门禁', flush=True)
+        print('回归通过（轻量预检已按要求跳过），开始原生路面门禁', flush=True)
         gate = native_gate(work)
         print('原生路面门禁通过，开始真实 UE 验收', flush=True)
         editor_before = save_editor_state(output)

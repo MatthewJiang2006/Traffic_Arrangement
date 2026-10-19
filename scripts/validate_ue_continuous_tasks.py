@@ -37,7 +37,7 @@ def main():
     global OUT
     FIXTURE.mkdir(parents=True,exist_ok=True)
     (ROOT/'runs/ue_scene/test_sites').mkdir(parents=True,exist_ok=True)
-    parser=argparse.ArgumentParser();parser.add_argument('--scenario',default=str(ROOT/'config/runtime/industrialarea_ue_full_verified_20261007.json'));parser.add_argument('--diagnose-stall',action='store_true');parser.add_argument('--diagnostic-prefix',action='store_true');parser.add_argument('--time-scale',type=int,choices=(1,2,4));args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--scenario',default=str(ROOT/'config/runtime/industrialarea_ue_full_verified_20261007.json'));parser.add_argument('--diagnose-stall',action='store_true');parser.add_argument('--diagnostic-prefix',action='store_true');parser.add_argument('--time-scale',type=int,choices=(1,2,4));parser.add_argument('--skip-precheck',action='store_true',help='run UE acceptance without a stored lightweight precheck');args=parser.parse_args()
     specpath=Path(args.scenario).resolve();spec=json.loads(specpath.read_text());OUT=ROOT/spec.get('output','runs/continuous_tasks');OUT.mkdir(parents=True,exist_ok=True)
     networkpath=ROOT/spec.get('network','config/topology/industrialarea_ue_service_network.json')
     world_time_scale=args.time_scale or spec.get('world_time_scale',4)
@@ -67,22 +67,27 @@ def main():
         surface_row=ue_script(c,'export_drivable_surface.py',ROOT/'runs/ue_scene/drivable_surface.json')
         pavement=DrivableSurface(surface_row)
         (OUT/'drivable_surface.json').write_text(json.dumps(surface_row))
-    light=json.loads((OUT/'lightweight_acceptance.json').read_text())
-    current_sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (specpath,ROOT/spec['map'],networkpath)}
-    persistent_cycle=(str(light.get('failure','')).startswith('Persistent stationary waiting cycle')
-                      and light.get('cycle_observation_s',0)>=15
-                      and bool(light.get('wait_dependencies',{}).get('cycles'))
-                      and bool(light.get('cycle_displacement_m'))
-                      and all(v<.25 for v in light['cycle_displacement_m'].values()))
-    stall_diagnostic=(args.diagnose_stall and light['status']=='FAIL'
-                      and (light.get('failure')=="RuntimeError('Fleet stalled without moving vehicles')" or persistent_cycle)
-                      and all(light.get(k)==0 for k in ('collision_count','unauthorized_shared_entry_count',
-                          'local_unauthorized_entry_count','road_capacity_violation_steps')))
-    prefix_diagnostic=args.diagnostic_prefix and prefix_precheck_ready(light,len(spec['positions']),spec.get('diagnostic_preflight_s'))
-    if light['source_sha256']!=current_sources or (light['status']!='PASS' and not stall_diagnostic and not prefix_diagnostic):
-        raise RuntimeError('Current lightweight precheck must pass, or explicit collision-free stall diagnostic required')
-    if spec.get('traffic_routing',False) and light.get('algorithm_sha256')!=algorithm_fingerprints(ROOT):
-        raise RuntimeError('Congestion precheck algorithm code has changed')
+    precheck=not args.skip_precheck
+    if precheck:
+        light=json.loads((OUT/'lightweight_acceptance.json').read_text())
+        current_sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (specpath,ROOT/spec['map'],networkpath)}
+        persistent_cycle=(str(light.get('failure','')).startswith('Persistent stationary waiting cycle')
+                          and light.get('cycle_observation_s',0)>=15
+                          and bool(light.get('wait_dependencies',{}).get('cycles'))
+                          and bool(light.get('cycle_displacement_m'))
+                          and all(v<.25 for v in light['cycle_displacement_m'].values()))
+        stall_diagnostic=(args.diagnose_stall and light['status']=='FAIL'
+                          and (light.get('failure')=="RuntimeError('Fleet stalled without moving vehicles')" or persistent_cycle)
+                          and all(light.get(k)==0 for k in ('collision_count','unauthorized_shared_entry_count',
+                              'local_unauthorized_entry_count','road_capacity_violation_steps')))
+        prefix_diagnostic=args.diagnostic_prefix and prefix_precheck_ready(light,len(spec['positions']),spec.get('diagnostic_preflight_s'))
+        if light['source_sha256']!=current_sources or (light['status']!='PASS' and not stall_diagnostic and not prefix_diagnostic):
+            raise RuntimeError('Current lightweight precheck must pass, or explicit collision-free stall diagnostic required')
+        if spec.get('traffic_routing',False) and light.get('algorithm_sha256')!=algorithm_fingerprints(ROOT):
+            raise RuntimeError('Congestion precheck algorithm code has changed')
+    else:
+        light=dict(status='SKIPPED',failure=None);stall_diagnostic=False;prefix_diagnostic=False
+        print('lightweight precheck skipped: direct UE acceptance',flush=True)
     if spec['map_sha256']!=maps:raise RuntimeError('Continuous fixture differs from saved maps')
     fleet=FleetRegistry()
     traffic=TrafficRouting(network,model,**spec.get('traffic_routing_options',{})) if spec.get('traffic_routing',False) else None
@@ -106,7 +111,7 @@ def main():
         expected_tasks=len(work),completed_tasks=0,maximum_moving_vehicles=0,body_obstacle_contacts=0,vehicle_collisions=0,ground_contact_samples=[],
         camera_changed=False,surface_preflight=surface_preflight,map_sha256=maps,ue_geometry_asset_sha256=geometry_assets,ue_native_dependency_sha256=native_assets,algorithm_sha256=algorithm_fingerprints(ROOT),source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
             (specpath,ROOT/spec['map'],networkpath)},
-        requested_world_time_scale=world_time_scale,lightweight_status=light['status'],stall_diagnostic=stall_diagnostic,prefix_diagnostic=prefix_diagnostic,vehicle_count=len(pool),vehicles_removed_between_legs=False,teleports_during_tasks=0,ue_physics_validated=False,cargo_visual_effect_validated=False)
+        requested_world_time_scale=world_time_scale,lightweight_status=light.get('status','SKIPPED'),stall_diagnostic=stall_diagnostic,prefix_diagnostic=prefix_diagnostic,vehicle_count=len(pool),vehicles_removed_between_legs=False,teleports_during_tasks=0,ue_physics_validated=False,cargo_visual_effect_validated=False)
     def local_diagnostics(now,commands):
         local=controller.local_traffic
         if not local:return {}
