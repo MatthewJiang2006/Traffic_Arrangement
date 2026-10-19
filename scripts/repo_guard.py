@@ -57,6 +57,15 @@ def audit(action, reason):
         handle.write(json.dumps(row, ensure_ascii=False) + '\n')
 
 
+def guarded_dirs():
+    out = []
+    for path in sorted(ROOT.rglob('*')):
+        if not path.is_dir() or not guarded(str(path.relative_to(ROOT))):
+            continue
+        out.append(path)
+    return out
+
+
 def lock(reason=''):
     files = [ROOT / n for n in tracked_files() if guarded(n)]
     changed = 0
@@ -67,6 +76,12 @@ def lock(reason=''):
         if mode & stat.S_IWUSR:
             path.chmod(mode & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH))
             changed += 1
+    # Read-only files can still be deleted or renamed inside a writable
+    # directory, so the directories lose their write bit as well.
+    for path in guarded_dirs():
+        mode = path.stat().st_mode
+        if mode & stat.S_IWUSR:
+            path.chmod(mode & ~(stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH))
     MARKER.write_text(json.dumps(dict(locked=True,
                                       time=datetime.datetime.now().isoformat(timespec='seconds'),
                                       files=len(files), reason=reason), ensure_ascii=False) + '\n')
@@ -87,6 +102,10 @@ def unlock(reason, confirm):
     print('解除后任何脚本或程序都可以直接修改本仓库，请确认这是你的显式授权。')
     print('=' * 72)
     files = [ROOT / n for n in tracked_files() if guarded(n)]
+    for path in reversed(guarded_dirs()):
+        mode = path.stat().st_mode
+        if not mode & stat.S_IWUSR:
+            path.chmod(mode | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRUSR)
     for path in files:
         if not path.is_file():
             continue
