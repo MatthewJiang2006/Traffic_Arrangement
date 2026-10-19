@@ -27,6 +27,7 @@ import json
 import os
 import shutil
 import signal
+import stat
 import socket
 import subprocess
 import sys
@@ -91,6 +92,14 @@ def prepare_workspace(output):
     work = output / 'workspace'
     shutil.copytree(ROOT, work, ignore=shutil.ignore_patterns(
         '.git', 'runs', '__pycache__', '*.pyc', '.pytest_cache', '.venv'))
+    # copytree keeps the source modes; the repository is write-protected, but
+    # its disposable copy outside the repository must be writable.
+    for path in (work, *work.rglob('*')):
+        mode = path.stat().st_mode
+        if path.is_dir():
+            path.chmod(mode | stat.S_IWUSR | stat.S_IXUSR)
+        elif path.is_file():
+            path.chmod(mode | stat.S_IWUSR)
     (work / OUT_REL).mkdir(parents=True, exist_ok=True)
     return work
 
