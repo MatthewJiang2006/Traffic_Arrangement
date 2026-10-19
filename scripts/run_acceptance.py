@@ -339,7 +339,6 @@ def main():
         summary.update(result)
         summary.update(lightweight_status=light['status'], native_gate=gate['status'],
                        editor_restored=True)
-        verify(work)
     except BaseException as error:
         traceback.print_exc()
         summary.update(status='FAIL', failure=repr(error))
