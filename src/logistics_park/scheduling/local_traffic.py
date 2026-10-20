@@ -11,7 +11,8 @@ from logistics_park.common.messages import VehicleState
 from logistics_park.safety.collision import overlaps,separating_gap
 from .conflict_timing import ConflictTiming
 from logistics_park.runtime.safety_timing import EMERGENCY_REACTION_S,braking_distance,braking_speed,MIN_ACTUATED_SPEED_M_S
-TAIL_CLEAR_M=6.
+from .traffic_transition import (TAIL_CLEAR_M, ActionContract, TrafficTransition,
+                                 TransitionValidator, TransitionDecision, holding_line, sample_sweep)
 
 @lru_cache(maxsize=512)
 def _spatial_boxes(boxes):
@@ -50,6 +51,78 @@ class LocalTraffic:
         self.proactive_admission=False
         self.braking_advice={};self.braking_advice_signatures={}
         self.timing=ConflictTiming()
+        self.transition_revision=0
+        self.transition_rejections=set()
+
+    def _transition_stamp(self,executions,states):
+        return (self.transition_revision,
+            tuple((n,id(e.plan),e.progress,e.finished) for n,e in executions.items()),
+            tuple((n,s.x,s.y,s.heading,s.speed) for n,s in states.items()),
+            tuple((key,id(lease),id(lease['plan']),lease['end']) for key,lease in self.passages.items()),
+            tuple((n,frozenset(keys)) for n,keys in self.paused_by.items()),
+            tuple((n,frozenset(keys)) for n,keys in self.clearance_pauses.items()))
+
+    def commit_transition(self, proposal, states, boxes, envelope, apply, *, executions=None, rollback=None):
+        """Validate a proposal and publish its in-memory edits synchronously.
+
+        No RPC or callbacks into the executor may run between validation and
+        publication. Rejection never changes permissions, plans or precedence.
+        The revision is useful evidence in control diagnostics and replay.
+        """
+        executions=self._executions if executions is None else executions
+        stamp=self._transition_stamp(executions,states)
+        validator=TransitionValidator(self,executions,states,boxes,envelope)
+        decision=validator.validate(proposal)
+        if decision.allowed and stamp!=self._transition_stamp(executions,states):
+            decision=TransitionDecision(False,'transition_frame_changed',proposal.actor)
+        if not decision.allowed:
+            signature=(proposal.kind,proposal.actor,decision.reason,decision.blocked_by)
+            if signature not in self.transition_rejections:
+                if len(self.transition_rejections)>=2048:self.transition_rejections.clear()
+                self.transition_rejections.add(signature)
+                self.events.append(dict(event='TRANSITION_REJECTED',kind=proposal.kind,
+                    vehicle_id=proposal.actor,reason=decision.reason,blocked_by=decision.blocked_by,
+                    revision=self.transition_revision,time=self.now))
+            return decision
+        # Stage container snapshots, preserving geometry/lease identities. Restore
+        # all authorization edits if publication unexpectedly raises.
+        fields=('passages','released','retry_after','paused_by','compatible',
+                'yield_since','yield_plans','wait_since','clearance_rights','clearance_pauses')
+        before={}
+        if hasattr(self,'action_groups'):fields+=('action_groups',)
+        for field in fields:
+            value=getattr(self,field)
+            if isinstance(value,dict):
+                before[field]={k:(set(v) if isinstance(v,set) else v) for k,v in value.items()}
+            else:before[field]=value.copy()
+        original_executions=dict(executions)
+        plans={n:e.plan for n,e in executions.items()};event_count=len(self.events)
+        try:
+            apply()
+        except BaseException:
+            for field,value in before.items():setattr(self,field,value)
+            executions.clear();executions.update(original_executions)
+            for n,plan in plans.items():executions[n].plan=plan
+            del self.events[event_count:]
+            if rollback is not None:rollback()
+            raise
+        self.transition_revision+=1
+        self.events.append(dict(event='TRANSITION_COMMITTED',kind=proposal.kind,
+            vehicle_id=proposal.actor,revision=self.transition_revision,time=self.now))
+        return decision
+
+    def release_passages(self, keys, states, envelope, *, reason, executions=None, retire=False):
+        """One revocation gate for timeout, competition and cycle recovery."""
+        keys=tuple(keys)
+        if not keys:return True
+        proposal=TrafficTransition(reason,keys[0][0],**{'retire' if retire else 'revoke':keys})
+        def publish():
+            for key in keys:
+                lease=self.passages.pop(key)
+                if not retire:
+                    self.released.append((key,lease));self.retry_after[key]=self.now+2.
+                    self.events.append(dict(event='UNENTERED_PASSAGE_RELEASED',vehicle_id=key[0],start=key[1],time=self.now))
+        return self.commit_transition(proposal,states,{},envelope,publish,executions=executions).allowed
 
     def _forecast(self,name,state,ex,target,hold,envelope,*,brake_after_s=None,allowed_start=None):
         if abs(target)<MIN_ACTUATED_SPEED_M_S:target=0.
@@ -68,7 +141,7 @@ class LocalTraffic:
             if start==allowed_start or exit_s+TAIL_CLEAR_M<s:continue
             lease=self.passages.get((name,start))
             if lease and lease['plan'] is plan and lease['end']>=exit_s-1e-6:continue
-            stop=min(stop,max(0.,entry-7.8))
+            stop=min(stop,holding_line(entry))
         boxes=[envelope(state)];aliases=[plan.model.aliases[plan.edges[plan.edge_index(s)]]]
         steps=math.ceil(self.horizon_s/dt)
         for index in range(steps):
@@ -109,12 +182,10 @@ class LocalTraffic:
         for key,lease in list(self.passages.items()):
             n=key[0];ex=executions[n]
             if ex.finished or ex.plan is not lease['plan'] or ex.progress>lease['end']+TAIL_CLEAR_M:
-                del self.passages[key]
+                self.release_passages((key,),states,envelope,reason='passage_retirement',retire=True)
             elif (ex.progress+TAIL_CLEAR_M<ex.plan.edge_starts[key[1]]
                     and abs(states[n].speed)<.08 and self.now-lease.get('created_at',self.now)>=8.):
-                self.released.append((key,lease));del self.passages[key]
-                self.retry_after[key]=self.now+2.
-                self.events.append(dict(event='UNENTERED_PASSAGE_RELEASED',vehicle_id=n,start=key[1],time=self.now))
+                self.release_passages((key,),states,envelope,reason='timeout_revocation')
             elif 'stations' in lease:
                 # Each sampled box already includes the entire truck and its
                 # tail. Retaining another six metres of old full-body poses
@@ -181,7 +252,7 @@ class LocalTraffic:
             if exit_s+TAIL_CLEAR_M<ex.progress:continue
             lease=self.passages.get((name,start))
             if lease and lease['plan'] is ex.plan and lease['end']>=exit_s-1e-6:continue
-            line=max(0.,entry-7.8)
+            line=holding_line(entry)
             if line<stop:stop=line;reason='ungranted_stop_line'
         return stop,reason
 
@@ -240,11 +311,10 @@ class LocalTraffic:
     def _grant_clearance(self,owner,start,name,ex,states,conflicts,index,envelope):
         """Keep a forward road truck moving until its complete body clears."""
         if self.proactive_admission:
-            from .maneuver_admission import entered_special,prospective_cycle
+            from .maneuver_admission import entered_special
             owner_ex=self._executions.get(owner)
             if owner_ex and entered_special(owner_ex.plan,owner_ex.progress,start,self.passages[owner,start]['end'],forward_access=True):
                 return False
-            if prospective_cycle(self,name,{owner},states):return False
         end_index=index
         while end_index+1<len(conflicts) and conflicts[end_index+1]-conflicts[end_index]<=.501:
             end_index+=1
@@ -272,10 +342,13 @@ class LocalTraffic:
                     yielding_vehicle=owner,time=self.now,reason='unexecutable_clearance',required_end_s=end))
                 self.clearance_rejections.add(signature)
             return False
-        self.clearance_rights[owner,start,name]=dict(plan=ex.plan,owner_plan=self.passages[owner,start]['plan'],end=end)
-        self.clearance_pauses.setdefault(owner,set()).add(name)
-        self.events.append(dict(event='CLEARANCE_PRIORITY_GRANTED',vehicle_id=name,yielding_vehicle=owner,start=start,end_m=end,time=self.now))
-        return True
+        proposal=TrafficTransition('clearance_yield',name,waits=((owner,name),),
+            holds=((owner,self._executions[owner].progress),),clearances=((owner,name,end),))
+        def publish():
+            self.clearance_rights[owner,start,name]=dict(plan=ex.plan,owner_plan=self.passages[owner,start]['plan'],end=end)
+            self.clearance_pauses.setdefault(owner,set()).add(name)
+            self.events.append(dict(event='CLEARANCE_PRIORITY_GRANTED',vehicle_id=name,yielding_vehicle=owner,start=start,end_m=end,time=self.now))
+        return self.commit_transition(proposal,states,{},envelope,publish).allowed
 
     def _protect_maneuver_space(self,states,executions,envelope):
         """Keep stopped queues out of a granted access/U-turn sweep.
@@ -285,6 +358,7 @@ class LocalTraffic:
         stopping other cars at the intersection line can occupy that entrance.
         Use their first swept-body conflict as the upstream holding boundary.
         """
+        self._executions=executions
         self.maneuver_holds={}
         self.clearance_pauses={}
         for key,right in list(self.clearance_rights.items()):
@@ -497,16 +571,18 @@ class LocalTraffic:
         return True
 
     def passage_outlet(self,ex,start,end):
+        group=(start,end,ex.plan.edge_starts[start],ex.plan.edge_ends[end])
+        contract=ActionContract.for_group(ex.plan,group,self.compact_permissions)
         ordinary=self.compact_permissions and not any(
             ex.plan.model.edges[k].get('reverse') or ex.plan.model.edges[k]['kind']=='uturn'
             for k in ex.plan.edges[start:end+1])
-        return ordinary,min(ex.plan.length,ex.plan.edge_ends[end]+(6. if ordinary else 11.344))
+        return ordinary,contract.outlet
 
     def claim_passage(self,name,ex,start,end,states,boxes,envelope):
         # Reserve the whole maneuver and enough road for its complete exit.
         # Parallel paths that do not intersect keep separate permissions.
         existing=self.passages.get((name,start))
-        if existing is not None and existing['end']>=ex.plan.edge_ends[end]-1e-6:return True
+        if existing is not None and existing['plan'] is ex.plan and existing['end']>=ex.plan.edge_ends[end]-1e-6:return True
         if getattr(self,'retry_after',{}).get((name,start),0.)>getattr(self,'now',0.):return False
         if self.paused_by.get(name) or self.clearance_pauses.get(name):return False
         # Include the approach: a permission cannot be fulfilled if its
@@ -521,15 +597,14 @@ class LocalTraffic:
             # rather than owning the entire upstream road. Each sweep pose
             # includes the full truck; six rear-axle metres of outlet already
             # cover the body plus compact following headroom.
-            entry=max(entry,plan.edge_starts[start]-7.8)
+            entry=max(entry,holding_line(plan.edge_starts[start]))
         key=(plan.edges,start,end,entry)
         if key not in self.passage_shapes:
             if len(self.passage_shapes)>=256:self.passage_shapes.pop(next(iter(self.passage_shapes)))
             # Curved truck bodies can intersect between 1.5 m samples even
             # when every sampled pair is clear. Use fine canonical stations
             # for the same footprint checks used during motion prediction.
-            count=max(1,math.ceil((outlet-entry)/.25))
-            self.passage_shapes[key]=[envelope(VehicleState(name,*plan.point(entry+(outlet-entry)*i/count),plan.heading(entry+(outlet-entry)*i/count))) for i in range(count+1)]
+            self.passage_shapes[key]=[box for _,box in sample_sweep(plan,entry,outlet,envelope,name)]
         sweep=self.passage_shapes[key]
         def deny(other,reason):
             self.passage_denials.setdefault(name,[]).append(dict(blocked_by=other,reason=reason,start=start))
@@ -561,10 +636,9 @@ class LocalTraffic:
                 # permission reinstates a stop line before the action. Keep
                 # the permission once the owner cannot brake before that line.
                 if future:
-                    speed=abs(states[owner].speed)
-                    available=other_ex.plan.edge_starts[key[1]]-7.8-other_ex.progress
-                    stopping=braking_distance(speed)+.3*self.step_s**2
-                    if available<stopping:return deny(owner,'passage_stop_line_committed')
+                    decision=TransitionValidator(self,self._executions,states,boxes,envelope).validate(
+                        TrafficTransition('competing_revocation',name,revoke=(key,)))
+                    if not decision.allowed:return deny(owner,decision.reason)
                 own_window=self.timing.windows.get(name,{})
                 owner_window=self.timing.windows.get(owner,{})
                 earlier=(own_window.get('entry_eta_s',math.inf)+1.<owner_window.get('entry_eta_s',0.))
@@ -616,30 +690,36 @@ class LocalTraffic:
                 probes=[envelope(VehicleState(other,*other_ex.plan.point(min(other_ex.plan.length,station+.25*i)),
                                              other_ex.plan.heading(min(other_ex.plan.length,station+.25*i)))) for i in range(7)]
                 if intersects(special_sweep,probes):return deny(other,'special_hold_stopping_room')
-        if self.proactive_admission:
-            from .maneuver_admission import prospective_cycle
-            cycle=prospective_cycle(self,name,yielding,states,resolved_passage_start=start)
-            if cycle:
+        lease=dict(plan=plan,start=start,end=exit_s,outlet=outlet,sweep=sweep,
+                   stations=prospective_stations,created_at=self.now)
+        proposal=TrafficTransition('passage_admission',name,
+            revoke=tuple(key for key,_ in withdraw),grants=(((name,start),lease),),
+            waits=tuple((owner,name) for owner in yielding),
+            holds=tuple((owner,self._executions[owner].progress) for owner in yielding),
+            resolved=((name,start),),compatible=tuple(owner for owner,_ in compatible))
+        def publish():
+            for old_key,lease in withdraw:
+                self.released.append((old_key,lease));del self.passages[old_key]
+                self.retry_after[old_key]=self.now+2.
+                self.events.append(dict(event='UNENTERED_PASSAGE_RELEASED',vehicle_id=old_key[0],start=old_key[1],time=self.now))
+            self.compatible.update(frozenset(((name,id(plan),start),(other,id(self._executions[other].plan),other_start))) for other,other_start in compatible)
+            self.passages[(name,start)]=dict(plan=plan,start=start,end=exit_s,outlet=outlet,sweep=sweep,stations=prospective_stations,created_at=getattr(self,'now',0.))
+            self.events.append(dict(event='PASSAGE_GRANTED',vehicle_id=name,start=start,time=self.now,distance_to_entry_m=plan.edge_starts[start]-ex.progress))
+            if self.proactive_admission:
+                self.events.append(dict(event='ADMISSION_COMMITTED',vehicle_id=name,start=start,
+                    time=self.now,paused_vehicles=sorted(yielding),approved_end_s=outlet))
+            for owner in yielding:
+                self.paused_by.setdefault(owner,set()).add((name,start))
+                self.yield_since.setdefault(owner,self.now)
+                self.yield_plans[owner,(name,start)]=plan
+                self.wait_since.setdefault(owner,0.)
+                self.events.append(dict(event='PASSAGE_YIELD_STARTED',vehicle_id=owner,passing_vehicle=name,start=start))
+        decision=self.commit_transition(proposal,states,boxes,envelope,publish)
+        if not decision.allowed:
+            if decision.reason=='prospective_wait_cycle':
                 self.events.append(dict(event='ADMISSION_WAIT_CYCLE_PREVENTED',vehicle_id=name,
-                    vehicles=cycle,start=start,time=self.now))
-                return deny(next(n for n in cycle if n!=name),'prospective_wait_cycle')
-        stations=prospective_stations
-        for old_key,lease in withdraw:
-            self.released.append((old_key,lease));del self.passages[old_key]
-            self.retry_after[old_key]=self.now+2.
-            self.events.append(dict(event='UNENTERED_PASSAGE_RELEASED',vehicle_id=old_key[0],start=old_key[1],time=self.now))
-        self.compatible.update(frozenset(((name,id(plan),start),(other,id(self._executions[other].plan),other_start))) for other,other_start in compatible)
-        self.passages[(name,start)]=dict(plan=plan,start=start,end=exit_s,outlet=outlet,sweep=sweep,stations=stations,created_at=getattr(self,'now',0.))
-        self.events.append(dict(event='PASSAGE_GRANTED',vehicle_id=name,start=start,time=self.now,distance_to_entry_m=plan.edge_starts[start]-ex.progress))
-        if self.proactive_admission:
-            self.events.append(dict(event='ADMISSION_COMMITTED',vehicle_id=name,start=start,
-                time=self.now,paused_vehicles=sorted(yielding),approved_end_s=outlet))
-        for owner in yielding:
-            self.paused_by.setdefault(owner,set()).add((name,start))
-            self.yield_since.setdefault(owner,self.now)
-            self.yield_plans[owner,(name,start)]=plan
-            self.wait_since.setdefault(owner,0.)
-            self.events.append(dict(event='PASSAGE_YIELD_STARTED',vehicle_id=owner,passing_vehicle=name,start=start))
+                    start=start,time=self.now))
+            return deny(decision.blocked_by,decision.reason)
         return True
 
     def regulate(self,states,executions,commands,holds,now,envelope):

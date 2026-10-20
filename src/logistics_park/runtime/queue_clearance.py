@@ -126,8 +126,8 @@ def clear_stopped_queues(executor,states,now):
             try:
                 plan=executor.geometry.plan(replace(move,destination=q,route=route,waiting=True))
                 if lender and plan.length-ex.progress+10>=d.waiting_lenders[lender]:continue
-                if proactive:c.reroute_forward(name,plan,now,state=state)
-                else:c.reroute_stopped(name,plan,now,state=state)
+                if proactive:c.reroute_forward(name,plan,now,state=state,observations=states,body_boxes=getattr(executor,'latest_body_boxes',None))
+                else:c.reroute_stopped(name,plan,now,state=state,observations=states,body_boxes=getattr(executor,'latest_body_boxes',None))
             except ValueError:continue
             executor.moves[name]=d.divert_to_waiting(name,q,route,reassign_from=lender,persistent_block=persistent)
             if policy:d._event('WAITING_DIVERSION_COST',vehicle_id=name,waiting_node=q,
@@ -192,7 +192,7 @@ def _clear_parked_waiting(executor,states,now):
             d._event('WAITING_RESERVATION_REASSIGNED',vehicle_id=name,previous_unentered_holder=lender,node=q)
             d.waiting_lenders.pop(lender,None)
         move=d._issue(a,q,route,True)
-        c.continue_route(name,plan,now,state=states[name])
+        c.continue_route(name,plan,now,state=states[name],observations=states,body_boxes=getattr(executor,'latest_body_boxes',None))
         executor.moves[name]=move;executor.sources[name]=envelope(states[name])
         d._event('ASSIGNED_WAITING_VEHICLE_CLEARED',vehicle_id=name,task_id=a.work.task_id,origin=origin,destination=q)
         refresh_requirements(executor)

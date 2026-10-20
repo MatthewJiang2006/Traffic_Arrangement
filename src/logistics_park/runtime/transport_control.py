@@ -1,5 +1,6 @@
 """Continuous transport control independent of simulation wall-clock time."""
 import math
+from logistics_park.scheduling.traffic_transition import TrafficTransition, holding_line
 from dataclasses import dataclass,field
 from logistics_park.common.messages import VehicleState
 from logistics_park.safety.collision import OBB,overlaps
@@ -159,7 +160,7 @@ class TransportController:
         if first.get('operation')=='LOADING' and 'cycle' in first:
             self.events.append({'time':now,'vehicle_id':name,'event':'TRANSPORT_TASK_RELEASED','cycle':first['cycle'],'source':first['site']})
 
-    def continue_route(self,name,plan,now,*,state):
+    def continue_route(self,name,plan,now,*,state,observations=None,body_boxes=None):
         """Replace a stopped leg without deleting the truck or its road leases."""
         if not self.retain_finished_vehicles or name not in self.executions or not self.executions[name].finished:
             raise ValueError('Only a retained finished leg may continue')
@@ -171,92 +172,64 @@ class TransportController:
         required={v.channel_id for v in plan.shared_visits}
         if owned-required:
             raise ValueError('Next leg omits retained shared-resource leases')
-        self.plans[name]=plan;self.executions[name]=Execution(plan,last_progress_time=now)
-        # A stopped arrival may be a few centimetres ahead of the canonical
-        # source. Audit movement beyond that measured starting pose, rather
-        # than interpreting the leg switch itself as an unauthorized entry.
-        self.executions[name].initial_station=plan.project((state.x,state.y),0.,behind=0,ahead=.5)[1]
-        self.events.append(dict(time=now,event='LEG_CONTINUED',vehicle_id=name,origin=plan.origin,destination=plan.stops[0],retained_resources=sorted(owned)))
+        next_execution=Execution(plan,last_progress_time=now)
+        next_execution.initial_station=plan.project((state.x,state.y),0.,behind=0,ahead=.5)[1]
+        keys=tuple(key for key in self.local_traffic.passages if key[0]==name) if self.local_traffic else ()
+        old_execution=self.executions[name];old_plan=self.plans[name]
+        def rollback():
+            self.executions[name]=old_execution;self.plans[name]=old_plan
+        def publish():
+            if self.local_traffic:
+                for key in keys:self.local_traffic.released.append((key,self.local_traffic.passages.pop(key)))
+                getattr(self.local_traffic,'action_groups',{}).pop(name,None)
+            self.plans[name]=plan;self.executions[name]=next_execution
+            self.events.append(dict(time=now,event='LEG_CONTINUED',vehicle_id=name,origin=plan.origin,destination=plan.stops[0],retained_resources=sorted(owned)))
+        if self.local_traffic:
+            states=dict(observations if observations is not None else getattr(self,'states',{}));states[name]=state
+            if observations is not None and set(states)!=set(self.executions):
+                raise ValueError('Next leg requires a complete observation frame')
+            proposal=TrafficTransition('leg_handoff',name,handoffs=((name,plan),),retire=keys)
+            decision=self.local_traffic.commit_transition(proposal,states,body_boxes if body_boxes is not None else getattr(self,'boxes',{}),envelope,
+                publish,executions=self.executions,rollback=rollback)
+            if not decision.allowed:raise ValueError('Next leg rejected: '+decision.reason)
+        else:publish()
 
-    def reroute_stopped(self,name,plan,now,*,state):
+    def reroute_stopped(self,name,plan,now,*,state,observations=None,body_boxes=None):
         """Change only the future of a stopped road leg with no live passage."""
-        self._reroute_road(name,plan,now,state=state,moving=False)
+        self._reroute_road(name,plan,now,state=state,moving=False,observations=observations,body_boxes=body_boxes)
 
-    def reroute_forward(self,name,plan,now,*,state):
+    def reroute_forward(self,name,plan,now,*,state,observations=None,body_boxes=None):
         """Redirect before a junction, preserving the entire braking prefix."""
         if not self.local_traffic or not self.local_traffic.proactive_admission or state.speed<-.08:
             raise ValueError('Moving diversion requires proactive forward admission')
-        self._reroute_road(name,plan,now,state=state,moving=True)
+        self._reroute_road(name,plan,now,state=state,moving=True,observations=observations,body_boxes=body_boxes)
 
-    def _reroute_road(self,name,plan,now,*,state,moving):
+    def _reroute_road(self,name,plan,now,*,state,moving,observations=None,body_boxes=None):
         ex=self.executions[name]
         if (not self.local_traffic or ex.finished or (not moving and abs(state.speed)>.08)
                 or any(key[0]==name for key in self.local_traffic.passages)):
             raise ValueError('Diversion requires a stopped, uncommitted road vehicle')
         if self.model.edges[ex.plan.edges[ex.plan.edge_index(ex.progress)]]['kind']!='road':
             raise ValueError('Diversion must start on an ordinary road')
-        # Preserve all traversed geometry and the complete nose of the actual
-        # stopped body. An unentered turn beyond its stop line may change.
         limit=ex.progress+max(6.,braking_distance(state.speed))
-        # A nearby new access can merge with a junction already traversed.
-        # Identical prefix points alone do not preserve the admission contract:
-        # the merged action would require a lease whose entry is behind us.
-        # No passage is live here, so reject that diversion before changing
-        # either the active plan or its capacity commitments.
-        if hasattr(plan,'edge_starts') and any(
-                entry+.2<ex.progress<exit_s+.2
-                for _,_,entry,exit_s in maneuver_groups(plan)):
-            raise ValueError('Diversion retroactively requires a traversed maneuver passage')
-        if moving:
-            braking_end=ex.progress+braking_distance(state.speed)
-            if hasattr(plan,"edge_starts") and any(g[3]>ex.progress and g[2]-7.8<braking_end for g in maneuver_groups(plan)):
-                raise ValueError('Diversion cannot brake before a newly required action stop line')
-        tolerance=.001 if getattr(self.model,'raw',{}).get('point_conflicts',False) else 1e-6
-        if plan.length<=limit:raise ValueError('Diversion omits the retained road prefix')
-        for i in range(math.ceil(limit/.25)+1):
-            station=min(limit,i*.25)
-            if (math.dist(plan.point(station),ex.plan.point(station))>tolerance
-                    or plan.reverse(station)!=ex.plan.reverse(station)):
-                raise ValueError('Diversion changes the traversed or committed prefix')
-        if math.dist((state.x,state.y),plan.point(ex.progress))>.5:
-            raise ValueError('Diversion must preserve the actual stopped pose')
-        if getattr(self.local_traffic,'check_diversion_room',False):
-            self._check_diversion_reverse_room(name,plan,ex.progress,state)
-        ex.plan=plan;self.plans[name]=plan
-        # No live maneuver remains. Cancel only unentered future capacity;
-        # actual road occupancy is retained and remeasured every tick.
-        for alias in self.capacity.committed:self.capacity.release_commitment(name,alias)
-        self.events.append(dict(time=now,event='PROACTIVE_ROAD_DIVERSION' if moving else 'STOPPED_ROAD_DIVERSION',vehicle_id=name,destination=plan.stops[0],progress_m=ex.progress,retained_prefix_end_m=limit))
-
-    def _check_diversion_reverse_room(self,name,plan,progress,state):
-        """Do not divert a lane leader into its stopped follower's body.
-
-        A follower cannot clear a reverse entrance by driving through its
-        leader. Reject the proposed route before replacing the old plan or
-        releasing capacity, so queue clearance can try another waiting site.
-        Only nearby new reverse maneuvers need this check; distant traffic
-        remains governed by the normal passage admission checks.
-        """
-        if not hasattr(plan,'edge_starts'):return
-        followers=[]
-        for other,pose in getattr(self,'states',{}).items():
-            if other==name or abs(pose.speed)>.08:continue
-            dx,dy=pose.x-state.x,pose.y-state.y
-            along=dx*math.cos(state.heading)+dy*math.sin(state.heading)
-            across=-dx*math.sin(state.heading)+dy*math.cos(state.heading)
-            aligned=math.cos(pose.heading-state.heading)>.95
-            if aligned and -25.<along<0. and abs(across)<BODY_WIDTH:
-                followers.extend(getattr(self,'boxes',{}).get(other,[envelope(pose)]))
-        if not followers:return
-        for start,end,entry,exit_s in maneuver_groups(plan):
-            if not (progress<exit_s and entry<=progress+25.):continue
-            if not any(plan.model.edges[plan.edges[i]].get('reverse') for i in range(start,end+1)):continue
-            lo=max(progress,entry);count=max(1,math.ceil((exit_s-lo)/.25))
-            for i in range(count+1):
-                s=lo+(exit_s-lo)*i/count
-                body=envelope(VehicleState(name,*plan.point(s),plan.heading(s)))
-                if any(overlaps(body,other,self.local_traffic.margin_m) for other in followers):
-                    raise ValueError('Diversion reverse entrance is occupied by a stopped lane follower')
+        states=dict(observations if observations is not None else getattr(self,'states',{}));states[name]=state
+        if observations is not None and set(states)!=set(self.executions):
+            raise ValueError('Diversion requires a complete observation frame')
+        boxes=body_boxes if body_boxes is not None else getattr(self,'boxes',{})
+        proposal=TrafficTransition('moving_diversion' if moving else 'stopped_diversion',name,
+                                   routes=((name,plan),))
+        old_plan=ex.plan
+        old_commitments={alias:set(owners) for alias,owners in self.capacity.committed.items()}
+        def rollback():
+            self.plans[name]=old_plan
+            self.capacity.committed.clear();self.capacity.committed.update(old_commitments)
+        def publish():
+            ex.plan=plan;self.plans[name]=plan
+            for alias in self.capacity.committed:self.capacity.release_commitment(name,alias)
+            self.events.append(dict(time=now,event='PROACTIVE_ROAD_DIVERSION' if moving else 'STOPPED_ROAD_DIVERSION',vehicle_id=name,destination=plan.stops[0],progress_m=ex.progress,retained_prefix_end_m=limit))
+        decision=self.local_traffic.commit_transition(proposal,states,boxes,envelope,publish,executions=self.executions,rollback=rollback)
+        if not decision.allowed:
+            raise ValueError('Diversion rejected: '+('new action stop line committed' if decision.reason=='new_action_stop_line_committed' else decision.reason)+' '+decision.blocked_by)
 
     def _outlet_clear(self,edge,name):
         ex=self.executions[name]
@@ -636,7 +609,7 @@ class TransportController:
                             self.local_exit_bookings[(n,alias)]=(ex.plan,outlet_s)
                         ex.local_passages.add(start)
                     else:
-                        distance=max(0.,entry-s-7.8)
+                        distance=max(0.,holding_line(entry)-s)
                         if predecessor:
                             self.control_denials.setdefault(n,[]).append(dict(blocked_by=predecessor[0],
                                 reason='parking_future_entry_priority',resource=predecessor[1],start=start,distance_m=distance))

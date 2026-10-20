@@ -1,5 +1,4 @@
 """Read-only prospective admission checks; no physical lease is released."""
-from .wait_dependencies import strongly_connected_cycles
 
 
 def entered_special(plan, progress, start, end, *, forward_access=False):
@@ -12,22 +11,8 @@ def entered_special(plan, progress, start, end, *, forward_access=False):
 
 
 def prospective_cycle(local, vehicle, yielding, states, *, resolved_passage_start=None):
-    rows=[]
-    for row in getattr(local,'admission_dependencies',()):
-        a,b=row['vehicle'],row['blocked_by']
-        # claim_passage has just rechecked body/braking/sweep clearance. The
-        # previous denial for this same request is replaced by the proposal;
-        # carrying it forward would invent an applicant -> yielding owner ->
-        # applicant cycle and permanently reject an otherwise clear crossing.
-        if (resolved_passage_start is not None and a==vehicle
-                and row.get('resource')=='passage:'+str(resolved_passage_start)):
-            continue
-        if a in states and b in states and abs(states[a].speed)<.15:
-            rows.append(dict(vehicle=a,blocked_by=b))
-    for owner,grants in local.paused_by.items():
-        rows.extend(dict(vehicle=owner,blocked_by=g[0]) for g in grants)
-    for owner,grantees in local.clearance_pauses.items():
-        rows.extend(dict(vehicle=owner,blocked_by=g) for g in grantees)
-    rows.extend(dict(vehicle=owner,blocked_by=vehicle) for owner in yielding)
-    return next((cycle for cycle in strongly_connected_cycles(rows)
-                 if vehicle in cycle and set(cycle).intersection(yielding)),None)
+    from .traffic_transition import TrafficTransition,wait_cycle
+    proposal=TrafficTransition('passage_admission',vehicle,
+        waits=tuple((owner,vehicle) for owner in yielding),
+        resolved=((vehicle,resolved_passage_start),) if resolved_passage_start is not None else ())
+    return wait_cycle(local,states,proposal)

@@ -1,5 +1,6 @@
 """Advisory conflict windows; actual entry remains guarded by LocalTraffic."""
 import bisect
+from .maneuver_contract import holding_line
 import math
 from dataclasses import dataclass
 from logistics_park.common.messages import VehicleState
@@ -88,7 +89,7 @@ class ConflictTiming:
     def sweep(self,plan,group,envelope):
         key=(plan.edges,group)
         if key not in self.geometry:
-            lo=max(0.,group[2]-7.8);hi=min(plan.length,group[3]+11.344)
+            lo=holding_line(group[2]);hi=min(plan.length,group[3]+11.344)
             count=max(1,math.ceil((hi-lo)/.5))
             samples=[(lo+(hi-lo)*i/count,envelope(VehicleState('timing-probe',*plan.point(lo+(hi-lo)*i/count),plan.heading(lo+(hi-lo)*i/count)))) for i in range(count+1)]
             if len(self.geometry)>=128:self.geometry.clear();self.pairs.clear()
@@ -170,7 +171,7 @@ class ConflictTiming:
             eta=profile.eta(group[2])
             self.windows[n]=dict(start=group[0],entry_eta_s=eta,clear_eta_s=profile.eta(group[3]+6),
                 delay_s=delay,scheduled_entry_s=now+eta+delay,blocked_by=blocked,
-                stop_distance_m=max(0.,group[2]-7.8-executions[n].progress))
+                stop_distance_m=max(0.,holding_line(group[2])-executions[n].progress))
             signature=(group[0],tuple(blocked))
             if blocked and math.isfinite(delay):
                 self.statistics['window_frames']+=1

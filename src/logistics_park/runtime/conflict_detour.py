@@ -58,7 +58,7 @@ def try_conflict_detours(executor,states,now):
                 new_cost=sum(network.edges[k]['estimated_travel_time_s']+costs.get(k,0) for k in suffix['edge_ids'])
                 minimum_gain=policy.diversion_gain_s if policy else 3.
                 if new_cost+minimum_gain>old_cost:continue
-                c.reroute_stopped(name,plan,now,state=state)
+                c.reroute_stopped(name,plan,now,state=state,observations=states,body_boxes=getattr(executor,'latest_body_boxes',None))
             except ValueError:continue
             executor.moves[name]=candidate;d.moves[name]=candidate
             d._event('LEGAL_CONFLICT_DETOUR_SELECTED',vehicle_id=name,blocked_by=blocker,

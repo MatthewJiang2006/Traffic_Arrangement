@@ -1,5 +1,6 @@
 """Bind task commands to the existing, checked service-route geometry."""
 import math
+from logistics_park.scheduling.maneuver_contract import holding_line, HOLD_BEFORE_ENTRY_M, ActionContract
 from logistics_park.map.geometry import Polyline
 from .transport_routes import RouteGeometry
 
@@ -231,6 +232,7 @@ class ContinuousTaskExecutor:
                 self.dispatch._event('OBSERVED_TRAVEL_TIME',**self.travel_time.snapshot())
                 self.eta_log_at=now
         boxes=body_boxes or {n:[envelope(s)] for n,s in states.items()}
+        self.latest_body_boxes=boxes
         for vehicle,move in list(self.moves.items()):
             state=states[vehicle]
             measure=self.move_measurements.get(move.command_id)
@@ -294,7 +296,7 @@ class ContinuousTaskExecutor:
                 eta_service=self.eta_service)
         for move in self.dispatch.tick(now):
             vehicle=move.vehicle_id;plan=self.geometry.plan(move)
-            self.controller.continue_route(vehicle,plan,now,state=states[vehicle])
+            self.controller.continue_route(vehicle,plan,now,state=states[vehicle],observations=states,body_boxes=boxes)
             self.moves[vehicle]=move
             self.sources[vehicle]=envelope(states[vehicle])
             if self.dispatch.scheduling.calibrated_eta:
@@ -437,20 +439,20 @@ class ContinuousTaskExecutor:
         while index>0 and plan.model.edges[plan.edges[index-1]]['kind']=='service_access':index-=1
         entry=plan.edge_starts[index]
         group=next((g for g in maneuver_groups(plan) if g[2]<=entry+1e-6 and g[3]>=entry-1e-6),None)
-        gate=max(0.,(group[2] if group else entry)-7.8)
+        gate=holding_line(group[2] if group else entry)
         if not getattr(getattr(self,'dispatch',None),'efficiency_policy',None):return gate
         # A preceding maneuver can require clearance beyond this holding line
         # even when its gap is too long for maneuver_groups to merge it.
         # Request the dock at the earliest indivisible permission boundary.
         for previous in reversed(maneuver_groups(plan)):
-            if previous[2]>=gate+7.8-1e-6:continue
+            if previous[2]>=gate+HOLD_BEFORE_ENTRY_M-1e-6:continue
             ordinary=not any(
                 plan.model.edges[plan.edges[i]].get('reverse') or
                 plan.model.edges[plan.edges[i]]['kind']=='uturn'
                 for i in range(previous[0],previous[1]+1))
-            outlet=min(plan.length,previous[3]+(6. if ordinary else 11.344))
+            outlet=ActionContract.for_group(plan,previous,ordinary).outlet
             if outlet>gate+1e-6:
-                gate=max(0.,previous[2]-7.8)
+                gate=holding_line(previous[2])
         if self.dispatch.efficiency_policy.proactive_admission and plan.stops:
             # Admission ETA and the static exit-safe stop line must agree.
             # Otherwise a queue head stops upstream of the old near-ETA window
@@ -495,13 +497,13 @@ class ContinuousTaskExecutor:
             self.queue_gate_states.pop(vehicle,None)
             return gate
         groups=maneuver_groups(plan)
-        final=next((g for g in groups if abs(g[2]-7.8-gate)<1e-6 or gate==0 and g[2]<7.8),None)
+        final=next((g for g in groups if abs(holding_line(g[2])-gate)<1e-6 or gate==0 and g[2]<HOLD_BEFORE_ENTRY_M),None)
         if final and any(plan.model.edges[plan.edges[i]]['kind']=='junction' for i in range(final[0],final[1]+1)):
             return gate
-        candidates=[g for g in groups if g[3]<gate+7.8-1e-6 and
+        candidates=[g for g in groups if g[3]<gate+HOLD_BEFORE_ENTRY_M-1e-6 and
             any(plan.model.edges[plan.edges[i]]['kind']=='junction' for i in range(g[0],g[1]+1))]
         if not candidates:return gate
-        hold=max(0.,candidates[-1][2]-7.8)
+        hold=holding_line(candidates[-1][2])
         previous=self.queue_gate_states.get(vehicle)
         ex=self.controller.executions[vehicle]
         if previous and previous[0] is plan and previous[1]==hold:return hold

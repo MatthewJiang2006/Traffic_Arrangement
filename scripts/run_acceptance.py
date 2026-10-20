@@ -38,9 +38,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SPEC_REL = 'config/runtime/industrialarea_ue_full_verified_20261007.json'
 LEVEL = '/Game/IndustrialArea/Map/IndustrialArea（复件）'
-MAP_DIR = Path('/home/aipc/Traffic_ue4/Content/IndustrialArea/Map')
+UE_PROJECT_DIR = Path(os.environ.get('TRAFFIC_UE_PROJECT_DIR', '/home/aipc/Traffic_ue4')).resolve()
+MAP_DIR = UE_PROJECT_DIR / 'Content/IndustrialArea/Map'
 OUTPUT_ROOT = Path(os.environ.get('DEMO_OUTPUT_ROOT', ROOT.parent / 'Demo_runs'))
-ENV = dict(os.environ, PYTHONDONTWRITEBYTECODE='1')
+ENV = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', TRAFFIC_UE_PROJECT_DIR=str(UE_PROJECT_DIR))
 
 
 def digest(path):
@@ -100,6 +101,20 @@ def prepare_workspace(output):
             path.chmod(mode | stat.S_IWUSR | stat.S_IXUSR)
         elif path.is_file():
             path.chmod(mode | stat.S_IWUSR)
+    # Bind hashes to the editor project actually under test. Preserve expected
+    # digests; a copied project must contain exactly the verified dependencies.
+    bound=json.loads((work / SPEC_REL).read_text())
+    bindings={}
+    for field in ('ue_geometry_asset_sha256','ue_native_dependency_sha256'):
+        remapped={}
+        for filename,expected in bound.get(field,{}).items():
+            prefix='/home/aipc/Traffic_ue4/'
+            target=UE_PROJECT_DIR / filename[len(prefix):] if filename.startswith(prefix) else Path(filename)
+            if digest(target)!=expected:raise RuntimeError('bound UE dependency drift: '+str(target))
+            remapped[str(target)]=expected;bindings[filename]=str(target)
+        bound[field]=remapped
+    (work / SPEC_REL).write_text(json.dumps(bound,indent=2)+'\n')
+    (output / 'project_bindings.json').write_text(json.dumps(dict(project=str(UE_PROJECT_DIR),files=bindings),indent=2)+'\n')
     (work / OUT_REL).mkdir(parents=True, exist_ok=True)
     return work
 
@@ -156,7 +171,8 @@ print(json.dumps(out))
 
 
 def save_editor_state(output):
-    row = ue("import unreal,json\n"
+    row = ue("import unreal,json,os\n"
+             "assert os.path.realpath(unreal.Paths.project_dir())==%r\n" % str(UE_PROJECT_DIR) +
              "w=unreal.EditorLevelLibrary.get_editor_world()\n"
              "assert unreal.EditorLevelLibrary.get_game_world() is None\n"
              "c,r=unreal.EditorLevelLibrary.get_level_viewport_camera_info()\n"

@@ -1,7 +1,7 @@
 """Reorder stopped cycles by withdrawing only unentered, brake-safe promises."""
 import math
 from logistics_park.scheduling.wait_dependencies import wait_snapshot
-from .safety_timing import braking_distance
+from .transport_control import envelope
 
 
 def recover_wait_cycles(executor,states,commands,now):
@@ -25,13 +25,8 @@ def recover_wait_cycles(executor,states,commands,now):
             name,start=passage
             if name not in members:continue
             ex=executor.controller.executions[name]
-            available=ex.plan.edge_starts[start]-7.8-ex.progress
-            stopping=braking_distance(states[name].speed)
-            if available<stopping:continue
-            # No entered or nose-committed permission can be stolen. Current
-            # commands remain stopped until a fresh tick reevaluates admission.
-            del local.passages[passage];local.released.append((passage,lease))
-            local.retry_after[passage]=now+2.
+            if not local.release_passages((passage,),states,envelope,reason='cycle_revocation',
+                                          executions=executor.controller.executions):continue
             ex.local_passages.discard(start);withdrawn.append(dict(vehicle=name,start=start))
         executor.dispatch._event('WAIT_CYCLE_REEVALUATED',vehicles=members,
             withdrawn_unentered=withdrawn,physical_leases_revoked=False)

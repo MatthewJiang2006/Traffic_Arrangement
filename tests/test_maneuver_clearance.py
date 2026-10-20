@@ -254,6 +254,7 @@ def test_clearance_rejects_end_after_an_unapproved_maneuver_stop_line():
 
 def test_approved_next_maneuver_does_not_reject_an_otherwise_valid_clearance():
     policy,ex,states=north_pair()
+    policy._executions=ex
     road=ex['exit'];road.progress=146.65
     states['exit']=VehicleState('exit',*road.plan.point(road.progress),road.plan.heading(road.progress))
     policy.action_groups={'exit':[(99,99,155.,160.)]}

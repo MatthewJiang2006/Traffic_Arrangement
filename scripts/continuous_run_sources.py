@@ -13,6 +13,8 @@ def algorithm_fingerprints(root):
         'src/logistics_park/scheduling/global_scheduler.py',
         'src/logistics_park/scheduling/eta_service.py',
         'src/logistics_park/scheduling/maneuver_admission.py',
+        'src/logistics_park/scheduling/traffic_transition.py',
+        'src/logistics_park/scheduling/maneuver_contract.py',
         'src/logistics_park/runtime/safe_landing.py',
         'src/logistics_park/scheduling/efficiency_policy.py',
         'src/logistics_park/scheduling/travel_time.py',

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Continuous legal-road approach, reverse berth, exit and exclusive-zone trial."""
 import argparse
+import os
 import json
 import hashlib
 import math
@@ -22,7 +23,7 @@ from validate_ue_station_entry import drive, WHEELBASE_M
 
 OUT = ROOT/"runs/ue_scene/station_siting"
 OWNER, BLOCKER, FOLLOWER = "Car_0_0", "Car_0_1", "Car_0_2"
-MAP_DIRECTORY = Path.home() / "Traffic_ue4/Content/IndustrialArea/Map"
+MAP_DIRECTORY = Path(os.environ.get("TRAFFIC_UE_PROJECT_DIR", str(Path.home() / "Traffic_ue4"))) / "Content/IndustrialArea/Map"
 
 
 def map_fingerprints():

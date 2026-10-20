@@ -1,5 +1,6 @@
 """Find a real safe holding pose before committing the next route section."""
 import math
+from logistics_park.scheduling.maneuver_contract import holding_line
 from logistics_park.common.messages import VehicleState
 from logistics_park.safety.collision import overlaps
 from logistics_park.scheduling.conflict_timing import maneuver_groups
@@ -371,7 +372,7 @@ def safe_landing(executor,vehicle,plan,desired,states,*,progress=0.,speed=0.,tar
             following=station-9.544
             if progress<following<desired:desired=following
     candidates={desired}
-    candidates.update(max(0.,g[2]-7.8) for g in groups if g[2]-7.8<desired)
+    candidates.update(holding_line(g[2]) for g in groups if g[2]-7.8<desired)
     minimum=progress+braking_distance(speed)
     for station in sorted(candidates,reverse=True):
         if station<minimum:continue

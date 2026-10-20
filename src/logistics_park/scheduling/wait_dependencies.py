@@ -1,5 +1,6 @@
 """Explain physical and logical waiting without revoking any live lease."""
 import math
+from .maneuver_contract import holding_line
 
 def strongly_connected_cycles(edges):
     adjacency={}
@@ -78,7 +79,7 @@ def wait_snapshot(executor,states):
                 for grant in getattr(c.local_traffic,'paused_by',{}).get(vehicle,set()):add(vehicle,grant[0],'paused_for_clear_passage','passage:'+str(grant[1]))
                 for denial in getattr(c.local_traffic,'passage_denials',{}).get(vehicle,[]):
                     add(vehicle,denial['blocked_by'],denial['reason'],'passage:'+str(denial['start']),
-                        active=at_hold(ex,ex.plan.edge_starts[denial['start']]-7.8))
+                        active=at_hold(ex,holding_line(ex.plan.edge_starts[denial['start']])))
                 denial=c.local_traffic.last_denials.get(vehicle,{})
                 if denial.get('blocked_by'):add(vehicle,denial['blocked_by'],denial['reason'],'local_trajectory')
                 if denial.get('reason')=='capacity':
