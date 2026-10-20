@@ -53,7 +53,7 @@ TRAFFIC_UE_PROJECT_DIR=/home/aipc/Traffic_ue4 \
 - UE 依赖与几何资产：17 项摘要核对通过。
 - 十轮冷启动实验：9 次通过、1 次等待环停滞失败。成功轮完成 32/32 个任务并停放 16 辆车；失败轮约 928.6 秒完成 18/32 个任务。
 
-十轮实测工程为 `/home/aipc/Traffic_ue4_agent/Traffic_ue4.uproject`，日常运行工程为 `/home/aipc/Traffic_ue4/Traffic_ue4.uproject`。实验环境、逐轮结果和诊断见 [验证记录](docs/VALIDATION_20261020.md)。等待环的持续解阻是当前完善方向。
+十轮实测工程为 `/home/aipc/Traffic_ue4_agent/Traffic_ue4.uproject`，日常运行工程为 `/home/aipc/Traffic_ue4/Traffic_ue4.uproject`。实验环境、逐轮结果和诊断见 [验证记录](docs/VALIDATION_20261020.md)。针对第 2 轮的等待环停滞，后续解决方案是接入 Agent 实时调度，根据车辆状态和阻塞关系识别突发事件，生成解阻调度方案，并经现有状态转换与安全校验后执行。
 
 Q33 的进出连接处于关闭状态，车辆使用其余已发布泊位。Q33 开放流程包含路沿通行修复和实车验收。
 
