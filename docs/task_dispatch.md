@@ -1,6 +1,6 @@
 # 当前园区任务调度第一版
 
-> 阶段开发历史：以下“当前”“最新”均指对应章节当时的阶段，不能作为 2026-10-20 的运行说明。当前模块流程见 [CURRENT_RUNTIME.md](CURRENT_RUNTIME.md)，当前验证见 [VALIDATION_20261020.md](VALIDATION_20261020.md)。
+> 本文按实验阶段记录任务调度设计与结果。Demo 模块调用关系见 [运行流程](CURRENT_RUNTIME.md)，实验汇总见 [验证记录](VALIDATION_20261020.md)。
 
 任务层现已从指定车辆的固定运输脚本中分离，入口为 `TaskDispatcher`。提交 `TransportWork(task_id, loading_node, unloading_node, release_time, priority)` 后，由动态车队注册表提供可接单车辆，选择静态路线 ETA 加泊位服务排队估计最小的车辆；同分按车辆编号稳定选择。任务先按优先级、释放时间及任务编号处理。这是贪心基线，尚未预测动态堵塞或优化多个车辆的联合任务分配。
 

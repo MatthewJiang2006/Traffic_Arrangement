@@ -1,44 +1,46 @@
-# 当前 Demo 的运行与控制流程
+# Demo 运行与控制流程
 
-本文对应 2026-10-20 冻结的 Demo。默认 UE 工程为 `/home/aipc/Traffic_ue4/Traffic_ue4.uproject`；Traffic_Arrangement 与 agent 工程是迁移前开发和测试背景，默认运行不连接 agent 工程。具体命令与输出位置见 [README](../README.md)。
+Demo 的标准入口是 `run.sh`，默认 UE 工程为 `/home/aipc/Traffic_ue4/Traffic_ue4.uproject`。配置与命令见 [README](../README.md)。
 
 ## 入口与模块
 
 ```text
 run.sh → scripts/run_acceptance.py
-  → 仓库外工作副本、工程依赖绑定与编辑器状态记录
+  → 建立仓库外工作副本、绑定工程依赖、保存编辑器状态
   → 加载关卡、启动 PIE、等待 AirSim 车辆停稳
   → scripts/validate_ue_continuous_tasks.py
-  → 任务完成及停车、独立位姿和道路包络审计
-  → 结束 PIE、恢复编辑器状态、acceptance_summary.json
+  → 运输任务、等待位停车、独立位姿和道路包络审计
+  → 结束 PIE、恢复编辑器状态、写入 acceptance_summary.json
 ```
 
-run_acceptance 的异常处理会尝试结束 PIE，并在已保存编辑器状态时尝试恢复；恢复失败会记录 editor_restore_error。不是所有异常都能保证恢复成功。入口不会自动重启编辑器或恢复完整工程基线。默认不跑预检不等于取消底层验收中的原生依赖、几何及安全检查。
+调用者负责打开 UE 编辑器。run_acceptance 管理 PIE 生命周期，在异常处理和收尾阶段执行结束 PIE、编辑器状态恢复；恢复异常写入 editor_restore_error。独立冷启动实验由外部编排流程负责工程基线恢复、编辑器创建和关闭。
 
-任务执行由 runtime/task_execution.py 中的 ContinuousTaskExecutor 协调，任务分派和资源管理位于 scheduling/task_dispatch.py。ServiceRouteGeometry 拼接服务路网动作；TransportController 根据实测状态推进路线和检查点并计算控制命令；LocalTraffic 处理通行许可与末端预测调节；AirSim 后端执行车辆控制。
+ContinuousTaskExecutor 协调任务执行，TaskDispatcher 管理派单和服务资源，ServiceRouteGeometry 拼接服务路网动作。TransportController 根据实测状态推进路线和检查点并计算控制命令；LocalTraffic 处理通行许可与末端预测调节；AirSim 后端执行油门、转向和刹车。
 
-每轮实验固定 32 个运输任务、16 辆参与车辆；PIE 初始夹具中有 24 辆车。停止、等待、已完成车辆仍需遵循实际占用与车体安全约束，逻辑任务完成不能当作实车已清空。
+标准场景包含 24 辆车，其中 16 辆车执行 32 个运输任务。停止、等待和已完成车辆持续保留实际车身占用；资源释放以物理清空事件为依据。
 
-## 共同状态转换与后续运动
+## 状态转换与运动控制
 
-改道、授权、撤销、让行、清空义务和任务段交接通过 TrafficTransition 表达，由 TransitionValidator 校验后经 LocalTraffic.commit_transition 发布。主要检查停车与制动边界、保留路线前缀、实测车身和预测扫掠、许可阶段、等待依赖及清空义务。拒绝不提交；提交前复核状态戳，发布异常回滚。详见 [校验规则](STATE_TRANSITIONS.md)。
+改道、授权、撤销、让行、清空义务和任务段交接通过 TrafficTransition 表达，由 TransitionValidator 校验后经 LocalTraffic.commit_transition 发布。检查覆盖停车与制动边界、路线前缀、实测车身和预测扫掠、许可阶段、等待依赖及清空义务。校验通过才发布；提交前复核状态戳，发布异常回滚。
 
-共同转换通过后，控制仍依次受速度、动作净空、通行与时序、目的地等待、共享区域/路口权限、跟车、静止车身、检查点及末端 local regulation 约束。各阶段可进一步降低速度。获得通行权不等于后续每帧一定有正速度命令；逻辑许可和物理可执行性必须同时满足。
+控制链按顺序计算路线速度、动作净空、通行时序、目的地等待、共享区域和路口权限、跟车、静止车身、检查点及末端轨迹调节。各阶段给出速度上限，最终指令同时满足逻辑许可和物理安全约束。具体校验见 [状态转换规则](STATE_TRANSITIONS.md)。
 
-当前校验提供观测帧及有限预测范围内的可行性检查，不维护一个覆盖后续所有车辆运动的全局可执行解阻证明。底层轨迹保护可能产生新的物理等待，现有恢复也不能保证解除所有等待环。这是已知缺口，不能把共同校验描述为“此类停滞已经根治”。
+校验采用当前观测帧与有限预测范围。车辆后续运动会更新物理阻塞关系，持续解阻需要随控制帧重新评估。十轮实测中的一次等待环停滞，为这一方向提供了具体复现数据。
 
-## 等待环恢复的实际能力
+## 等待环恢复
 
-runtime/wait_cycle_recovery.py 定期观察等待环，待车辆停止且环稳定后尝试撤销可安全停车的通行权。进入动作或已经无法在停车线外停下的权限不可强撤，拒绝原因是 passage_stop_line_committed。该恢复路径没有保证在撤销不可行时自动找到倒车、改道或多车协同脱困方案。
+runtime/wait_cycle_recovery.py 定期观察等待环，在车辆停止且环稳定后尝试撤销可安全停车的通行权。已进入动作、或制动边界已越过停车线的车辆保留必要权限，撤销请求返回 passage_stop_line_committed。
 
-十轮实验第 2 轮中，Car_6_1 与 Car_7_1 受到相互 predicted_body 拒绝；约 918.7 秒恢复尝试未撤销任何通行权，其中 Car_6_1 因已承诺/进入动作而拒绝撤销；约 928.6 秒触发局部停滞失败。它说明安全约束仍可能导致无法推进。等待环首次如何形成尚未精确定位，不能把路径断言、环境错配和此运行中停滞归为同一个原因。
+十轮实验第 2 轮中，Car_6_1 与 Car_7_1 相互触发 predicted_body 保护。约 918.7 秒恢复尝试得到空撤销集合，Car_6_1 的权限因动作阶段受到保护；约 928.6 秒触发局部停滞判定。持续解阻的完善重点是撤销受限时的路线与多车协调策略，根因分析继续追踪等待环首次形成的控制帧。
 
-## 诊断证据
+## 诊断
 
-acceptance_summary.json 汇总结果；初始化失败先检查 execution.log。physical_control_diagnostics.jsonl 提供各阶段目标速度、local_denials、passage_denials、control_denials、许可、道路占用和执行进度。physical_acceptance.json 中保留状态转换及等待环恢复等事件；physical_trajectory.jsonl 保存物理轨迹，native_road_history.jsonl 保存原生道路历史。
+acceptance_summary.json 汇总结果，execution.log 记录初始化和执行错误。physical_control_diagnostics.jsonl 提供各阶段目标速度、local_denials、passage_denials、control_denials、许可、占用和执行进度。physical_acceptance.json 保留转换与恢复事件，physical_trajectory.jsonl 保存轨迹，native_road_history.jsonl 保存原生道路历史。
 
-排查顺序：确认入口与 UE 工程一致；确认是否真正进入任务阶段；对运行中失败比较第一个速度被压低的阶段、阻塞方、许可阶段与随后恢复事件。只看末尾等待环不能确定最早根因。历史重放证明指定输入下的转换结果，不证明整轮真实物理执行通过。
+排查顺序为：确认入口与工程 → 确认任务阶段 → 找到首次降速阶段 → 核对阻塞方和许可阶段 → 追踪恢复事件。记录场景重放用于核对指定状态下的转换结果；真实 UE 多轮实验用于评估整轮执行表现。
 
-## 当前证据
+## 实测与冻结
 
-942 项测试及四个历史场景重放通过。agent 工程十轮为 9 PASS、1 FAIL；原 Demo UE 的迁移后多轮结果不能用这些轮次替代。冻结摘要覆盖 590 个 config/scripts/src/tests/run.sh 文件，文档由 Git 提交记录，摘要清单不包含自身。验证细节见 [验证记录](VALIDATION_20261020.md)，冻结范围见 [冻结记录](FREEZE_20261020.md)。
+回归测试 942 项通过，状态转换重放 4 个场景通过。十轮冷启动实测为 9 PASS、1 FAIL，受测工程位于 `/home/aipc/Traffic_ue4_agent`。日常工程配置见 [环境说明](UE_ENVIRONMENT.md)，逐轮数据见 [验证记录](VALIDATION_20261020.md)。
+
+冻结摘要覆盖 590 个配置、脚本、实现和测试文件。文档由 Git 提交记录，冻结清单自身采用 Git 跟踪。详见 [冻结记录](FREEZE_20261020.md)。

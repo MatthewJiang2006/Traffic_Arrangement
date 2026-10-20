@@ -1,6 +1,6 @@
 # 架构约定（Phase 0～4）
 
-> 早期小尺寸车辆仿真约定：本文的 0.12m 车身及固定频率描述不适用于当前 UE 货车运行。当前 UE 流程见 [CURRENT_RUNTIME.md](CURRENT_RUNTIME.md)。
+> 本文描述小尺寸车辆仿真的坐标、运动学和阶段接口。UE 货车的执行链与环境见 [运行流程](CURRENT_RUNTIME.md)。
 
 ## 数据与坐标
 
