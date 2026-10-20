@@ -1,107 +1,78 @@
-# Factory Traffic Management · 园区运输调度
+# Demo · 园区运输调度
 
-本模块包含园区物流运输的 Python 调度算法、道路与服务点拓扑、车辆控制、AirSim 接口、轻量仿真和 UE 验收脚本。车辆连续执行装货、运输、卸货和等待位停车任务，运行时检查通行许可、道路容量、跟车间距、车体接触和局部停滞。
+本仓库包含园区物流运输的 Python 调度算法、道路与服务点拓扑、车辆控制、AirSim 接口、轻量仿真和 UE 验收脚本。当前代码已接入改道、通行授权、撤销、让行与任务段交接的共同状态转换校验。
 
-当前 `IndustrialArea（复件）` 地图中，Q33 因进出路沿时存在物理卡车风险，已从已发布服务点移入不可用清单，并在源拓扑关闭 `Q33_entry`、`Q33_exit`。固定的 32 个任务和 16 辆车保持不变，使用其余泊位。重新开放 Q33 需要单独完成物理通行修复与验收。此修正后的连续多轮实测及故障验证尚未完成；下文历史 PASS 不代表当前基线已通过。当前复测的工作副本、轨迹和报告均存放在 Demo 目录之外。
+当前冻结说明见 [2026-10-20 冻结记录](docs/FREEZE_20261020.md)，技术流程见 [当前运行说明](docs/CURRENT_RUNTIME.md)。2026-10-19 及更早文档保留对应阶段的历史结果，不代表当前代码已通过同等验证。
 
-## 模块结构
+## 当前验证状态
 
-```text
-Factory_Traffic_Management_script/
-├── src/logistics_park/
-│   ├── common/          # 公共消息与数据模型
-│   ├── map/             # 道路图与几何
-│   ├── navigation/      # 定位匹配与路径跟踪
-│   ├── routing/         # 服务节点路由
-│   ├── scheduling/      # 任务分派、资源预约与通行时序
-│   ├── tasks/           # 任务状态与生命周期
-│   ├── runtime/         # 连续任务、车辆控制与运行检查
-│   ├── safety/          # 车体范围与碰撞检查
-│   ├── adapters/        # 仿真接口
-│   └── simulation/      # 轻量仿真
-├── config/              # 拓扑、泊位、任务、交通策略和运行参数
-├── scripts/             # 构图、预检、真实 UE 验收与结果复核
-├── tests/               # 回归测试和独立测试夹具
-├── docs/                # 设计、路网、接口和修复记录
-├── runs/                # 本地运行输出，分享数据见百度网盘
-├── 项目规划.md
-├── 调度算法优化方案.md
-└── README.md
-```
+- Demo 替换后：942 项回归测试通过，四个历史场景的状态转换重放通过，原 UE 的 17 项原生/几何依赖摘要核对通过。
+- 被迁入版本在独立 agent UE 工程中完成 10 次同版冷启动实验：9 次通过、1 次等待环停滞失败。成功轮完成 32/32 个任务、16 辆车停放；失败轮约 928.6 秒完成 18/32 个任务。
+- 上述 10 轮使用 `/home/aipc/Traffic_ue4_agent`，不能视为替换后的原 Demo UE 工程已完成多轮验收。仍有偶发停滞问题，不保证每次成功。证据与限制见 [验证记录](docs/VALIDATION_20261020.md)。
 
-## 最近完整 UE 验收
+Q33 因进出路沿存在物理卡车风险，已在源拓扑关闭 Q33_entry、Q33_exit；固定 32 个任务和 16 辆参与车辆使用其余泊位。重新开放需要单独修复并进行物理验收。
 
-2026-10-07 的完整验收 **PASS**：16 辆车完成 32/32 个运输任务并全部停入等待位，正常时间倍率 1，用时 1725.769 秒（约 28 分 46 秒）。
+## 启动真实 UE 验收
 
-- 车辆碰撞、车体障碍接触、未授权通行、道路容量违规和停滞报警均为 0；任务期间瞬移为 0。
-- 最终停车最大朝向偏差 2.147°，最大位置偏差 0.264 米，满足 5° 和 0.35 米的验收阈值。
-- 直线路段整车范围检查覆盖 67,838 个样本，越界标记为 0，最小边界余量约 0.204 米。
-- 全套 539 项回归测试和完整轻量预检通过；车辆、API、地图与编辑器状态恢复检查通过。
+先单独打开 `/home/aipc/Traffic_ue4/Traffic_ue4.uproject`，等待编辑器加载完成。只保留一个 UE 编辑器，保持未进入 PIE 的编辑状态；脚本负责启动和结束 PIE。UE4.27、AirSim、Python 客户端及 UE Python 远程执行需预先配置。
 
-直线范围检查限于整车已进入直线路段的样本；转弯和接入口由运行中的车身扫描、碰撞和路线误差检查覆盖。停车控制、改道许可、出发准入和排队顺序的修复过程见 [完整复跑记录](docs/20261007_full_ue_repeat.md) 与 [停车姿态复核](docs/20261007_behavior_audit.md)。
-
-对应配置为 `config/runtime/industrialarea_ue_full_verified_20261007.json`。
-
-## 实验数据与视频下载
-
-实验数据、原始日志、验收报告和演示视频在百度网盘分享。视频及原始日志体积较大，无法直接上传 GitHub，请从网盘下载。
-
-- 分享文件：**demo**
-- 下载链接：[百度网盘 · demo](https://pan.baidu.com/s/19O_M7CYBkYUeR5J2xVH-1w?pwd=2006)
-- 提取码：**2006**
-
-结果入口为 `acceptance_summary.json`；详细报告为 `physical_acceptance.json`，轨迹与控制日志可用于复核。完整录屏 `ue_full_demo.mp4` 约 28 分 52 秒，16 倍速视频 `ue_full_demo_16x.mp4` 约 1 分 48 秒。
-
-## 离线运行与检查
-
-以下命令在本模块目录执行，使用 Python 3.10 或更高版本：
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install pytest
-
-PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=src python -m pytest -p no:nose -q
-```
-
-完整轻量任务预检：
-
-```bash
-python scripts/simulate_ue_continuous_tasks.py \
-  --scenario config/runtime/industrialarea_ue_full_verified_20261007.json
-```
-
-其他阶段的测试与轻量验收：
-
-```bash
-PYTHONPATH=src python scripts/check.py
-```
-
-轻量仿真使用 Python 标准库，生成的报告与日志写入本地 `runs/`，工作目录会由脚本创建。
-
-## 真实 UE 验收
-
-需要单独配置 UE4.27 场景、AirSim 插件及匹配的 Python 客户端、RPC 连接和 UE Python 远程执行。本仓库提供算法和验证脚本，UE 工程需另行准备。运行前应按本机环境设置脚本中的 UE 工程与插件路径，并确认配置中的地图指纹与当前地图一致。
-
-让 UE 场景进入可连接的运行状态后，复现完整实验演示只需执行：
+在 Demo 目录执行：
 
 ```bash
 ./run.sh
+# 也可指定新的仓库外输出目录
+./run.sh --output /absolute/external/run01
 ```
 
-启动脚本优先使用项目 `.venv` 中的 Python，否则使用当前环境的 `python3`。也可以直接执行 `python scripts/run.py`。
+避免终端所在目录或环境变量选错入口，可显式运行：
 
-演示不启动录屏，进入 UE 验收时会关闭 AirSim 数据录制。UE 编辑器的运行视口左上角每秒刷新任务完成数及百分比、行驶车辆数、已停入等待位的车辆数和耗时；任务完成后显示回等待位阶段，结束时显示 PASS 或 FAIL。屏幕提示使用英文以兼容默认字体，详细日志仍写入运行目录。
+```bash
+TRAFFIC_UE_PROJECT_DIR=/home/aipc/Traffic_ue4 \
+  /mnt/190c1d31-5aef-e142-8902-edc8e0c6e516/Demo/run.sh
+```
 
-该入口固定使用 `config/runtime/industrialarea_ue_full_verified_20261007.json`：16 辆车、32 个运输任务、时间倍率 1，关闭诊断模式，结果写入 `runs/ue_full_verified_20261007/`。脚本先执行完整轻量预检，通过后自动执行真实 UE 验收；任一阶段失败即停止。入口不接受参数，使用当前 Python 环境，从任意工作目录调用均可正确定位项目文件。正常倍率下真实 UE 实验约需 29 分钟。
+`run.sh` 优先使用项目 `.venv/bin/python`，否则使用 python3，调用 `scripts/run_acceptance.py`。TRAFFIC_UE_PROJECT_DIR 可覆盖工程路径，DEMO_OUTPUT_ROOT 可覆盖输出根目录；默认工程为 `/home/aipc/Traffic_ue4`，默认结果位于仓库外 `../Demo_runs/ue_acceptance_<时间戳>/`。
 
-UE 远程执行工具为 `scripts/ue_remote.py`，真实连续任务入口为 `scripts/validate_ue_continuous_tasks.py`。结果复核工具为 `scripts/audit_ue_run.py` 与 `scripts/audit_ue_road_envelope.py`。
+当前入口直接运行 1 倍速真实 UE 验收，使用 `config/runtime/industrialarea_ue_full_verified_20261007.json`，不自动运行轻量预检、回归测试或原生门禁；运行中的依赖、地图和安全检查仍保留。脚本建立外部工作副本，保存编辑器状态，加载关卡、启动 PIE 并等待 24 车就绪，其中 16 车参与运输；随后执行任务验收及独立位姿、道路包络审计，退出 PIE 并尝试恢复关卡、相机、自动保存与节流设置。任务期间不录屏，并关闭 AirSim 数据录制。
 
-## 设计文档
+一次 run.sh 不会新开/关闭 UE 编辑器，也不恢复冷启动文件基线。需要独立多轮实验时，须在每轮前另外恢复基线、新开编辑器，结束后关闭，再进行下一轮。不能把连续在同一编辑器中运行当作独立冷启动。
 
+不要用旧入口 `python scripts/run.py` 替代 run.sh：它先跑轻量预检，直接运行底层脚本并写入仓库内 runs，不具备当前入口的隔离与生命周期管理。
+
+## 结果和故障检查
+
+先查看外部运行目录中的 `acceptance_summary.json`。详细日志和轨迹在其 `workspace/runs/ue_full_verified_20261007/`：execution.log、physical_acceptance.json、physical_progress.json、physical_control_diagnostics.jsonl、physical_trajectory.jsonl，以及成功时的独立审计报告。
+
+初始化失败可能没有 physical_acceptance.json；此时应同时看 execution.log，外层缺少报告的 FileNotFoundError 可能掩盖了里面更早的错误。工程路径断言失败时，先核对运行的是哪个目录的 run.sh、TRAFFIC_UE_PROJECT_DIR 和实际打开的 UE 工程；“原生库未加载”还需核对实际进程加载文件，不能通过关闭校验解决。
+
+Demo 默认只读，运行数据必须留在仓库外；写保护、授权修改和恢复锁定流程见 [仓库保护说明](docs/REPO_PROTECTION.md)。
+
+## 离线验证
+
+已安装依赖的环境中，从 Demo 运行以下命令，不启动 UE；测试缓存和 Python 字节码均关闭：
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONPATH=src:scripts \
+  python3 -B -m pytest -q -p no:cacheprovider -p no:nose tests
+PYTHONDONTWRITEBYTECODE=1 python3 -B scripts/replay_traffic_transitions.py
+```
+
+轻量仿真和旧阶段检查脚本默认写入 runs，仅在仓库外的可写工作副本中手动运行。不要在锁定的 Demo 内创建虚拟环境或运行会写入源码目录的旧入口。
+
+## 技术文档
+
+- [当前模块流程、诊断与限制](docs/CURRENT_RUNTIME.md)
+- [共同状态转换校验](docs/STATE_TRANSITIONS.md)
+- [2026-10-20 验证记录](docs/VALIDATION_20261020.md)
+- [2026-10-20 冻结记录](docs/FREEZE_20261020.md)
+- [代码替换与 UE 绑定](docs/DEMO_REPLACEMENT_20261020.md)
 - [服务节点路网](docs/ue_service_network.md)
-- [动态车队接口](docs/dynamic_fleet_interfaces.md)
-- [任务调度](docs/task_dispatch.md)
-- [早期架构约定](docs/architecture.md)
-- [项目规划](项目规划.md)
-- [调度算法优化方案](调度算法优化方案.md)
+- [任务调度开发历史](docs/task_dispatch.md)
+- [动态车队接口及尚未接入的范围](docs/dynamic_fleet_interfaces.md)
+- [早期小车仿真架构](docs/architecture.md)
+
+主要代码位于 src/logistics_park，配置位于 config，入口与审计位于 scripts，回归位于 tests。UE 工程、实验日志和视频不随本仓库分发。
+
+## 历史实验资料
+
+2026-10-07 曾完成 16 车、32 个任务的完整 UE 验收，见 [当时的复跑记录](docs/20261007_full_ue_repeat.md) 与 [停车姿态复核](docs/20261007_behavior_audit.md)。该结果属于旧版本。历史日志和演示视频分享：[百度网盘 · demo](https://pan.baidu.com/s/19O_M7CYBkYUeR5J2xVH-1w?pwd=2006)，提取码 2006；不把历史视频视为当前冻结版本的实测证据。

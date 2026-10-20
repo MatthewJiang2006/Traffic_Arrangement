@@ -1,18 +1,18 @@
 # Demo 仓库写保护
 
-本仓库默认锁定：所有受版本管理的源文件为只读，任何脚本或程序直接写入都会
-以 `Permission denied` 失败；提交也会被 `pre-commit` 钩子拒绝。
+本仓库本机已启用写保护：所有受保护的源文件为只读，普通脚本或程序直接写入会
+以 `Permission denied` 失败；本机提交也会被 `pre-commit` 钩子拒绝。Git 不分发本机钩子、写权限或 .repo-lock，新克隆需自行启用保护。
 
 ## 状态
 
 ```bash
 ./scripts/repo_guard.py status
-# {"locked": true, "marker": true, "files": 780, "writable": 0}
+# {"locked": true, "marker": true, "files": 624, "writable": 0}
 ```
 
 ## 解锁（必须显式授权）
 
-解锁是不可逆动作，必须同时给出**原因**和**确认词**，且会打印警告横幅：
+解锁是可重新锁定的临时状态变化，必须已有修改授权，同时给出**原因**和**确认词**，且会打印警告横幅：
 
 ```bash
 ./scripts/repo_guard.py unlock --reason "修复 xxx" --confirm UNLOCK
@@ -22,7 +22,7 @@
 
 ## 重新锁定
 
-修改完成、提交、推送后立即重新锁定：
+修改并提交后立即重新锁定，再推送；文件数量随版本变化，以 status 实际输出为准：
 
 ```bash
 ./scripts/repo_guard.py lock --reason "修改已完成"
